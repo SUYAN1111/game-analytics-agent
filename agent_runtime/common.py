@@ -136,7 +136,7 @@ def lines(path):
 
 def clean_environment():
     # An allowlist, not removal of one key from an otherwise inherited environment.
-    allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "PATH", "PATHEXT", "TEMP", "TMP",
+    allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "PATH", "PATHEXT", "TEMP", "TMP", "PROCESSOR_ARCHITECTURE", "PROCESSOR_ARCHITEW6432",
                "USERPROFILE", "APPDATA", "LOCALAPPDATA", "PROGRAMFILES", "PROGRAMFILES(X86)", "OS", "APP_ASSET_DIR", "APP_STATE_DIR", "APP_DEBUG", "APP_READ_AUDIT"}
     from product_core.paths import STATE
     temporary=STATE/"temporary"/str(os.getpid());temporary.mkdir(parents=True,exist_ok=True)

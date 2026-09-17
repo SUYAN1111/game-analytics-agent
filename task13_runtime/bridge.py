@@ -8,6 +8,7 @@ from contextlib import ExitStack, asynccontextmanager
 from pathlib import Path
 from task13_runtime.common import CONFIG, ROOT, TOOLS, HostError, append, canonical, clean_environment, now, read, require, write
 from task13_runtime.admission import Admission
+from task13_runtime.progress import signal
 
 
 class ReplyTracker:
@@ -135,6 +136,7 @@ async def serve(config):
             if not line: break
             request = json.loads(line)
             identifier, operation = request.get("id"), request.get("op")
+            progress_tool_started = False
             try:
                 tracker.begin(identifier, operation)
                 args = request.get("args", {})
@@ -145,6 +147,9 @@ async def serve(config):
                     call_id = args["tool_call_id"]
                     require(type(call_id) is str and call_id and call_id not in seen_tools, "call_id", "duplicate DSH tool call ID")
                     seen_tools.add(call_id)
+                    progress_turn = read(config['turn_file'])['turn_id']
+                    signal(directory, progress_turn, 'tool_started', call_id, args['name'])
+                    progress_tool_started = True
                     result = await connection.call(args["name"], args["arguments"], call_id)
                     current_turn=read(config['turn_file'])['turn_id']
                     if args['name']=='inspect_context' and result.get('error') is None:
@@ -155,12 +160,15 @@ async def serve(config):
                     if args['name']=='query_association_rules' and result.get('status')!='not_applicable':
                         require(current_turn in context_sessions,'rule_session','missing current MCP context')
                         rules.add(result,context_sessions[current_turn],current_turn,args['arguments'])
+                    signal(directory, progress_turn, 'tool_failed' if result.get('error') or result.get('status')=='not_applicable' else 'tool_finished', call_id, args['name'])
                 elif operation == "reserve":
                     require(asset_failure is None,'asset_integrity','frozen identity failure stopped this host: '+str(asset_failure))
                     turn = read(config["turn_file"])
                     result = reserve_frozen_request(config,budget,args,turn)
+                    signal(directory, turn['turn_id'], 'model_started', result['attempt_id'])
                 elif operation == "settle":
                     result = budget.settle(args["attempt_id"], args.get("usage"), args.get("error"))
+                    signal(directory, read(config["turn_file"])["turn_id"], "model_finished", args["attempt_id"])
                 elif operation == 'tool_attempt':
                     result=budget.call('tool',turn_id=read(config['turn_file'])['turn_id'],call_id=args['call_id'])
                 elif operation == 'summary':
@@ -176,6 +184,8 @@ async def serve(config):
                 tracker.finish(identifier, operation)
                 response = {"id": identifier, "op": operation, "result": result}
             except Exception as exc:
+                if progress_tool_started:
+                    signal(directory, read(config['turn_file'])['turn_id'], 'tool_failed', call_id, args['name'])
                 code='tool_timeout' if isinstance(exc,TimeoutError) and operation=='tool' else getattr(exc,'code','bridge')
                 if code=='asset_integrity' or code.startswith(('cluster_','rule_')):
                     asset_failure=str(exc)

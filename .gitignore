@@ -7,3 +7,15 @@ __pycache__/
 .env.*
 !.env.example
 *.zip
+web/node_modules/
+web/dist/
+web/.vite/
+*.tsbuildinfo
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+playwright-report/
+test-results/
+*.local

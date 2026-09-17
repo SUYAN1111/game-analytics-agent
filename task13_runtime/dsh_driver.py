@@ -44,7 +44,7 @@ def main():
         'credential_source':'offline_generated_canary' if cfg['mode']=='offline' else 'explicit_process_environment'})
     safe = clean_environment()
     safe.update(DEEPSEEK_API_KEY=secret, TASK13_BRIDGE_CONFIG=str(Path(boot["config"]).resolve()),
-                DSH_SYSTEM_PROMPT=(ROOT/"task12_runtime/prompts/knowledge_assistant_v1.md").read_text(encoding="utf-8")+cfg['public_adaptation'])
+                DSH_SYSTEM_PROMPT=(ROOT/"task12_runtime/prompts/knowledge_assistant_v1.md").read_text(encoding="utf-8")+cfg['public_adaptation']+(ROOT/'web_api/scope_prompt.md').read_text(encoding='utf-8'))
     os.environ.clear(); os.environ.update(safe)
     home, workspace = directory/"dsh_home", directory/"blank_workspace"
     home.mkdir(); workspace.mkdir()

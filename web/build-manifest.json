@@ -1,0 +1,22 @@
+{
+  "assets/index-Dt0o7IU_.js": {
+    "sha256": "978c9c6c0a17064762e9d70704ef8af9ceb9afa3dcf9d454ec10968311c92668",
+    "size": 372761
+  },
+  "assets/index-ks_BazSq.css": {
+    "sha256": "d10f39dfad3ad543ed6c5524d4389df4f360a6aa1a136d38ac825b4e27fe5acd",
+    "size": 47301
+  },
+  "assets/source-worker-CPBe4g8x.js": {
+    "sha256": "d465c2ee4905177c1efcfb98e9a15429b88fd513812dbeeb92eab563c84dea60",
+    "size": 68395
+  },
+  "favicon.svg": {
+    "sha256": "6bf753b1315535e213ceee71a9cd3afd9ee64b7e7e26223596fbd44822c382ff",
+    "size": 417
+  },
+  "index.html": {
+    "sha256": "7b33b64a6bf304ec2d59a474db6569b8662cecf772e6ef3d0df454e231ca2612",
+    "size": 490
+  }
+}

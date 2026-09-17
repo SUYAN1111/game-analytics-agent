@@ -1,0 +1,65 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import ts from 'typescript';
+const out=path.resolve(process.env.WEB_TEST_OUTPUT||'state/ux-stage2'),base=process.env.WEB_TEST_URL||'http://127.0.0.1:8766';
+await fs.mkdir(out,{recursive:true});
+const compiled=ts.transpile(await fs.readFile('web/src/execution-events.ts','utf8'),{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022});
+const {mergeEvents}=await import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64'));
+const binding={id:'j',session_id:'s',turn_id:'t'},event=n=>({seq:n,job_id:'j',session_id:'s',turn_id:'t'});
+assert.deepEqual(mergeEvents(binding,[event(2)],[event(1),event(2),{...event(3),turn_id:'other'}]).map(e=>e.seq),[1,2]);
+const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
+const errors=[],checks=['ordered/deduplicated events reject other turns'];let posts=0,polls=0;
+page.on('pageerror',e=>errors.push(String(e)));page.on('request',r=>{assert.equal(new URL(r.url()).hostname,'127.0.0.1');if(r.method()==='POST'&&r.url().endsWith('/turns'))posts++;if(r.method()==='GET'&&r.url().includes('/api/jobs/'))polls++;});
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+const shot=async name=>{await page.screenshot({animations:'disabled',path:path.join(out,name+'.png'),fullPage:true});console.log(name);};
+const fresh=async()=>{await page.getByRole('button',{name:'＋ 新建对话',exact:true}).click();await page.locator('#question').waitFor();await page.waitForFunction(()=>!document.querySelector('#question').disabled);};
+const get=async url=>(await context.request.get(base+url)).json();
+try{
+  await page.goto(base);await page.getByRole('button',{name:'版本对比',exact:true}).waitFor();
+  // Simulate lost acknowledgement after the server accepted the POST. Retry must use the same idempotency key/session.
+  let intercepted=false;
+  await page.route('**/api/sessions/*/turns',async route=>{if(!intercepted){intercepted=true;await route.fetch();await route.abort();}else await route.continue();});
+  await page.locator('#question').fill('比较两个版本的剧情开始情况');await page.getByRole('button',{name:'发送问题',exact:true}).click();
+  await page.getByRole('button',{name:'重试同一提交',exact:true}).click();
+  await page.unroute('**/api/sessions/*/turns');await page.locator('.execution-current').waitFor();
+  const sid=await page.evaluate(()=>localStorage.getItem('selectedSession'));let session=await get('/api/sessions/'+sid),jid=session.jobs[0].id;
+  assert.equal(session.jobs.length,1);assert.equal((await get('/api/sessions')).length,1);checks.push('lost POST acknowledgement retries same session/job');
+  await shot('01-real-preparing');
+  await page.route('**/api/jobs/**',route=>route.request().method()==='GET'?route.abort():route.continue());
+  await page.getByText('连接中断，正在重新获取状态',{exact:true}).waitFor({timeout:15000});
+  const frozen=await page.locator('.execution-steps').innerText();await pause(1200);assert.equal(await page.locator('.execution-steps').innerText(),frozen);
+  await shot('02-connection-interrupted');await page.unroute('**/api/jobs/**');
+  await page.reload();await page.locator('.execution-current').waitFor();assert.equal(posts,2);
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.locator('.status.verified').waitFor({timeout:900000});
+  assert.ok(await page.evaluate(()=>window.scrollY<3),'arriving result must not move someone reading history');
+  session=await get('/api/sessions/'+sid);const job=session.jobs[0];assert.ok(job.events.some(e=>e.code==='checking'));
+  await page.locator('.execution summary').click();
+  const expected=job.events.filter(e=>['preparing','model_started','tool_started','checking'].includes(e.code));
+  assert.equal(await page.locator('.execution-steps li').count(),expected.length);
+  const seqs=await page.locator('.execution-steps li').evaluateAll(xs=>xs.map(x=>Number(x.dataset.seq)));assert.deepEqual(seqs,expected.map(e=>e.seq));
+  const atEnd=polls;await pause(1600);assert.equal(polls,atEnd,'terminal must stop polling');
+  await shot('03-completed-real-steps');checks.push('reconnect/reload restores actual steps; terminal polling stops');
+  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await shot('04-mobile-steps');await page.setViewportSize({width:1440,height:1000});
+  // Evidence drawer opens immediately; failure can retry; a late reply cannot reopen a closed drawer.
+  let fail=true;
+  await page.route('**/evidence/*',async route=>fail?route.abort():route.continue());
+  await page.locator('.reading-card button').first().click();await page.getByRole('button',{name:'重新读取依据',exact:true}).waitFor();fail=false;
+  await page.getByRole('button',{name:'重新读取依据',exact:true}).click();await page.locator('.evidence-readable').waitFor();await page.getByRole('button',{name:'关闭证据',exact:true}).click();await page.unroute('**/evidence/*');
+  let release;const gate=new Promise(r=>release=r);
+  await page.route('**/evidence/*',async route=>{const response=await route.fetch();await gate;await route.fulfill({response});});
+  await page.locator('.reading-card button').first().click();await page.getByText('正在读取这条依据…',{exact:true}).waitFor();await page.getByRole('button',{name:'关闭证据',exact:true}).click();release();await pause(300);assert.equal(await page.getByRole('dialog').count(),0);await page.unroute('**/evidence/*');
+  checks.push('evidence loading/error/retry; late response ignored after close');
+  await fresh();const second=await page.evaluate(()=>localStorage.getItem('selectedSession'));
+  let releaseHistory;const historyGate=new Promise(r=>releaseHistory=r);
+  await page.route('**/api/sessions/'+sid,async route=>{const response=await route.fetch();await historyGate;await route.fulfill({response});});
+  await page.locator(`[data-session-id="${sid}"] .history`).click();await page.getByText('正在读取对话…',{exact:true}).waitFor();assert.equal(await page.locator('.turn:visible').count(),0);
+  await page.locator(`[data-session-id="${second}"] .history`).click();await page.locator('.welcome').waitFor();releaseHistory();await pause(300);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('selectedSession')),second);assert.equal(await page.locator('.turn').count(),0);await page.unroute('**/api/sessions/'+sid);
+  checks.push('history loading hides old content; late session response ignored');
+  await page.route('**/api/sessions/'+sid,route=>route.abort());await page.locator(`[data-session-id="${sid}"] .history`).click();await page.getByRole('button',{name:'重新读取对话',exact:true}).waitFor();await page.unroute('**/api/sessions/'+sid);await page.getByRole('button',{name:'重新读取对话',exact:true}).click();await page.locator('.status.verified').waitFor();checks.push('history errors have read-only retry');
+  assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,'browser-execution-results.json'),JSON.stringify({status:'PASS',checks,errors},null,2));
+}catch(e){await shot('failure-debug');await fs.writeFile(path.join(out,'browser-execution-results.json'),JSON.stringify({status:'FAIL',checks,errors,error:String(e)},null,2));throw e;}
+finally{await browser.close();}

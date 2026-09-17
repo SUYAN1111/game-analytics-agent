@@ -61,7 +61,19 @@ def answer_envelope(text):
     return v
 
 def verify_answer(text,numeric,knowledge,clusters,rules,turn_id):
+    outer=parse_json(text)
+    limitations=[]
+    if type(outer) is dict and 'response_type' in outer:
+        from web_api.capabilities import model_control, REASONS
+        if outer['response_type'] in ('clarification','out_of_scope'):
+            try: result=model_control(outer)
+            except ValueError as exc:raise HostError('answer_control',str(exc)) from exc
+            return {'status':'control_checked','control':result,'claims':[],'turn_id':turn_id}
+        require(set(outer)=={'response_type','reason','answer'} and outer['response_type']=='partial' and outer['reason'] in ('causality','unsupported'), 'answer_control','invalid partial response')
+        limitations=[REASONS[outer['reason']]]
+        text=__import__('json').dumps(outer['answer'],ensure_ascii=False)
     v=answer_envelope(text)
+    require(not limitations or any(v[k] for k in ('claims','knowledge_selections','cluster_selections','rule_selections')),'answer_control','partial results require evidence')
     require_evidence_families(v,numeric,knowledge,clusters,rules)
     facts=[render_fact(numeric.resolve_selection(s),numeric.definition['metric_id']) for s in v['claims']]
     quotes=[quote(knowledge.select(s,numeric.session_id,turn_id)) for s in v['knowledge_selections']]
@@ -88,4 +100,4 @@ def verify_answer(text,numeric,knowledge,clusters,rules,turn_id):
     if NOTES['limitations'] not in rendered:rendered.append(NOTES['limitations'])
     return {'answer_markdown':'\n\n'.join(rendered),'claims':facts,'knowledge_selections':quotes,'cluster_selections':groups,'rule_selections':rule_facts,
             'status':'reference_checked_candidate','presentation_contract':'host_bound_four_evidence_v1',
-            'selections':v,'note_evidence':note_evidence,'turn_id':turn_id}
+            'selections':v,'note_evidence':note_evidence,'turn_id':turn_id,'limitations':limitations}

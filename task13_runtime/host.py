@@ -1,6 +1,7 @@
 """Original-environment controller, deadlines and evidence validation."""
 import os
 import sys
+import threading
 from pathlib import Path
 from uuid import uuid4
 from task13_runtime.common import CONFIG, ROOT, HostError, append, clean_environment, lines, read, replace, require, verify_task08, write, within_run
@@ -42,6 +43,9 @@ class Host:
         self.loaded_calls = 0
         self.canary = "task09-canary-"+uuid4().hex
         self.driver = None
+        self.lifecycle_lock = threading.RLock()
+        self.closing = False
+        self.admission_closed = False
         self.cfg = {"directory": str(self.directory), "project_root": str(ROOT), "original_python": str(Path(sys.executable).resolve()),
             "condition":condition,"admission":admission,"quality_binding":quality_binding,
             "public_adaptation":public_prompt(quality_binding,self.registered['definition']),
@@ -73,7 +77,9 @@ class Host:
         if self.mode == "live":
             require(bool(os.environ.get("DEEPSEEK_API_KEY")), "credential", "set DEEPSEEK_API_KEY locally; it is not read from global DSH config")
             env["DEEPSEEK_API_KEY"] = os.environ["DEEPSEEK_API_KEY"]
-        self.driver = DriverProcess([str(executable), "-m", "task13_runtime.dsh_driver"], ROOT, env, self.directory/"controller")
+        with self.lifecycle_lock:
+            require(not self.closing, 'session_closed', 'session cancelled before driver startup')
+            self.driver = DriverProcess([str(executable), "-m", "task13_runtime.dsh_driver"], ROOT, env, self.directory/"controller")
         self.cfg["owned_job_name"] = self.driver.job.name
         replace(self.directory/"config.json", self.cfg)
         self.driver.send({"config": str(self.directory/"config.json")})
@@ -104,7 +110,7 @@ class Host:
         require(bool(result.get("new_session")), "session", "DSH did not create a fresh offline session")
         return result
 
-    def turn(self, text, turn_id=None, *, validate=True, timeout=900, require_rule_discovery=False):
+    def turn(self, text, turn_id=None, *, validate=True, timeout=900, require_rule_discovery=False, on_progress=None):
         require(type(require_rule_discovery) is bool, 'command', 'require_rule_discovery must be boolean')
         self.verify_frozen_asset()
         turn_id = turn_id or "turn"+uuid4().hex
@@ -116,12 +122,15 @@ class Host:
         history_item={'user':text,'verified_scopes':[],'status':'historical_not_current_evidence'}
         self.history.append(history_item)
         first_call = self.loaded_calls
+        first_bridge = len(list(lines(self.directory/'internal_bridge.jsonl')))
         write(self.directory/(turn_id+"_input.json"), {"text": text, "mode": self.mode,
               "require_rule_discovery": require_rule_discovery})
         self.driver.send({"op": "turn", "turn_id": turn_id, "text": text,
                           "require_rule_discovery": require_rule_discovery})
-        result = self.driver.receive(timeout)
-        bridge_timeouts=[r for r in lines(self.directory/'internal_bridge.jsonl')
+        from task13_runtime.progress import ProgressReader
+        reader = ProgressReader(self.directory, turn_id, on_progress)
+        result = self.driver.receive(timeout, on_poll=reader.drain)
+        bridge_timeouts=[r for r in list(lines(self.directory/'internal_bridge.jsonl'))[first_bridge:]
             if r.get('response',{}).get('error',{}).get('code')=='tool_timeout']
         if bridge_timeouts:
             raise TimeoutError('Task13 real MCP tool deadline; controller must reclaim owned process tree')
@@ -131,6 +140,7 @@ class Host:
             raise HostError(result['content_failure']['code'],result['content_failure']['message'])
         require(result.get("turn_id") == turn_id and "result" in result, "dsh_turn", "DSH did not finish the requested turn")
         write(self.directory/(turn_id+"_raw_result.json"), result)
+        if on_progress is not None: on_progress({"code": "checking", "turn_id": turn_id})
         calls = self.collect_evidence()[first_call:]
         if validate:
             try:
@@ -159,10 +169,24 @@ class Host:
         return result
 
     def close(self):
-        if self.driver is not None:
-            self.driver.close(); self.driver = None
-            from task13_runtime.admission import Admission
-            Admission(self.cfg['admission']).call('close')
+        with self.lifecycle_lock:
+            self.closing = True
+            failures = []
+            if self.driver is not None:
+                try:
+                    self.driver.close()
+                    self.driver = None
+                except Exception as exc:
+                    failures.append(exc)
+            if not self.admission_closed:
+                try:
+                    from task13_runtime.admission import Admission
+                    Admission(self.cfg['admission']).call('close')
+                    self.admission_closed = True
+                except Exception as exc:
+                    failures.append(exc)
+            if failures:
+                raise ExceptionGroup('host cleanup failed', failures)
 
     def __enter__(self):
         try: return self.open()

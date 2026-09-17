@@ -1,0 +1,26 @@
+.analysis-methods {margin: 26px 0 18px; border: 1px solid #d6e3da; border-radius: 16px; background: #f5f8f3; overflow: hidden;}
+.analysis-methods > summary {padding: 17px 20px; color: #214d48;}
+.analysis-methods > summary > span {display: inline; font-weight: 600;}
+.analysis-methods > summary small {font-weight: 400; font-size: 13px; margin-left: 16px; color: #5a726d;}
+.method-content {padding: 0 22px 22px;}
+.method-card + .method-card {border-top: 1px solid #d6e3da; margin-top: 24px; padding-top: 22px;}
+.method-card h4 {margin: 5px 0 8px; font-size: 18px; color: #214d48;}
+.method-intro {margin: 0 0 20px; line-height: 1.8;}
+.method-guide {display: grid; gap: 17px; margin: 0;}
+.method-guide > div {display: grid; grid-template-columns: 116px minmax(0,1fr); gap: 16px;}
+.method-guide dt {font-weight: 600; color: #305d54; line-height: 1.85;}
+.method-guide dd {margin: 0; line-height: 1.85; color: #4f6560;}
+.method-technical {margin: 20px 0 14px; border-top: 1px solid #d6e3da; padding-top: 14px;}
+.method-technical > summary {font-size: 14px; color: #305d54;}
+.method-technical p {font-size: 14px; line-height: 1.85; color: #4f6560;}
+.method-card h5 {font-size: 14px; margin: 16px 0 8px;}
+.method-comparison {padding: 1px 16px; border-left: 2px solid #a9c2ac;}
+.method-scopes {list-style: none; padding: 0; font-size: 12px; color: #526c63;}
+.method-scopes li {margin: 6px 0; overflow-wrap: anywhere; white-space: normal;}
+.method-evidence {padding: 9px 14px; background: #fffefa; border: 1px solid #ceddd2; border-radius: 10px; color: #285d51;}
+@media(max-width:650px){
+  .analysis-methods > summary {padding: 15px;}
+  .analysis-methods > summary small {display: block; margin: 4px 0 0 17px;}
+  .method-content {padding: 0 16px 18px;}
+  .method-guide > div {grid-template-columns: 1fr; gap: 3px;}
+}

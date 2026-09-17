@@ -67,6 +67,7 @@ class Coordinator:
         self.auth=bytes.fromhex(uuid4().hex+uuid4().hex)
         self.address=r'\\.\pipe\task13-'+uuid4().hex
         self.sessions=set();self.errors=[]
+        self.closed=False
         self.listener=Listener(self.address,family='AF_PIPE',authkey=self.auth)
         self.thread=threading.Thread(target=self.serve,daemon=True);self.thread.start()
 
@@ -112,8 +113,10 @@ class Coordinator:
                     self.ledger.stop('reservation/settlement reply lost; retain unknown fees')
 
     def close(self):
+        if self.closed:return
         require(self.thread.is_alive(),'coordinator','coordinator failed before shutdown')
         with Client(self.address,family='AF_PIPE',authkey=self.auth) as conn:
             conn.send({'shutdown':True});conn.recv()
         self.thread.join(10);self.listener.close()
         require(not self.thread.is_alive(),'coordinator','coordinator did not stop')
+        self.closed=True

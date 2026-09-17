@@ -128,6 +128,9 @@ class DriverProcess:
         self.stderr_thread = threading.Thread(target=stderr_reader, daemon=True)
         self.stderr_thread.start()
         self.messages = queue.Queue(); self.job = None
+        self.close_lock = threading.RLock()
+        self.closed = False
+        self.termination_pids = []
         try:
             self.job = Job(self.process.pid)
             require(belongs_to_job(self.process.pid,self.job.name),"job","launcher not attached")
@@ -145,15 +148,18 @@ class DriverProcess:
     def send(self, value):
         self.process.stdin.write(canonical(value)+"\n"); self.process.stdin.flush()
 
-    def receive(self, timeout=900):
+    def receive(self, timeout=900, on_poll=None):
         deadline, next_progress = time.monotonic()+timeout, time.monotonic()
         while True:
+            if on_poll is not None: on_poll()
             remaining = deadline-time.monotonic()
             if remaining <= 0:
                 self.close()
                 raise TimeoutError("Task09 owned user-turn watchdog expired")
             if time.monotonic() >= next_progress:
-                append(self.log, {"event": "membership", "pids": self.job.pids(), "at": now()})
+                with self.close_lock:
+                    members = self.job.pids() if self.job is not None else []
+                append(self.log, {"event": "membership", "pids": members, "at": now()})
                 phase = "DSH/MCP启动或控制器等待"
                 try:
                     latest = (self.directory.parent/"phase.jsonl").read_text(encoding="utf-8").splitlines()[-1]
@@ -164,15 +170,19 @@ class DriverProcess:
             try: line = self.messages.get(timeout=min(1, remaining))
             except queue.Empty: continue
             require(line is not None, "driver_exit", "DSH driver closed without a completed response")
+            if on_poll is not None: on_poll()
             return __import__("json").loads(line)
 
     def close(self):
-        if self.job is not None:
-            before = self.job.pids()
-            self.job.close(); self.job = None
+        with self.close_lock:
+            if self.closed:return
+            if self.job is not None:
+                self.termination_pids = self.job.pids()
+                self.job.close(); self.job = None
             self.process.wait(timeout=10)
-            append(self.log, {"event": "terminated_owned_tree", "pids_before": before, "pids_after": [],
-                              "exit_code": self.process.returncode, "at": now()})
             self.thread.join(timeout=2)
             self.stderr_thread.join(timeout=2)
             self.process.stdin.close(); self.process.stdout.close(); self.process.stderr.close(); self.stderr.close()
+            append(self.log, {"event": "terminated_owned_tree", "pids_before": self.termination_pids, "pids_after": [],
+                              "exit_code": self.process.returncode, "at": now()})
+            self.closed = True

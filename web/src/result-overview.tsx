@@ -1,0 +1,30 @@
+import type {Evidence,Fact} from './results';
+
+const finite=(v:unknown):v is number=>typeof v==='number'&&Number.isFinite(v);
+const name=(v:unknown)=>({V1:'第一次更新',V2:'第二次更新',V3:'第三次更新',V4:'第四次更新',V5:'前一次更新',V6:'后一次更新',G01:'第 1 组',G02:'第 2 组',G03:'第 3 组'}[String(v)]||String(v??'未指定'));
+function display(e?:Evidence){const f=e?.fact;if(!f)return '暂无数据';if(f.rendered_value!==undefined)return f.rendered_value;if(!finite(f.value))return '暂无数据';return f.unit==='%'?(f.value*100).toFixed(2)+'%':f.value.toFixed(f.precision??(f.unit==='倍'?4:0));}
+function scopeEqual(a?:Fact,b?:Fact){return !!a&&!!b&&a.metric_id===b.metric_id&&['window_hours','group_by','group_value'].every(k=>a.scope?.[k]===b.scope?.[k]);}
+export function ResultOverview({evidence,onInspect}:{evidence:Evidence[];onInspect:(e:Evidence)=>void}){
+  const numeric=evidence.filter(e=>e.kind==='claims'&&e.fact),clusters=evidence.filter(e=>e.kind==='cluster_selections'&&e.fact),rules=evidence.filter(e=>e.kind==='rule_selections'&&e.fact);
+  const rates=numeric.filter(e=>e.fact?.kind==='metric_rate'),diff=numeric.find(e=>e.fact?.field==='percentage_point_difference');
+  const left=rates.find(e=>e.fact?.scope?.version_id===diff?.fact?.scope?.left_version),right=rates.find(e=>e.fact?.scope?.version_id===diff?.fact?.scope?.right_version);
+  const comparison=left&&right&&diff&&scopeEqual(left.fact,right.fact)&&scopeEqual(left.fact,diff.fact)&&left.fact?.raw_unit==='ratio'&&right.fact?.raw_unit==='ratio'&&diff.fact?.raw_unit==='percentage_point'&&[left.fact?.raw_value,right.fact?.raw_value,diff.fact?.raw_value].every(finite);
+  const prediction=numeric.filter(e=>e.fact?.kind?.startsWith('prediction_'));
+  const samePrediction=prediction.length>0&&prediction.every(e=>JSON.stringify(e.fact?.scope)===JSON.stringify(prediction[0].fact?.scope)&&e.fact?.metric_id===prediction[0].fact?.metric_id);
+  const sameRates=rates.length>0&&rates.every(e=>scopeEqual(e.fact,rates[0].fact)&&e.fact?.raw_unit==='ratio');
+  const groups=clusters.filter(e=>e.fact?.selection?.field==='player_count');
+  const clusterScope=(e:Evidence)=>JSON.stringify([e.fact?.selection?.scope.segmentation_model_id,e.fact?.selection?.scope.snapshot_id]);
+  const sameClusters=groups.length>0&&clusters.every(e=>clusterScope(e)===clusterScope(groups[0]));
+  const ruleSets=new Map<string,Evidence[]>();for(const e of rules){const s=e.fact?.selection?.scope;const k=JSON.stringify([s?.rule_set_id,s?.evaluation_id,s?.rule_id]);ruleSets.set(k,[...(ruleSets.get(k)||[]),e]);}
+  function card(e:Evidence|undefined,label:string,unit=''){return <div className="reading-card"><span>{label}</span><strong>{display(e)}{unit&&<small> {unit}</small>}</strong>{e&&<button onClick={()=>onInspect(e)} aria-label={'查看依据：'+label}>查看依据 ↗</button>}</div>;}
+  return <div className="result-overview">
+    {rates.length>0&&<section aria-label="版本对比概览"><div className="finding"><span className="result-kicker">先看重点</span><h3>{comparison?`${name(right.fact?.scope?.version_id)}，三天仍未开始剧情的比例${diff.fact!.raw_value!>0?'更高':diff.fact!.raw_value!<0?'更低':'相同'}`:'查看各次更新的剧情开始情况'}</h3><p>统计已经可以开始剧情、且有有效观察结果的玩家与剧情组合。比例越低，表示未开始的情况越少；差异本身不能说明原因。</p></div><div className="key-readings">{rates.map(e=><div key={e.id}>{card(e,name(e.fact?.scope?.version_id))}</div>)}{comparison&&card(diff,'变化（后一次减前一次）')}</div>
+      {sameRates?<figure className="overview-bars"><figcaption>三天仍未开始剧情的比例 <small>统一刻度 0–100%</small></figcaption>{rates.map(e=><div className="overview-bar" key={e.id}><span>{name(e.fact?.scope?.version_id)}</span><svg viewBox="0 0 100 10" preserveAspectRatio="none" role="img" aria-label={`${name(e.fact?.scope?.version_id)}：${display(e)}`}><rect width="100" height="10" fill="var(--chart-track)"/>{finite(e.fact?.raw_value)&&e.fact!.raw_value!>=0&&e.fact!.raw_value!<=1&&<rect width={e.fact!.raw_value!*100} height="10" fill="var(--chart-primary)"/>}</svg><b>{display(e)}</b></div>)}</figure>:<p className="data-note">这些读数的统计范围不同，请展开详细数据分别查看。</p>}
+    </section>}
+    {samePrediction&&<section aria-label="预测概览"><div className="finding"><span className="result-kicker">先读懂这个预测</span><h3>估计玩家三天内仍未开始剧情的可能性</h3><p>这是根据历史数据做的预测演示，不是实际发生的比例。每位玩家在不同剧情中分别计数，没有预测的对象不按零计算。</p></div><div className="key-readings">{['mean_p','prediction_coverage','missing_count'].map(field=><div key={field}>{card(prediction.find(e=>e.fact?.field===field),{mean_p:'平均预测概率',prediction_coverage:'有预测结果的比例',missing_count:'没有预测结果的组合数'}[field]!)}</div>)}</div></section>}
+    {prediction.length>0&&!samePrediction&&<p className="data-note">这次预测涉及不同范围，请展开详细数据分别查看。</p>}
+    {sameClusters&&<section aria-label="玩家分组概览"><div className="finding"><span className="result-kicker">把各组放在一起看</span><h3>比较人数、游玩频率和通常时长</h3><p>以下组别描述不同的游戏习惯，不代表价值高低。时长先取每位玩家的中位数，再算组内平均。</p></div><div className="group-comparison">{groups.map(g=>{const id=g.fact?.selection?.scope.segment_id;const find=(field:string)=>clusters.find(e=>e.fact?.selection?.scope.segment_id===id&&e.fact?.selection?.field===field);return <section className="group-card" key={g.id}><h4>{name(id)} <small>{String(id)}</small></h4>{card(g,'组内人数','人')}{card(find('completed_sessions_14d.mean'),'近两周人均游玩','次')}{card(find('median_session_minutes_14d.mean'),'通常每次游玩','分钟')}</section>;})}</div></section>}
+    {clusters.length>0&&!sameClusters&&<p className="finding">这次回答包含不同范围的分组数据，请展开详细数据分别查看。</p>}
+    {Array.from(ruleSets).map(([key,entries])=><section className="rule-overview" key={key} aria-label="玩法关联概览"><div className="finding"><span className="result-kicker">同一批玩家还玩了什么</span><h3>{entries[0].fact?.antecedent?.join(' + ')} <span className="pair-link">与</span> {entries[0].fact?.consequent?.join(' + ')}</h3><p>比较同一玩家在同一周内的游玩记录。这表示两种玩法有共同的参与者，不代表喜好、先后顺序或因果关系。</p></div><div className="key-readings">{['support','confidence','lift'].map(field=><div key={field}>{card(entries.find(e=>e.fact?.selection?.field===field),{support:'两边玩法都体验过的比例',confidence:'体验左侧玩法的样本中，也体验右侧玩法的比例',lift:'右侧玩法的参与比例，相对全体样本'}[field]!,field==='lift'?'倍':'')}</div>)}</div></section>)}
+  </div>;
+}
