@@ -1,0 +1,25 @@
+{
+  "contract":"activity_week_basket_v1",
+  "case_id":"case_activity_week_v1",
+  "metric_id":"activity_association_v1",
+  "basket_key":["activity_dataset_id","user_id","window_id"],
+  "basket_states":["eligible_nonempty","eligible_empty","coverage_incomplete"],
+  "rule_identity":["basket_contract","antecedent","consequent"],
+  "rule_counts":["N","antecedent_count","consequent_count","joint_count"],
+  "nullable_metrics":["support","confidence","lift"],
+  "public_status":["ok","no_rules","no_eligible_baskets","restricted_granularity"],
+  "rules":{
+    "K16.a":"独立模拟活动案例：六类虚构活动另行模拟，仅复用原匿名玩家名册、有效区域属性和日历。A01支线体验不是M03目标剧情，不对应真实游戏活动。新活动有独立activity_dataset_id，不能冒用M03数据身份或宣称真实偏好发现。",
+    "K16.b":"活动观察单位是玩家×区域版本开放后的固定7日，[w_start,w_end)，不是自然周或28日版本。as_of为该版最晚区域窗口终点加24小时；V6活动截止2025-05-29T14:00:00Z，M03与历史会话分群V6截止2025-06-09T14:00:00Z。同叫V6不等于同期，不作逐人跨案例连接或同期差值。",
+    "K16.c":"候选由窗口开始时已经注册且元数据可见的玩家建立，注册等号纳入，不能从有活动的人倒推。上传available_at不晚于该版as_of才可见，可见后按event_id去重；同类别多次参与只计一个item，窗口右端事件不纳入。",
+    "K16.d":"完整覆盖有活动为eligible_nonempty，完整无活动为eligible_empty且items=[]，二者都进入N。覆盖不足为coverage_incomplete且items=null，不进N。candidate三状态守恒；篮子数不同于不同玩家数。覆盖复用完整固定窗的采集区间及交付水位，不缩短窗口凑完整。",
+    "K17.a":"有向共现规则A→B中，N是包含空篮子的全部有效篮子数，nA为同时含全部前件的篮子数，nB为含后件的篮子数，nAB为同时含前后件的篮子数。support=nAB/N，confidence=nAB/nA，lift=nAB×N/(nA×nB)。support与confidence是比例，lift是无量纲倍数；方向交换会改变置信度。",
+    "K17.b":"Apriori仅发现正向参与活动，逐层生成长度1至3项集并用频繁子集剪枝；前件1或2项，后件恰1项且不相交。开发门槛含等号：support至少0.05、confidence至少0.40、lift至少1.10、联合篮子至少50，使用精确未舍入比例。",
+    "K17.c":"仅V1—V3各自固定周发现规则，先合并计数再算指标。按lift、confidence、support降序，再以前件长度和ID字典序排序。冻结全部合格规则及开发前10展示名单；V4/V5/V6只复核这份名单，不用验证表现改阈值、换规则或重新挖掘。保留下降或跌破门槛的结果。",
+    "K17.d":"无合格规则是合法no_rules，不降低门槛或换种子。N=0时比例均null；N>0且nA=0时support=0而confidence/lift=null；nA>0且nB=0时support/confidence=0而lift=null。不可计算不等于0，不输出NaN或Infinity。",
+    "K18.a":"同一玩家可出现在不同版本周，篮子不能说成不同独立玩家。后续V4—V6是较晚时期复核，并非全新玩家外推或独立同分布测试。本轮不输出p值、显著性或未经设计的置信区间。",
+    "K18.b":"共现不是因果、事件先后、心理类型、推荐或营销收益。共享活动程度也可形成相关组合。禁止输出个人身份、逐人连接活动与M03或历史会话分群、按区域或群再挖掘、当场改阈值或调用训练功能。",
+    "K18.c":"公共最小数量为20，零格不触发。任一候选状态、固定0/1/2/3/4+篮子大小、活动参与及未参与或任一冻结规则2×2格出现1至19，整个评价分区restricted_granularity；只公开候选篮子数、身份、窗口及限制说明，其他计数比例规则全部隐藏。CSV、JSON、图和工具应用同一视图，不能从补集恢复。",
+    "K18.d":"三种分析分别解释：M03是取得剧情资格后72小时未开始的用户×剧情比例；历史会话分群是快照前完整历史会话的玩家描述；活动关联规则是区域开放固定7日玩家篮子的共现。它们的候选、有效分母、窗口与截止各自独立，不能把同一版本名当作同一观察单位。"
+  }
+}

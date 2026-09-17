@@ -1,0 +1,56 @@
+{
+    "card_id":  "K14",
+    "title":  "开发选择与冻结分配",
+    "knowledge_revision":  "segments_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "historical_session_segments_v1",
+    "definition_fingerprint":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+    "enabled":  true,
+    "keywords":  [
+                     "分群",
+                     "KMeans",
+                     "标准化",
+                     "轮廓系数",
+                     "ARI",
+                     "冻结分配"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K14.a",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/development",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "仅在V3主快照开发样本拟合StandardScaler，float64、ddof=0，常量列scale=1；只用四列。KMeans k为2/3/4，各5个固定seed，每次n_init=10、k-means++、lloyd、max_iter=300、tol=1e-4。随后冻结，不读取M03标签或后续快照进行选择。",
+                       "section_title":  "development"
+                   },
+                   {
+                       "chunk_id":  "K14.b",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/selection",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "一个k的五次候选均满足有限值、恰好k群、每群至少max(20,ceil(1%开发样本))、无收敛警告和未达迭代上限，才可行。取五次全样本欧氏silhouette均值，距最佳不超过0.01的最小k；固定seed=20260916为代表，不重拟合。ARI只描述初始化稳定性。无可行k则不可用。",
+                       "section_title":  "selection"
+                   },
+                   {
+                       "chunk_id":  "K14.c",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/freeze",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "冻结中心逆变换回原单位按四列完整精度字典序编号G01起。后续快照只按冻结标准化尺度计算到全部中心的平方欧氏距离，精确并列选较小群ID。原始训练labels与规范重分配均保留，群人数和评价使用规范重分配。",
+                       "section_title":  "冻结分群分配：标准化尺度、中心距离与固定群ID"
+                   }
+               ]
+}

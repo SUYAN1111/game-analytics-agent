@@ -1,0 +1,7 @@
+deepseek-harness-sdk==0.1.5rc1
+deepseek-harness-runtime-bin==0.1.5rc1
+pydantic==2.12.5
+pydantic-core==2.41.5
+annotated-types==0.7.0
+typing-extensions==4.15.0
+typing-inspection==0.4.2

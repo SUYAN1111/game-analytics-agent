@@ -1,0 +1,44 @@
+{
+    "card_id":  "K10",
+    "title":  "分组归属、小群限制与合并",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "分组",
+                     "区域",
+                     "语言",
+                     "客户端",
+                     "新玩家",
+                     "小群"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K10.a",
+                       "section_title":  "属性时点与账号年龄",
+                       "text":  "group_by每次仅一个允许维度：region_id、language、client或new_player。区域按候选开放元数据；有资格者语言/客户端按真实t0，Q0/Q1按主快照。new_player只对Q2—Q5以t0减registered_at\u003c168小时判断，恰好168小时归既有玩家（0）；Q0/Q1为not_applicable。本固定主案例属性不变，不声称已支持任意属性变更。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L35-L38"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K10.b",
+                       "section_title":  "小群与正确合并",
+                       "text":  "任一成熟分组样本数在1—19之间，整项分组视图返回restricted_granularity且rows为空；不能经比较或证据转读恢复。零成熟分组保留候选数及Q计数，比例null，不伪造0%。跨版本或分组合并须累计分子和分母再相除，不能直接平均百分比；候选、资格、成熟完整观察分别解释。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L30-L38"
+                                           }
+                                       ]
+                   }
+               ]
+}

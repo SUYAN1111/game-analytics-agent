@@ -1,0 +1,42 @@
+{
+    "card_id":  "K11",
+    "title":  "版本比较方向、计数差与百分点",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "比较",
+                     "百分点",
+                     "右减左",
+                     "计数差"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K11.a",
+                       "section_title":  "兼容证据与差值",
+                       "text":  "compare_results只接收当前会话两个不同单版本的metric证据，身份、定义、72小时窗口、用户×剧情粒度、候选规则、属性规则和分组维度须兼容。方向为右减左；rate_difference=右侧rate-左侧rate，percentage_point_difference=rate_difference×100。comparison_key对应总体或维度及组值，不含版本；row_key包含版本。不能颠倒方向或混用预测与实际。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L51-L56"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K11.b",
+                       "section_title":  "零分母与缺组仍保留原计数",
+                       "text":  "count_differences包含candidate_count、numerator、denominator、Q0、Q1、Q2、Q3、Q4、Q5，均为右减左整数。两侧分组都存在时，即使比例因零分母不可计算，计数差仍计算，比例差及百分点差为null。缺任一侧分组则标记missing_left/missing_right，相关九个计数差和比例差为null；不能把缺组当零。显示四舍五入不替代原始数值核对。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L55-L56"
+                                           }
+                                       ]
+                   }
+               ]
+}

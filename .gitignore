@@ -1,0 +1,9 @@
+assets/
+state/
+.venv*/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.zip

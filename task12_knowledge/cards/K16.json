@@ -1,0 +1,74 @@
+{
+    "card_id":  "K16",
+    "title":  "独立模拟活动：来源、固定周与篮子分母",
+    "knowledge_revision":  "activity_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_activity_week_v1",
+    "metric_id":  "activity_association_v1",
+    "definition_fingerprint":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "enabled":  true,
+    "keywords":  [
+                     "活动",
+                     "篮子",
+                     "关联规则",
+                     "支持度",
+                     "置信度",
+                     "提升度",
+                     "空篮子",
+                     "固定周",
+                     "共现",
+                     "冻结",
+                     "Apriori",
+                     "规则"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K16.a",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K16.a",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "独立模拟活动案例：六类虚构活动另行模拟，仅复用原匿名玩家名册、有效区域属性和日历。A01支线体验不是M03目标剧情，不对应真实游戏活动。新活动有独立activity_dataset_id，不能冒用M03数据身份或宣称真实偏好发现。",
+                       "section_title":  "独立模拟来源与六类虚构活动"
+                   },
+                   {
+                       "chunk_id":  "K16.b",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K16.b",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "活动观察单位是玩家×区域版本开放后的固定7日，[w_start,w_end)，不是自然周或28日版本。as_of为该版最晚区域窗口终点加24小时；V6活动截止2025-05-29T14:00:00Z，M03与历史会话分群V6截止2025-06-09T14:00:00Z。同叫V6不等于同期，不作逐人跨案例连接或同期差值。",
+                       "section_title":  "固定7日与V6两个截止"
+                   },
+                   {
+                       "chunk_id":  "K16.c",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K16.c",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "候选由窗口开始时已经注册且元数据可见的玩家建立，注册等号纳入，不能从有活动的人倒推。上传available_at不晚于该版as_of才可见，可见后按event_id去重；同类别多次参与只计一个item，窗口右端事件不纳入。",
+                       "section_title":  "候选可见性与事件去重"
+                   },
+                   {
+                       "chunk_id":  "K16.d",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K16.d",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "完整覆盖有活动为eligible_nonempty，完整无活动为eligible_empty且items=[]，二者都进入N。覆盖不足为coverage_incomplete且items=null，不进N。candidate三状态守恒；篮子数不同于不同玩家数。覆盖复用完整固定窗的采集区间及交付水位，不缩短窗口凑完整。",
+                       "section_title":  "完整空篮子与覆盖不足"
+                   }
+               ]
+}

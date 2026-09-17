@@ -1,0 +1,268 @@
+{
+    "contract":  "activity_raw_v1",
+    "format":  "UTF-8 JSONL no BOM LF canonical JSON, one object plus LF per line",
+    "timestamp":  "UTC integer seconds",
+    "tables":  {
+                   "activity_catalog":  {
+                                            "fields":  {
+                                                           "activity_id":  {
+                                                                               "type":  "string",
+                                                                               "required":  true,
+                                                                               "nullable":  false
+                                                                           },
+                                                           "name":  {
+                                                                        "type":  "string",
+                                                                        "required":  true,
+                                                                        "nullable":  false
+                                                                    },
+                                                           "available_at":  {
+                                                                                "type":  "utc_time",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            }
+                                                       },
+                                            "primary_key":  [
+                                                                "activity_id"
+                                                            ],
+                                            "sort":  [
+                                                         "activity_id"
+                                                     ]
+                                        },
+                   "activity_windows":  {
+                                            "fields":  {
+                                                           "window_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "version_id":  {
+                                                                              "type":  "string",
+                                                                              "required":  true,
+                                                                              "nullable":  false
+                                                                          },
+                                                           "region_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "w_start":  {
+                                                                           "type":  "utc_time",
+                                                                           "required":  true,
+                                                                           "nullable":  false
+                                                                       },
+                                                           "w_end":  {
+                                                                         "type":  "utc_time",
+                                                                         "required":  true,
+                                                                         "nullable":  false
+                                                                     },
+                                                           "as_of":  {
+                                                                         "type":  "utc_time",
+                                                                         "required":  true,
+                                                                         "nullable":  false
+                                                                     },
+                                                           "available_at":  {
+                                                                                "type":  "utc_time",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            }
+                                                       },
+                                            "primary_key":  [
+                                                                "window_id"
+                                                            ],
+                                            "sort":  [
+                                                         "window_id"
+                                                     ]
+                                        },
+                   "activity_source_catalog":  {
+                                                   "fields":  {
+                                                                  "source_id":  {
+                                                                                    "type":  "string",
+                                                                                    "required":  true,
+                                                                                    "nullable":  false
+                                                                                },
+                                                                  "region_id":  {
+                                                                                    "type":  "string",
+                                                                                    "required":  true,
+                                                                                    "nullable":  false
+                                                                                },
+                                                                  "event_kind":  {
+                                                                                     "type":  "string",
+                                                                                     "required":  true,
+                                                                                     "nullable":  false,
+                                                                                     "enum":  [
+                                                                                                  "activity_participation"
+                                                                                              ]
+                                                                                 },
+                                                                  "available_at":  {
+                                                                                       "type":  "utc_time",
+                                                                                       "required":  true,
+                                                                                       "nullable":  false
+                                                                                   }
+                                                              },
+                                                   "primary_key":  [
+                                                                       "source_id"
+                                                                   ],
+                                                   "sort":  [
+                                                                "source_id"
+                                                            ]
+                                               },
+                   "activity_uploads":  {
+                                            "fields":  {
+                                                           "upload_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "event_id":  {
+                                                                            "type":  "string",
+                                                                            "required":  true,
+                                                                            "nullable":  false
+                                                                        },
+                                                           "user_id":  {
+                                                                           "type":  "string",
+                                                                           "required":  true,
+                                                                           "nullable":  false
+                                                                       },
+                                                           "window_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "activity_id":  {
+                                                                               "type":  "string",
+                                                                               "required":  true,
+                                                                               "nullable":  false
+                                                                           },
+                                                           "source_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "event_time":  {
+                                                                              "type":  "utc_time",
+                                                                              "required":  true,
+                                                                              "nullable":  false
+                                                                          },
+                                                           "available_at":  {
+                                                                                "type":  "utc_time",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            }
+                                                       },
+                                            "primary_key":  [
+                                                                "upload_id"
+                                                            ],
+                                            "sort":  [
+                                                         "event_time",
+                                                         "event_id",
+                                                         "available_at",
+                                                         "upload_id"
+                                                     ]
+                                        },
+                   "collection_checks":  {
+                                             "fields":  {
+                                                            "record_id":  {
+                                                                              "type":  "string",
+                                                                              "required":  true,
+                                                                              "nullable":  false
+                                                                          },
+                                                            "source_id":  {
+                                                                              "type":  "string",
+                                                                              "required":  true,
+                                                                              "nullable":  false
+                                                                          },
+                                                            "interval_id":  {
+                                                                                "type":  "string",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            },
+                                                            "start_at":  {
+                                                                             "type":  "utc_time",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                            "end_at":  {
+                                                                           "type":  "utc_time",
+                                                                           "required":  true,
+                                                                           "nullable":  false
+                                                                       },
+                                                            "state":  {
+                                                                          "type":  "string",
+                                                                          "required":  true,
+                                                                          "nullable":  false,
+                                                                          "enum":  [
+                                                                                       "complete",
+                                                                                       "gap"
+                                                                                   ]
+                                                                      },
+                                                            "checked_at":  {
+                                                                               "type":  "utc_time",
+                                                                               "required":  true,
+                                                                               "nullable":  false
+                                                                           },
+                                                            "available_at":  {
+                                                                                 "type":  "utc_time",
+                                                                                 "required":  true,
+                                                                                 "nullable":  false
+                                                                             }
+                                                        },
+                                             "primary_key":  [
+                                                                 "record_id"
+                                                             ],
+                                             "sort":  [
+                                                          "source_id",
+                                                          "start_at",
+                                                          "end_at",
+                                                          "checked_at",
+                                                          "record_id"
+                                                      ]
+                                         },
+                   "watermark_checks":  {
+                                            "fields":  {
+                                                           "record_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "source_id":  {
+                                                                             "type":  "string",
+                                                                             "required":  true,
+                                                                             "nullable":  false
+                                                                         },
+                                                           "watermark_at":  {
+                                                                                "type":  "utc_time",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            },
+                                                           "checked_at":  {
+                                                                              "type":  "utc_time",
+                                                                              "required":  true,
+                                                                              "nullable":  false
+                                                                          },
+                                                           "available_at":  {
+                                                                                "type":  "utc_time",
+                                                                                "required":  true,
+                                                                                "nullable":  false
+                                                                            }
+                                                       },
+                                            "primary_key":  [
+                                                                "record_id"
+                                                            ],
+                                            "sort":  [
+                                                         "source_id",
+                                                         "checked_at",
+                                                         "record_id"
+                                                     ]
+                                        }
+               },
+    "relationships":  [
+                          "activity_uploads.user_id -\u003e original registered players, candidate at window start",
+                          "activity_uploads.window_id -\u003e activity_windows",
+                          "activity_uploads.activity_id -\u003e activity_catalog",
+                          "activity_uploads.source_id and coverage source_id -\u003e activity_source_catalog with matching window region",
+                          "event_id retransmissions have identical business content; upload_id unique",
+                          "start_at \u003c end_at \u003c= checked_at \u003c= available_at; watermark_at \u003c= checked_at \u003c= available_at",
+                          "w_start \u003c= event_time \u003c w_end; event_time \u003c= available_at",
+                          "collection (source_id,interval_id) has fixed boundaries"
+                      ]
+}

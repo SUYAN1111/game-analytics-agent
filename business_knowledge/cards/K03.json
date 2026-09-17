@@ -1,0 +1,47 @@
+{
+    "card_id":  "K03",
+    "title":  "资格证据与真实t0",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "资格",
+                     "t0",
+                     "prereq_met_at",
+                     "not_met"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K03.a",
+                       "section_title":  "正面证据与资格起点",
+                       "text":  "met确认全部前置和权限首次同时满足，给出prereq_met_at；要求prereq_met_at\u003c=checked_at\u003c=available_at。先校验，再以checked_at\u003c=as_of且available_at\u003c=as_of选可见证据。已开放且可见met一致、无冲突时qualified，t0=max(region_open_at,prereq_met_at)。证据到达时间不替代t0，也不是已验证首次预测时间。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S03",
+                                               "sha256":  "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+                                               "locator":  "L44-L80"
+                                           },
+                                           {
+                                               "source_id":  "S03",
+                                               "sha256":  "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+                                               "locator":  "L118-L143"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K03.b",
+                       "section_title":  "未知、负面与冲突的顺序",
+                       "text":  "区域尚未开放先判not_qualified，并保留冲突诊断；恰好开放已算开放。已开放有业务冲突判unknown。无冲突且有一致met判qualified；否则只有checked_at=as_of的可见not_met才证明当前not_qualified，历史not_met或无记录判unknown。不同首次满足时间、同记录ID业务内容冲突，或met时间p同时有checked_at\u003e=p的not_met，都保留冲突；早于p的not_met不冲突。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S03",
+                                               "sha256":  "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+                                               "locator":  "L94-L131"
+                                           }
+                                       ]
+                   }
+               ]
+}

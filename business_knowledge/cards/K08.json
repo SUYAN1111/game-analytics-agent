@@ -1,0 +1,42 @@
+{
+    "card_id":  "K08",
+    "title":  "交付水位、确认顺序与观察覆盖率",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "水位",
+                     "watermark_at",
+                     "checked_at",
+                     "覆盖率"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K08.a",
+                       "section_title":  "水位与采集完整性相互配合",
+                       "text":  "采集和水位证据先按checked_at\u003c=as_of且available_at\u003c=as_of选可见记录，再处理重传和版本。每来源水位取最大checked_at版本，不取历史最大watermark_at；最新降低也须采用，同刻不同水位是冲突。水位只确认已采集并进入流程、事件时间严格早于watermark_at的记录已交付；不是最大事件时间、心跳或无漏采证明。完整性还须全部所需来源的complete并集覆盖全窗且无相交gap或冲突。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/coverage_rules"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K08.b",
+                       "section_title":  "窗口右端与修复后交付确认",
+                       "text":  "最新无冲突可见watermark_at\u003e=window_end，恰好等于右端足够；同时watermark.checked_at必须不早于所有与窗口正长度相交的当前complete区间最大checked_at。不能只挑旧区间绕过新修复；否则记录水位早于当前完整性确认。观察覆盖率=(Q4+Q5)/(Q3+Q4+Q5)，分母0为null；它不是M03也不是预测覆盖率。这些只核查提供证据，不证明真实上游没有不可见漏采。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/coverage_rules"
+                                           }
+                                       ]
+                   }
+               ]
+}

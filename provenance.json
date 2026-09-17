@@ -1,0 +1,1282 @@
+{
+  "agent_runtime/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "c2b66839038fc9dd68abb586f022a95603c59d19668171c8a00d4aa7bf28deac",
+    "product_sha256": "c2b66839038fc9dd68abb586f022a95603c59d19668171c8a00d4aa7bf28deac",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/__init__.py"
+  },
+  "agent_runtime/budget.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "5fe6d8f8d3fe0cca5456dec95ce0fc33fe4f494030a5c6bf4ac8f185cf388e0a",
+    "product_sha256": "5fe6d8f8d3fe0cca5456dec95ce0fc33fe4f494030a5c6bf4ac8f185cf388e0a",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/budget.py"
+  },
+  "agent_runtime/claims.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "6636d7480432c2be7d3244b2d3f283139981dc3bc27e02c25e7f3b4e0b58a9e4",
+    "product_sha256": "6636d7480432c2be7d3244b2d3f283139981dc3bc27e02c25e7f3b4e0b58a9e4",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/claims.py"
+  },
+  "agent_runtime/common.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "a7cf078791b4d0b099efcbc5725e3c541e57cfc2d0f0d31108024a73532ee678",
+    "product_sha256": "fedfa5d066c8d3b2f41ab0de32f728960883c14e71f4abfe6bc9ee50eafad96f",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/common.py"
+  },
+  "agent_runtime/configs/task09_deepseek_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "5b8eaedf9b4435b6d9d310d72be6bc4468a572c941da292403450f665b530e27",
+    "product_sha256": "31f812ddc0d8c453cebf07b1c90b6fe9419e235a1981939969805d81ea8d9300",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/configs/task09_deepseek_v1.json"
+  },
+  "agent_runtime/processes.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "449b663ec262ad2153f24e13dbf539e9aabfe36058dfa10d2321f450933b7542",
+    "product_sha256": "1615572f7e3866693f5dab3aa754a0b27a5b03486841bea73fa02d5fefcca9f2",
+    "reason": "Runtime dependency",
+    "source": "agent_runtime/processes.py"
+  },
+  "analysis_core/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "dcce4cf9b42ab632d9b24d40102d70e48a746107a4ad706bc9337bb227d897b9",
+    "product_sha256": "dcce4cf9b42ab632d9b24d40102d70e48a746107a4ad706bc9337bb227d897b9",
+    "reason": "Runtime dependency",
+    "source": "analysis_core/__init__.py"
+  },
+  "analysis_core/coverage.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "2ed24875a1009f9ca7d34436281da3e046a5ecedb47fee05ba4b6502e460aa06",
+    "product_sha256": "2ed24875a1009f9ca7d34436281da3e046a5ecedb47fee05ba4b6502e460aa06",
+    "reason": "Runtime dependency",
+    "source": "analysis_core/coverage.py"
+  },
+  "analysis_core/temporal.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "ee73ceea32338951b44751be6c996d9179c744d3155c090916e14cbe1d8aff37",
+    "product_sha256": "ee73ceea32338951b44751be6c996d9179c744d3155c090916e14cbe1d8aff37",
+    "reason": "Runtime dependency",
+    "source": "analysis_core/temporal.py"
+  },
+  "analysis_tools/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d3e308cabc0a577a2a2caf73862bae8b21976e5438c6b175cada1a29740071ba",
+    "product_sha256": "d3e308cabc0a577a2a2caf73862bae8b21976e5438c6b175cada1a29740071ba",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/__init__.py"
+  },
+  "analysis_tools/aggregation.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "84497cee2292987af3f8b9816eba1a2511be31a587cd165b85bd0eda6b1d7be2",
+    "product_sha256": "84497cee2292987af3f8b9816eba1a2511be31a587cd165b85bd0eda6b1d7be2",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/aggregation.py"
+  },
+  "analysis_tools/contracts.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "384adbacfc3e938f61945c12dea4147b15b514888798f91d1fe7c92c5dff0d1d",
+    "product_sha256": "384adbacfc3e938f61945c12dea4147b15b514888798f91d1fe7c92c5dff0d1d",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/contracts.py"
+  },
+  "analysis_tools/evidence.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "e9918fea66087fb6ca1ad6d1431713acd216f00cdb9023a96de6c494fe506422",
+    "product_sha256": "e9918fea66087fb6ca1ad6d1431713acd216f00cdb9023a96de6c494fe506422",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/evidence.py"
+  },
+  "analysis_tools/host.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "4136cb5c524b7f159744374410028008d5695ef02444c4543a608251250eec5b",
+    "product_sha256": "606346e00c8ba2d145316d0a1f1e106f1e55ef1d13f18f5610bef8c278a9750d",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/host.py"
+  },
+  "analysis_tools/registry.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "9b89c26aec43095f763ae0a5f2fa632d24b05cd57f924c5b45387eed382436d6",
+    "product_sha256": "b707840696967903afeecac1130642c441c49940d11b3a63d235c9214693f6ee",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/registry.py"
+  },
+  "analysis_tools/service.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "7729ca4ee36dff1e8a5f9c7797ab398084baf407064535687675dacca5fc7653",
+    "product_sha256": "7729ca4ee36dff1e8a5f9c7797ab398084baf407064535687675dacca5fc7653",
+    "reason": "Runtime dependency",
+    "source": "analysis_tools/service.py"
+  },
+  "assets/artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/cards.json": {
+    "modified": false,
+    "original_sha256": "7c1d161baac9f28bb43a5d8fc074a7ee297445d2e8754999117381967b740d32",
+    "product_sha256": "7c1d161baac9f28bb43a5d8fc074a7ee297445d2e8754999117381967b740d32",
+    "reason": "M03 frozen query/prediction/card resource: published_cards",
+    "source": "artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/cards.json"
+  },
+  "assets/artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/prediction_queue.json": {
+    "modified": false,
+    "original_sha256": "025598d2239f12ab7cd0f10ea0f5e89907cd536dda51eb6d53533d4c049cffb5",
+    "product_sha256": "025598d2239f12ab7cd0f10ea0f5e89907cd536dda51eb6d53533d4c049cffb5",
+    "reason": "M03 frozen query/prediction/card resource: prediction_queue",
+    "source": "artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/prediction_queue.json"
+  },
+  "assets/association/baskets/discovery_V1_V3.json": {
+    "modified": false,
+    "original_sha256": "ff8c6eb32e9351b239be1e678dc5da094bfff3e3de3544d1c50a1bb0a459aa81",
+    "product_sha256": "ff8c6eb32e9351b239be1e678dc5da094bfff3e3de3544d1c50a1bb0a459aa81",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/baskets/discovery_V1_V3.json"
+  },
+  "assets/association/baskets/validation_V4.json": {
+    "modified": false,
+    "original_sha256": "5377525f4a54f8c1d65086400fbeaac3ccc9c39cd5b84edcb62bdd8e3070656d",
+    "product_sha256": "5377525f4a54f8c1d65086400fbeaac3ccc9c39cd5b84edcb62bdd8e3070656d",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/baskets/validation_V4.json"
+  },
+  "assets/association/baskets/validation_V5.json": {
+    "modified": false,
+    "original_sha256": "164d92bdc7e63d0ecda99c9a7e172af8598a8da4e011499e3a1f2d38ceec1104",
+    "product_sha256": "164d92bdc7e63d0ecda99c9a7e172af8598a8da4e011499e3a1f2d38ceec1104",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/baskets/validation_V5.json"
+  },
+  "assets/association/baskets/validation_V6.json": {
+    "modified": false,
+    "original_sha256": "f8d52ffd247930b5dde29965d62180e043c2a849c565df9aafb2e8f5ccc0510d",
+    "product_sha256": "f8d52ffd247930b5dde29965d62180e043c2a849c565df9aafb2e8f5ccc0510d",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/baskets/validation_V6.json"
+  },
+  "assets/association/business.json": {
+    "modified": false,
+    "original_sha256": "9904966d205424903b4f48d8e3d5067971f7bb95584276469cd94b3d5d2c386a",
+    "product_sha256": "9904966d205424903b4f48d8e3d5067971f7bb95584276469cd94b3d5d2c386a",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/business.json"
+  },
+  "assets/association/evaluations/discovery_V1_V3.json": {
+    "modified": false,
+    "original_sha256": "fccc855b3feb6ab6cb306cd20e3c43490ab680deef040257e4080a864ced3aa0",
+    "product_sha256": "fccc855b3feb6ab6cb306cd20e3c43490ab680deef040257e4080a864ced3aa0",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/evaluations/discovery_V1_V3.json"
+  },
+  "assets/association/evaluations/validation_V4.json": {
+    "modified": false,
+    "original_sha256": "225f619035863a534c2be5b9ab02186b9583943650e21985790b940770e2f6c4",
+    "product_sha256": "225f619035863a534c2be5b9ab02186b9583943650e21985790b940770e2f6c4",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/evaluations/validation_V4.json"
+  },
+  "assets/association/evaluations/validation_V5.json": {
+    "modified": false,
+    "original_sha256": "e7deeb48eae9dca90d2513d4e9082a6a7121242d3e10e1b3fc2d5a82e62b827f",
+    "product_sha256": "e7deeb48eae9dca90d2513d4e9082a6a7121242d3e10e1b3fc2d5a82e62b827f",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/evaluations/validation_V5.json"
+  },
+  "assets/association/evaluations/validation_V6.json": {
+    "modified": false,
+    "original_sha256": "ebbadae647f6b4889c39153cb7fa9219732d833ebf94555a60da47f72f16e38e",
+    "product_sha256": "ebbadae647f6b4889c39153cb7fa9219732d833ebf94555a60da47f72f16e38e",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/evaluations/validation_V6.json"
+  },
+  "assets/association/generation_manifest.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "82fd301e190ff466c68647f463c9f31639a186ac98165811c5fe0ee7170254e7",
+    "product_sha256": "82fd301e190ff466c68647f463c9f31639a186ac98165811c5fe0ee7170254e7",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/generation_manifest.json"
+  },
+  "assets/association/metadata_references.json": {
+    "modified": false,
+    "original_sha256": "951c1ef4263e6dddb4d8f098926f0dbc51d411b797a099c89afe7f84c9a6fdfb",
+    "product_sha256": "951c1ef4263e6dddb4d8f098926f0dbc51d411b797a099c89afe7f84c9a6fdfb",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/metadata_references.json"
+  },
+  "assets/association/public/discovery_V1_V3.json": {
+    "modified": false,
+    "original_sha256": "30dabe93b0a7ed37a2b841617d650af7637ebaccf155a83a98dc9116717daf3a",
+    "product_sha256": "30dabe93b0a7ed37a2b841617d650af7637ebaccf155a83a98dc9116717daf3a",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/public/discovery_V1_V3.json"
+  },
+  "assets/association/public/validation_V4.json": {
+    "modified": false,
+    "original_sha256": "c594b163f5a6c141cd05006f55bad9c0db3d99933a9e4fa64567f999809f05b9",
+    "product_sha256": "c594b163f5a6c141cd05006f55bad9c0db3d99933a9e4fa64567f999809f05b9",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/public/validation_V4.json"
+  },
+  "assets/association/public/validation_V5.json": {
+    "modified": false,
+    "original_sha256": "de86d3ddd543e35b5dc8f59138c664f7e4a95ddf7504267a8c3be9d5e0948b21",
+    "product_sha256": "de86d3ddd543e35b5dc8f59138c664f7e4a95ddf7504267a8c3be9d5e0948b21",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/public/validation_V5.json"
+  },
+  "assets/association/public/validation_V6.json": {
+    "modified": false,
+    "original_sha256": "727cae48b3521ce6e2e253361642ffa0b833e097e014d067133d7dccf40bb24f",
+    "product_sha256": "727cae48b3521ce6e2e253361642ffa0b833e097e014d067133d7dccf40bb24f",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/public/validation_V6.json"
+  },
+  "assets/association/raw_contract.json": {
+    "modified": false,
+    "original_sha256": "e74aa3db24217207400fa5597e6f5c5bc87d6c8a47bda5b2908817cce845bb4e",
+    "product_sha256": "e74aa3db24217207400fa5597e6f5c5bc87d6c8a47bda5b2908817cce845bb4e",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/raw_contract.json"
+  },
+  "assets/association/rule_contract.json": {
+    "modified": false,
+    "original_sha256": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "product_sha256": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/rule_contract.json"
+  },
+  "assets/association/rules.json": {
+    "modified": false,
+    "original_sha256": "20e4284157db1faceb01738e67138c79e4a289dce2763be5f59b946e1c0db5bf",
+    "product_sha256": "20e4284157db1faceb01738e67138c79e4a289dce2763be5f59b946e1c0db5bf",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/rules.json"
+  },
+  "assets/association/windows.json": {
+    "modified": false,
+    "original_sha256": "741bda65a885d9f596c284ad92f0576ce87b2ca8cf02835e8290af5ba4aede49",
+    "product_sha256": "741bda65a885d9f596c284ad92f0576ce87b2ca8cf02835e8290af5ba4aede49",
+    "reason": "Frozen association runtime evidence",
+    "source": "artifacts/association/association128d9ad62c0a996c68d820ee72/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/windows.json"
+  },
+  "assets/business_configs/m03_features_v1.json": {
+    "modified": false,
+    "original_sha256": "916e135b01d68188886f5568cc94384aa39176bffbb12dfd8f3912ef0a6dc83f",
+    "product_sha256": "916e135b01d68188886f5568cc94384aa39176bffbb12dfd8f3912ef0a6dc83f",
+    "reason": "M03 frozen query/prediction/card resource: feature_contract",
+    "source": "business_configs/m03_features_v1.json"
+  },
+  "assets/data/derived/m035c1fae9c52860eb04c4565ca/m03f86fba0d54aeb2d2793c09008/test/X.jsonl": {
+    "modified": false,
+    "original_sha256": "ba6f09d32b5baaf269eb1aaeab64994663cca773b81d13dc7a6d3f91dfb6457b",
+    "product_sha256": "ba6f09d32b5baaf269eb1aaeab64994663cca773b81d13dc7a6d3f91dfb6457b",
+    "reason": "M03 frozen query/prediction/card resource: test_X",
+    "source": "data/derived/m035c1fae9c52860eb04c4565ca/m03f86fba0d54aeb2d2793c09008/test/X.jsonl"
+  },
+  "assets/data/derived/m035c1fae9c52860eb04c4565ca/m03f86fba0d54aeb2d2793c09008/test/row_map.jsonl": {
+    "modified": false,
+    "original_sha256": "848875203dd13d03fa2a6ae41ea0f7b157caa0faea53762019c168881b10819c",
+    "product_sha256": "848875203dd13d03fa2a6ae41ea0f7b157caa0faea53762019c168881b10819c",
+    "reason": "M03 frozen query/prediction/card resource: test_row_map",
+    "source": "data/derived/m035c1fae9c52860eb04c4565ca/m03f86fba0d54aeb2d2793c09008/test/row_map.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_catalog.jsonl": {
+    "modified": false,
+    "original_sha256": "3611aa84e8496a3968ad466c72384638ddb7f69048d528990e17cdae88c8f749",
+    "product_sha256": "3611aa84e8496a3968ad466c72384638ddb7f69048d528990e17cdae88c8f749",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_catalog.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_source_catalog.jsonl": {
+    "modified": false,
+    "original_sha256": "6ff5a604da6ac9f0f75c20e81759524f395346cb44d6017996b8662bb01a2775",
+    "product_sha256": "6ff5a604da6ac9f0f75c20e81759524f395346cb44d6017996b8662bb01a2775",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_source_catalog.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_uploads.jsonl": {
+    "modified": false,
+    "original_sha256": "3a1cbe0d087ffb1069a2233aac142f8a4f8f43fdce4044b95ccaeba597397490",
+    "product_sha256": "3a1cbe0d087ffb1069a2233aac142f8a4f8f43fdce4044b95ccaeba597397490",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_uploads.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_windows.jsonl": {
+    "modified": false,
+    "original_sha256": "b301f42843414637a0fb049d98f0d97447b675c3767ec0c54d7246f7aa70244f",
+    "product_sha256": "b301f42843414637a0fb049d98f0d97447b675c3767ec0c54d7246f7aa70244f",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/activity_windows.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/collection_checks.jsonl": {
+    "modified": false,
+    "original_sha256": "99643aa07fe7098b7de19342a26083a54d120fccf57a88c44f0443f1b314d998",
+    "product_sha256": "99643aa07fe7098b7de19342a26083a54d120fccf57a88c44f0443f1b314d998",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/collection_checks.jsonl"
+  },
+  "assets/data/generated/activity120c2f429d1bf49a5cf5c50321/observed/watermark_checks.jsonl": {
+    "modified": false,
+    "original_sha256": "8ecb5551593eef9a4e06d80282da8ccc1ef7f97338ee44f0e31362142ac4c01c",
+    "product_sha256": "8ecb5551593eef9a4e06d80282da8ccc1ef7f97338ee44f0e31362142ac4c01c",
+    "reason": "Frozen activity observation integrity",
+    "source": "data/generated/activity120c2f429d1bf49a5cf5c50321/observed/watermark_checks.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/collection_checks.jsonl": {
+    "modified": false,
+    "original_sha256": "0530a3f749a79e3f29f7deb099097a21a4518ad86bf7a6fc6561f2ba7cde357e",
+    "product_sha256": "0530a3f749a79e3f29f7deb099097a21a4518ad86bf7a6fc6561f2ba7cde357e",
+    "reason": "M03 frozen query/prediction/card resource: observed:collection_checks",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/collection_checks.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/player_attributes.jsonl": {
+    "modified": false,
+    "original_sha256": "e2a7cca93c3e00c35a048470b1c4c2cebb9a5a9fea8e14891c1e23a515d7584f",
+    "product_sha256": "e2a7cca93c3e00c35a048470b1c4c2cebb9a5a9fea8e14891c1e23a515d7584f",
+    "reason": "M03 frozen query/prediction/card resource: observed:player_attributes",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/player_attributes.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/players.jsonl": {
+    "modified": false,
+    "original_sha256": "4c43f858f971b8d3d2701980deb8eb3f82ee45db3c2a1aef60437c89f107ef6b",
+    "product_sha256": "4c43f858f971b8d3d2701980deb8eb3f82ee45db3c2a1aef60437c89f107ef6b",
+    "reason": "M03 frozen query/prediction/card resource: observed:players",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/players.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/qualification_checks.jsonl": {
+    "modified": false,
+    "original_sha256": "4535a10cfae8fcc30ad51af76b581b93d83cf0b76bec2549dd494a63acf8810f",
+    "product_sha256": "4535a10cfae8fcc30ad51af76b581b93d83cf0b76bec2549dd494a63acf8810f",
+    "reason": "M03 frozen query/prediction/card resource: observed:qualification_checks",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/qualification_checks.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/session_uploads.jsonl": {
+    "modified": false,
+    "original_sha256": "30d801592bf6c2be97d9a35297eab3b0fc5fd29525e584d52440b13008191c70",
+    "product_sha256": "30d801592bf6c2be97d9a35297eab3b0fc5fd29525e584d52440b13008191c70",
+    "reason": "M03 frozen query/prediction/card resource: observed:session_uploads",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/session_uploads.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/source_catalog.jsonl": {
+    "modified": false,
+    "original_sha256": "6a6b5cb4eba7fd6f6ee405bc32a9b881d207ac70757df925d898fdd380c48607",
+    "product_sha256": "6a6b5cb4eba7fd6f6ee405bc32a9b881d207ac70757df925d898fdd380c48607",
+    "reason": "M03 frozen query/prediction/card resource: observed:source_catalog",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/source_catalog.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/story_calendar.jsonl": {
+    "modified": false,
+    "original_sha256": "47ced71b52d17f0cf08647e021139926083f8bb18ab1d6ecd691dc2ec7808fc2",
+    "product_sha256": "47ced71b52d17f0cf08647e021139926083f8bb18ab1d6ecd691dc2ec7808fc2",
+    "reason": "M03 frozen query/prediction/card resource: observed:story_calendar",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/story_calendar.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/story_start_uploads.jsonl": {
+    "modified": false,
+    "original_sha256": "5c90d46137912c9ff59b348ddafcea8aacc2f2e9afd81d0395a8889a24cf9147",
+    "product_sha256": "5c90d46137912c9ff59b348ddafcea8aacc2f2e9afd81d0395a8889a24cf9147",
+    "reason": "M03 frozen query/prediction/card resource: observed:story_start_uploads",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/story_start_uploads.jsonl"
+  },
+  "assets/data/generated/m035c1fae9c52860eb04c4565ca/observed/watermark_checks.jsonl": {
+    "modified": false,
+    "original_sha256": "9d9e686c7570ae2693df97840501730f05bfcf7941b8b973017c028b02354287",
+    "product_sha256": "9d9e686c7570ae2693df97840501730f05bfcf7941b8b973017c028b02354287",
+    "reason": "M03 frozen query/prediction/card resource: observed:watermark_checks",
+    "source": "data/generated/m035c1fae9c52860eb04c4565ca/observed/watermark_checks.jsonl"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/baseline_prior.joblib": {
+    "modified": false,
+    "original_sha256": "33bceaa6b0076d5019e0aa2e8e99dc18bfea45755f66ef474856b7a4ab72f0f1",
+    "product_sha256": "33bceaa6b0076d5019e0aa2e8e99dc18bfea45755f66ef474856b7a4ab72f0f1",
+    "reason": "M03 frozen query/prediction/card resource: asset:baseline_prior",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/baseline_prior.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c0p1.joblib": {
+    "modified": false,
+    "original_sha256": "6c73fd18593c5ac448705d60792c9633dbf2a3999984a2fe283c394f2c87fff9",
+    "product_sha256": "6c73fd18593c5ac448705d60792c9633dbf2a3999984a2fe283c394f2c87fff9",
+    "reason": "M03 frozen query/prediction/card resource: asset:lr_c0p1",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c0p1.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c1.joblib": {
+    "modified": false,
+    "original_sha256": "2546d74aaa2d815deea50ed34c132a533ade429cb43cb05c00cbb4c656f0d711",
+    "product_sha256": "2546d74aaa2d815deea50ed34c132a533ade429cb43cb05c00cbb4c656f0d711",
+    "reason": "M03 frozen query/prediction/card resource: asset:lr_c1",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c1.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c10.joblib": {
+    "modified": false,
+    "original_sha256": "4b493ff137d422b89f8eddf8f7066d21a94a6e509525734c1a6d29921e054860",
+    "product_sha256": "4b493ff137d422b89f8eddf8f7066d21a94a6e509525734c1a6d29921e054860",
+    "reason": "M03 frozen query/prediction/card resource: asset:lr_c10",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/lr_c10.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d2.joblib": {
+    "modified": false,
+    "original_sha256": "b92ac5227c6c422bf226a268d85f130176cb680b1f24d96e7342596e710e2ce2",
+    "product_sha256": "b92ac5227c6c422bf226a268d85f130176cb680b1f24d96e7342596e710e2ce2",
+    "reason": "M03 frozen query/prediction/card resource: asset:tree_d2",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d2.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d3.joblib": {
+    "modified": false,
+    "original_sha256": "9387cd3150436b4ef59e966568c3b015916ff477579ffb97ddeef7efee404b95",
+    "product_sha256": "9387cd3150436b4ef59e966568c3b015916ff477579ffb97ddeef7efee404b95",
+    "reason": "M03 frozen query/prediction/card resource: asset:tree_d3",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d3.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d4.joblib": {
+    "modified": false,
+    "original_sha256": "e5a834a21ab2f44defc3848d4c9f8747a50e642210ea799f8dee1610f0559146",
+    "product_sha256": "e5a834a21ab2f44defc3848d4c9f8747a50e642210ea799f8dee1610f0559146",
+    "reason": "M03 frozen query/prediction/card resource: asset:tree_d4",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/assets/tree_d4.joblib"
+  },
+  "assets/models/m03/m03ef3c03af2f324e0e12d7ecf37/freeze.json": {
+    "modified": false,
+    "original_sha256": "aa04665390dd4331047bb7c4e4eecd939a4ec650b270d2bb2dcd92073cdeb27e",
+    "product_sha256": "aa04665390dd4331047bb7c4e4eecd939a4ec650b270d2bb2dcd92073cdeb27e",
+    "reason": "M03 frozen query/prediction/card resource: freeze",
+    "source": "models/m03/m03ef3c03af2f324e0e12d7ecf37/freeze.json"
+  },
+  "assets/runtime/host.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+    "product_sha256": "af32e17014f280d3274586a1878e4ccc3a3d686e65807ed93de01becf5919d88",
+    "reason": "runtime resource closure replaces historical code/report dependencies",
+    "source": "artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/host.json"
+  },
+  "assets/segmentation/configuration.json": {
+    "modified": false,
+    "original_sha256": "4a5b23bb892b7e269d3602a65ae64186e90e6ceb113c5f3b2902bf071364a7b3",
+    "product_sha256": "4a5b23bb892b7e269d3602a65ae64186e90e6ceb113c5f3b2902bf071364a7b3",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/configuration.json"
+  },
+  "assets/segmentation/feature_contract.json": {
+    "modified": false,
+    "original_sha256": "fad8bc461c81df0fd326338a0507e48737603d195785bef97556d91606e928af",
+    "product_sha256": "fad8bc461c81df0fd326338a0507e48737603d195785bef97556d91606e928af",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/feature_contract.json"
+  },
+  "assets/segmentation/model.json": {
+    "modified": false,
+    "original_sha256": "fb03135228ecf871dd3082427d5a316a0616125b3a3bbcf00fd1902319e8785a",
+    "product_sha256": "fb03135228ecf871dd3082427d5a316a0616125b3a3bbcf00fd1902319e8785a",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/model.json"
+  },
+  "assets/segmentation/phases.json": {
+    "modified": false,
+    "original_sha256": "f41381e0cc982c3a0ba2ec0d3db4c2a75a4e12ca154776da305d96fe6400ff7d",
+    "product_sha256": "f41381e0cc982c3a0ba2ec0d3db4c2a75a4e12ca154776da305d96fe6400ff7d",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/phases.json"
+  },
+  "assets/segmentation/results/fit_V3main.json": {
+    "modified": false,
+    "original_sha256": "243b3317d405d744bea74bb2df181540d6edce43130f92729514c002c92419e0",
+    "product_sha256": "243b3317d405d744bea74bb2df181540d6edce43130f92729514c002c92419e0",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/results/fit_V3main.json"
+  },
+  "assets/segmentation/results/replay_V5main.json": {
+    "modified": false,
+    "original_sha256": "6149e64ce0f743509f5b8ab0b9023390fe7a9aace85c33fb65a9c134e37c0ae5",
+    "product_sha256": "6149e64ce0f743509f5b8ab0b9023390fe7a9aace85c33fb65a9c134e37c0ae5",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/results/replay_V5main.json"
+  },
+  "assets/segmentation/results/replay_V6main.json": {
+    "modified": false,
+    "original_sha256": "d998562fe7607bf5f2071825193e725cfb9a1e8da3423a3a57f972edef08c32d",
+    "product_sha256": "d998562fe7607bf5f2071825193e725cfb9a1e8da3423a3a57f972edef08c32d",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/results/replay_V6main.json"
+  },
+  "assets/segmentation/snapshots/fit_V3main.json": {
+    "modified": false,
+    "original_sha256": "65f199b0c1edb51fd0641d63c1b41ae9b622dc4171ea42a4c9a6b6054046c0f6",
+    "product_sha256": "65f199b0c1edb51fd0641d63c1b41ae9b622dc4171ea42a4c9a6b6054046c0f6",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/snapshots/fit_V3main.json"
+  },
+  "assets/segmentation/snapshots/replay_V5main.json": {
+    "modified": false,
+    "original_sha256": "21f27e54fb205257b1f5e935f56a53873565b17be5abd43205c4c2279256dec7",
+    "product_sha256": "21f27e54fb205257b1f5e935f56a53873565b17be5abd43205c4c2279256dec7",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/snapshots/replay_V5main.json"
+  },
+  "assets/segmentation/snapshots/replay_V6main.json": {
+    "modified": false,
+    "original_sha256": "24b95209cfcef19001e92a46654d3abee1793dc005b9fe53a5af0fe89d04f820",
+    "product_sha256": "24b95209cfcef19001e92a46654d3abee1793dc005b9fe53a5af0fe89d04f820",
+    "reason": "Frozen segmentation runtime evidence",
+    "source": "artifacts/segmentation/segments111a4ea6912072056354f9aa3d/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/snapshots/replay_V6main.json"
+  },
+  "association/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "68118d4af52f97ba3c8c3fa0a2a1e5bf887894677766a8ebf2d89c8a9fbdb733",
+    "product_sha256": "68118d4af52f97ba3c8c3fa0a2a1e5bf887894677766a8ebf2d89c8a9fbdb733",
+    "reason": "Runtime dependency",
+    "source": "association/__init__.py"
+  },
+  "association/assets.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "ad37aff57d065118ec6a24637bc9277dde3dd91a6c5541ba5a603a46549da1d6",
+    "product_sha256": "806cb05bc1651cd11dfc23b6195a4aaf5221a9ae55d9b21ae763f856015956c5",
+    "reason": "Runtime dependency",
+    "source": "association/assets.py"
+  },
+  "association/contract.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "414f8c35e325fc69bb1efcb9b2d75d17684473a3cbf330f3148eab8075006401",
+    "product_sha256": "708936d62e33aeb298965bd5fce3f80440d33722574c0b9213065bb0801d620a",
+    "reason": "Runtime dependency",
+    "source": "association/contract.py"
+  },
+  "association/mining.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "09cff8c3ac7dfbe5e4a132ed0cd72fb52208d9cf90261955ba985d40ba9af7b0",
+    "product_sha256": "6a4a46da62eceacdc58eabe94cd2271ea1ccd2bd2e5b325832f7869e057983be",
+    "reason": "Runtime dependency",
+    "source": "association/mining.py"
+  },
+  "association/public.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "249e5472807511a17442330dd35e54b02fd3da3b58360e800c5983c7982643fc",
+    "product_sha256": "249e5472807511a17442330dd35e54b02fd3da3b58360e800c5983c7982643fc",
+    "reason": "Runtime dependency",
+    "source": "association/public.py"
+  },
+  "business_configs/activity_rules_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "9904966d205424903b4f48d8e3d5067971f7bb95584276469cd94b3d5d2c386a",
+    "product_sha256": "9904966d205424903b4f48d8e3d5067971f7bb95584276469cd94b3d5d2c386a",
+    "reason": "Runtime dependency",
+    "source": "business_configs/activity_rules_v1.json"
+  },
+  "business_configs/m03_features_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "916e135b01d68188886f5568cc94384aa39176bffbb12dfd8f3912ef0a6dc83f",
+    "product_sha256": "916e135b01d68188886f5568cc94384aa39176bffbb12dfd8f3912ef0a6dc83f",
+    "reason": "Runtime dependency",
+    "source": "business_configs/m03_features_v1.json"
+  },
+  "business_configs/m03_segments_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "cbac13fdd980e47ec8c46709925a1a94472796e6f37ccb5e9cf96fbc150f43ba",
+    "product_sha256": "cbac13fdd980e47ec8c46709925a1a94472796e6f37ccb5e9cf96fbc150f43ba",
+    "reason": "Runtime dependency",
+    "source": "business_configs/m03_segments_v1.json"
+  },
+  "business_knowledge/cards/K01.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "4882d08af98d4cc981ac212845390142ffd5152aa228db895c8e18ce580d714c",
+    "product_sha256": "4882d08af98d4cc981ac212845390142ffd5152aa228db895c8e18ce580d714c",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K01.json"
+  },
+  "business_knowledge/cards/K02.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "db95e7ee993d352d452a82a94b6c2c88ec8ef514bfef2a4a51d2728170b0e23e",
+    "product_sha256": "db95e7ee993d352d452a82a94b6c2c88ec8ef514bfef2a4a51d2728170b0e23e",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K02.json"
+  },
+  "business_knowledge/cards/K03.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "273feec1dee5dbfabdee051169d5ab15d6fca538e8d059a39538186a15392ad9",
+    "product_sha256": "273feec1dee5dbfabdee051169d5ab15d6fca538e8d059a39538186a15392ad9",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K03.json"
+  },
+  "business_knowledge/cards/K04.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "388842624f8cedd81cfe208c49cfb1d2e3e05b5c84e1dd3b5504336152a70647",
+    "product_sha256": "388842624f8cedd81cfe208c49cfb1d2e3e05b5c84e1dd3b5504336152a70647",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K04.json"
+  },
+  "business_knowledge/cards/K05.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d562e8bbdb574580bae42fa9643b82bad91099713901c63edb5429d97dfd8cea",
+    "product_sha256": "d562e8bbdb574580bae42fa9643b82bad91099713901c63edb5429d97dfd8cea",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K05.json"
+  },
+  "business_knowledge/cards/K06.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "ddaaf64a36b9c6beb7d5a9ebb73ccc0915fbe1a950655a9c2fdb5d3b698c0a1b",
+    "product_sha256": "ddaaf64a36b9c6beb7d5a9ebb73ccc0915fbe1a950655a9c2fdb5d3b698c0a1b",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K06.json"
+  },
+  "business_knowledge/cards/K07.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "b3252740623423df8fc149438fba5adaa20ac177c39025374c9ace6b887ef3b5",
+    "product_sha256": "b3252740623423df8fc149438fba5adaa20ac177c39025374c9ace6b887ef3b5",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K07.json"
+  },
+  "business_knowledge/cards/K08.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "a7acb1b83761340769f4187d460a11edccb80f9a9a48d966fc41c133778a2035",
+    "product_sha256": "a7acb1b83761340769f4187d460a11edccb80f9a9a48d966fc41c133778a2035",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K08.json"
+  },
+  "business_knowledge/cards/K09.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "6a6440e1eb682219bcd924b7d966ce0a00f7d74494c409f32f5cc06d223b0e0b",
+    "product_sha256": "6a6440e1eb682219bcd924b7d966ce0a00f7d74494c409f32f5cc06d223b0e0b",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K09.json"
+  },
+  "business_knowledge/cards/K10.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "9dd2a9bb8a88761040ef9696ad32ae81b6fe8a18a06f0dc90e1fe828e25a00a9",
+    "product_sha256": "9dd2a9bb8a88761040ef9696ad32ae81b6fe8a18a06f0dc90e1fe828e25a00a9",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K10.json"
+  },
+  "business_knowledge/cards/K11.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "e0b3c6998d2e64970f657c27559fb21007b7fba29e204f476fe0f5cf144b6400",
+    "product_sha256": "e0b3c6998d2e64970f657c27559fb21007b7fba29e204f476fe0f5cf144b6400",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K11.json"
+  },
+  "business_knowledge/cards/K12.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "dc06f057c43974418fe9a4e1961dcc63f4ed595b42987cbf095bb67daa93934f",
+    "product_sha256": "dc06f057c43974418fe9a4e1961dcc63f4ed595b42987cbf095bb67daa93934f",
+    "reason": "Runtime dependency",
+    "source": "business_knowledge/cards/K12.json"
+  },
+  "case_adapters/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d535fe7d96a1b778f9683772cfe70055ae4a253e9c6499d3b40fb7e0ab3d5460",
+    "product_sha256": "d535fe7d96a1b778f9683772cfe70055ae4a253e9c6499d3b40fb7e0ab3d5460",
+    "reason": "Runtime dependency",
+    "source": "case_adapters/__init__.py"
+  },
+  "case_adapters/m03_prediction.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "566d2bb30eea0db1ad5c9a41d5d5924002040bd423d4ef6f1ca294a331d6b678",
+    "product_sha256": "42e94ca80b0f34062266819070fb9d519f393d5d5ac2c0fdb41bf5d379d25947",
+    "reason": "Runtime dependency",
+    "source": "case_adapters/m03_prediction.py"
+  },
+  "case_adapters/m03_tools.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "674b8bb775a28eb70d07b3dc9b5fe52bda3fd0ccb95b1657df13c730dd2d17b5",
+    "product_sha256": "624cf8d56bb4cacba2aedf800545e722da738a01303634f101662778b0d156ba",
+    "reason": "Runtime dependency",
+    "source": "case_adapters/m03_tools.py"
+  },
+  "features/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "fdf09d860166d1c510348ecc8ed6f30ad10ea42492dc7077de206dc910f369ed",
+    "product_sha256": "fdf09d860166d1c510348ecc8ed6f30ad10ea42492dc7077de206dc910f369ed",
+    "reason": "Runtime dependency",
+    "source": "features/__init__.py"
+  },
+  "features/contract.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "fc66e73ca97cc696b0622f46b343a52382d063b985c770422eb0a8a430430d02",
+    "product_sha256": "fc66e73ca97cc696b0622f46b343a52382d063b985c770422eb0a8a430430d02",
+    "reason": "Runtime dependency",
+    "source": "features/contract.py"
+  },
+  "features/m03_build.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "39ec477b262ae85404191524dcd8c81a58736daba482b165af331edc4015f230",
+    "product_sha256": "146fc0d6756d54fa7707d463357d26ee7bc30c4fd9212461b804c6915fcd7327",
+    "reason": "retain existing candidate selection; exclude feature generation",
+    "source": "features/m03_build.py"
+  },
+  "features/m03_history.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "219e9002399ee3e10b937024fa3c5d1f066a7eb4caf1bd796c3d829869b246ed",
+    "product_sha256": "219e9002399ee3e10b937024fa3c5d1f066a7eb4caf1bd796c3d829869b246ed",
+    "reason": "Runtime dependency",
+    "source": "features/m03_history.py"
+  },
+  "features/observed.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "29bdf9598b561acb82f6bd7bc3cebde1ccecabeeea3f9ebda0b1a85b502aa20d",
+    "product_sha256": "29bdf9598b561acb82f6bd7bc3cebde1ccecabeeea3f9ebda0b1a85b502aa20d",
+    "reason": "Runtime dependency",
+    "source": "features/observed.py"
+  },
+  "knowledge_core/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "5bf4185a4b7a77aaed1c9c07cdba073017fdff8a3152dcdc59169f8a9daca5f7",
+    "product_sha256": "5bf4185a4b7a77aaed1c9c07cdba073017fdff8a3152dcdc59169f8a9daca5f7",
+    "reason": "Runtime dependency",
+    "source": "knowledge_core/__init__.py"
+  },
+  "knowledge_core/retrieval.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "502e76e7a426aa30cb4868687b81573b0dcc1f5ad6dd2ca8510e31cd8b39f983",
+    "product_sha256": "502e76e7a426aa30cb4868687b81573b0dcc1f5ad6dd2ca8510e31cd8b39f983",
+    "reason": "Runtime dependency",
+    "source": "knowledge_core/retrieval.py"
+  },
+  "knowledge_core/service.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "0f21f4240c0b564e1485633bfdc7272740c2c07a0a3376101e2aca7e056c168a",
+    "product_sha256": "0f21f4240c0b564e1485633bfdc7272740c2c07a0a3376101e2aca7e056c168a",
+    "reason": "Runtime dependency",
+    "source": "knowledge_core/service.py"
+  },
+  "knowledge_sources/S01/host.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+    "product_sha256": "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "artifacts/tool_runtime/tools0821fc6e3b48e2cf818e585ddd/host.json"
+  },
+  "knowledge_sources/S02/ANALYSIS_TOOLS_AND_MCP_V1.md": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+    "product_sha256": "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "docs/ANALYSIS_TOOLS_AND_MCP_V1.md"
+  },
+  "knowledge_sources/S03/m03_qualification.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+    "product_sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "preparation/m03_qualification.py"
+  },
+  "knowledge_sources/S04/M03_FEATURES_AND_LABELS_V1.md": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "ef63584b5277f545de2008636435f0cd803a2b19d40cdea6eb0798a667b8d38f",
+    "product_sha256": "ef63584b5277f545de2008636435f0cd803a2b19d40cdea6eb0798a667b8d38f",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "docs/M03_FEATURES_AND_LABELS_V1.md"
+  },
+  "knowledge_sources/S05/M03_BASELINE_MODELS_V1.md": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "30ddb4083664caf7487487326c50caa6b0ee019289701aca60c5feaed23f97dd",
+    "product_sha256": "30ddb4083664caf7487487326c50caa6b0ee019289701aca60c5feaed23f97dd",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "docs/M03_BASELINE_MODELS_V1.md"
+  },
+  "knowledge_sources/S06/m03_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d2059d65e4174a4607cdbb74282fbb5f98198404cd22d10835024d937183944d",
+    "product_sha256": "d2059d65e4174a4607cdbb74282fbb5f98198404cd22d10835024d937183944d",
+    "reason": "immutable public knowledge citation source; not model full-text input",
+    "source": "business_configs/m03_v1.json"
+  },
+  "metrics/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d2eec80279ea77abe65efa139cdaf6dd0bc62b8cd6205b5badb55c91ce6bc59d",
+    "product_sha256": "d2eec80279ea77abe65efa139cdaf6dd0bc62b8cd6205b5badb55c91ce6bc59d",
+    "reason": "Runtime dependency",
+    "source": "metrics/__init__.py"
+  },
+  "metrics/m03.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "f711f5125f25f7846a0fc1a6bec127cb2fae1ebd61faa39b3361422d8d110a75",
+    "product_sha256": "f711f5125f25f7846a0fc1a6bec127cb2fae1ebd61faa39b3361422d8d110a75",
+    "reason": "Runtime dependency",
+    "source": "metrics/m03.py"
+  },
+  "modeling/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "16597d90ce12714bf3a78667d8f700d482ac16c7f70aea44426989eccf972af8",
+    "product_sha256": "16597d90ce12714bf3a78667d8f700d482ac16c7f70aea44426989eccf972af8",
+    "reason": "Runtime dependency",
+    "source": "modeling/__init__.py"
+  },
+  "modeling/m03_baselines.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "a8cf39c2ae334cde45c855955f3d02dcb4378c45ad50948a0177998082781ca3",
+    "product_sha256": "dad16226defc93c1b2cfe3b35ba69a3bc40c9e100847c85bb79568dc386761d5",
+    "reason": "Runtime dependency",
+    "source": "modeling/m03_baselines.py"
+  },
+  "modeling/m03_data.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "1b7a9889002c366734468de17518a9548e0e0e712781353d8d1cb62b13b8b893",
+    "product_sha256": "cd13670f754250721b79b7b0998a6ffb91c3d9220d47e5c7cb70a92aa23a615f",
+    "reason": "Runtime dependency",
+    "source": "modeling/m03_data.py"
+  },
+  "modeling/m03_io.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "d625cb0c125b3ac95e3df94dfe3bf552f6263c20c7813cb3f9d7b77515046e6c",
+    "product_sha256": "4ec92cd0fdfee224350a4df10141cd78a621a75da6d63f18f1cef12985c018a8",
+    "reason": "Runtime dependency",
+    "source": "modeling/m03_io.py"
+  },
+  "modeling/m03_predict.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "962a6d4d7eeb5edc513df6f04b87f55938c6cabae91e8eb402df4af8c0791019",
+    "product_sha256": "332dc6817638faa5194d45a539cd8ba48bd175b842387dc6f96bf18aefa42f83",
+    "reason": "Runtime dependency",
+    "source": "modeling/m03_predict.py"
+  },
+  "modeling/m03_preprocessing.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "2e463bcbe2c1c8672b2f70cd178060b0694967edd37bd11bdc0aaa1b5dd78e5d",
+    "product_sha256": "d423b80c67530c1b07af8a2eedb8a22bdc3486e01f4975d03bc6d46824d470d3",
+    "reason": "Runtime dependency",
+    "source": "modeling/m03_preprocessing.py"
+  },
+  "preparation/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "12796c6cdb8417c19f73e8ba06c17be31baf23d53a9f42edf625e4fdddb6d008",
+    "product_sha256": "12796c6cdb8417c19f73e8ba06c17be31baf23d53a9f42edf625e4fdddb6d008",
+    "reason": "Runtime dependency",
+    "source": "preparation/__init__.py"
+  },
+  "preparation/m03_generated_inputs.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d6b78ab23da01cdedf9e97d195e97d28a3718d972e2e126ac51d7e2fb037273e",
+    "product_sha256": "d6b78ab23da01cdedf9e97d195e97d28a3718d972e2e126ac51d7e2fb037273e",
+    "reason": "Runtime dependency",
+    "source": "preparation/m03_generated_inputs.py"
+  },
+  "preparation/m03_observation.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d68fc1dd8cab825a2cd71a024cbd8f66a3476a9434d64c202fb9698936484e09",
+    "product_sha256": "d68fc1dd8cab825a2cd71a024cbd8f66a3476a9434d64c202fb9698936484e09",
+    "reason": "Runtime dependency",
+    "source": "preparation/m03_observation.py"
+  },
+  "preparation/m03_qualification.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+    "product_sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+    "reason": "Runtime dependency",
+    "source": "preparation/m03_qualification.py"
+  },
+  "product_core/budget.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "30a35e84a45bdb48dcc5ef9f5b8f4eed6928935c518cd071842c13966ea99f3a",
+    "product_sha256": "7da0fb081e9e553bd345997fee1366d034a586dfebe5845a26b6532d9952a7dc",
+    "reason": "Controller-owned runtime budget only; no evaluator",
+    "source": "evaluation/task13/budget.py"
+  },
+  "product_core/offline_stub.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "3badfa3f297811b33d76cde081ea6ffb08e0564074ce565d9973ca60daa9a8d4",
+    "product_sha256": "3badfa3f297811b33d76cde081ea6ffb08e0564074ce565d9973ca60daa9a8d4",
+    "reason": "minimal loopback provider fixture, never loaded by live driver",
+    "source": "checks/task09_model_stub.py"
+  },
+  "schemas/activity_raw_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "e74aa3db24217207400fa5597e6f5c5bc87d6c8a47bda5b2908817cce845bb4e",
+    "product_sha256": "e74aa3db24217207400fa5597e6f5c5bc87d6c8a47bda5b2908817cce845bb4e",
+    "reason": "Runtime dependency",
+    "source": "schemas/activity_raw_v1.json"
+  },
+  "schemas/activity_rules_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "product_sha256": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "reason": "Runtime dependency",
+    "source": "schemas/activity_rules_v1.json"
+  },
+  "schemas/m03_segments_v1.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+    "product_sha256": "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+    "reason": "Runtime dependency",
+    "source": "schemas/m03_segments_v1.json"
+  },
+  "segmentation/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "8175625b3658efeabdf5c433202159538da4671906f9e4209ab8e7bb11953d3b",
+    "product_sha256": "8175625b3658efeabdf5c433202159538da4671906f9e4209ab8e7bb11953d3b",
+    "reason": "Runtime dependency",
+    "source": "segmentation/__init__.py"
+  },
+  "segmentation/assets.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "bab4417b0de20f99d21483d26bd5063e01be4d6aeb71f66b4624413a94a85788",
+    "product_sha256": "1578a3ca5c0c7dfd0b9f52e33c082f47f8d7a0d2d42edce83d2f5850311396b6",
+    "reason": "Runtime dependency",
+    "source": "segmentation/assets.py"
+  },
+  "segmentation/contract.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "d00bd5bb3afd7c16f0452e91ab3771057ee92cc11d0c5175fc5ef77674626458",
+    "product_sha256": "d00bd5bb3afd7c16f0452e91ab3771057ee92cc11d0c5175fc5ef77674626458",
+    "reason": "Runtime dependency",
+    "source": "segmentation/contract.py"
+  },
+  "segmentation/model.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "ae293e4429508456609ac6ac68dd458a456d1271b6de13d2c2ef2e90a7a80d5c",
+    "product_sha256": "7b2009c50c3527177563300167c3b8f2c17954dd74ff4017bef607384679ca22",
+    "reason": "Runtime dependency",
+    "source": "segmentation/model.py"
+  },
+  "segmentation/profiles.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "da6ffe66274f7ea355f917f5531066f25e2ee7115f51d74ea6076cbc4ee8ead2",
+    "product_sha256": "da6ffe66274f7ea355f917f5531066f25e2ee7115f51d74ea6076cbc4ee8ead2",
+    "reason": "Runtime dependency",
+    "source": "segmentation/profiles.py"
+  },
+  "task10_runtime/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "5124b5a02e2860535b70bca26ea135379d56876a52e32923bfee3a6b93e06b01",
+    "product_sha256": "5124b5a02e2860535b70bca26ea135379d56876a52e32923bfee3a6b93e06b01",
+    "reason": "Runtime dependency",
+    "source": "task10_runtime/__init__.py"
+  },
+  "task10_runtime/answers.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "c43d2b068b2c872a536efbee0bc7f6761bd8475c55d3bb71385de6822523835d",
+    "product_sha256": "c43d2b068b2c872a536efbee0bc7f6761bd8475c55d3bb71385de6822523835d",
+    "reason": "Runtime dependency",
+    "source": "task10_runtime/answers.py"
+  },
+  "task11_knowledge/cards/K13.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "4d09ea1d6012bc4b13bb9a090d3ca2f77022920ea0b8fd799f70e93c1c9ffafd",
+    "product_sha256": "4d09ea1d6012bc4b13bb9a090d3ca2f77022920ea0b8fd799f70e93c1c9ffafd",
+    "reason": "Runtime dependency",
+    "source": "task11_knowledge/cards/K13.json"
+  },
+  "task11_knowledge/cards/K14.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "04e9e54c27f96caba3b61ec7b26bed0da589e54a4da34954e1992231bc196548",
+    "product_sha256": "04e9e54c27f96caba3b61ec7b26bed0da589e54a4da34954e1992231bc196548",
+    "reason": "Runtime dependency",
+    "source": "task11_knowledge/cards/K14.json"
+  },
+  "task11_knowledge/cards/K15.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "ba27804905a93a727b53b69d2cff68ddaed4d26ca4f42bc49a002f9621e5355d",
+    "product_sha256": "ba27804905a93a727b53b69d2cff68ddaed4d26ca4f42bc49a002f9621e5355d",
+    "reason": "Runtime dependency",
+    "source": "task11_knowledge/cards/K15.json"
+  },
+  "task11_runtime/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "a8f99f2ac6f60f43a4b2933994119f5998b8a367d205b71f3638d398d862a4dd",
+    "product_sha256": "a8f99f2ac6f60f43a4b2933994119f5998b8a367d205b71f3638d398d862a4dd",
+    "reason": "Runtime dependency",
+    "source": "task11_runtime/__init__.py"
+  },
+  "task11_runtime/answers.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "7627c02c5809ca099aff7e6f473da6fc0db9c11d471793d3d9b9bc39ccf8c9f3",
+    "product_sha256": "7627c02c5809ca099aff7e6f473da6fc0db9c11d471793d3d9b9bc39ccf8c9f3",
+    "reason": "Runtime dependency",
+    "source": "task11_runtime/answers.py"
+  },
+  "task11_runtime/segments.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "a91f86c6546a39ce9e71eea1eab3fc668e8872f1ae4421029b92eb74ff466cc6",
+    "product_sha256": "a91f86c6546a39ce9e71eea1eab3fc668e8872f1ae4421029b92eb74ff466cc6",
+    "reason": "Runtime dependency",
+    "source": "task11_runtime/segments.py"
+  },
+  "task11_runtime/surface.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "02174079ef57f4a60ece728bf220223b0cdeeca04800484c3bdc9c2dfcc6156d",
+    "product_sha256": "02174079ef57f4a60ece728bf220223b0cdeeca04800484c3bdc9c2dfcc6156d",
+    "reason": "Runtime dependency",
+    "source": "task11_runtime/surface.py"
+  },
+  "task12_knowledge/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "c9eda251715978f918ec35fcb0b4ffb55fd8af6c664dbd31395eaba277f4eb02",
+    "product_sha256": "c9eda251715978f918ec35fcb0b4ffb55fd8af6c664dbd31395eaba277f4eb02",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/__init__.py"
+  },
+  "task12_knowledge/cards/K16.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "f231785348efd7dbab58afaf11bae7249df161f06a6c47c75b83164413197147",
+    "product_sha256": "f231785348efd7dbab58afaf11bae7249df161f06a6c47c75b83164413197147",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/cards/K16.json"
+  },
+  "task12_knowledge/cards/K17.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "3fe8feeefccd57ecff0194a4e1a41cbe23816e9eedc48542120af5761efefa4c",
+    "product_sha256": "3fe8feeefccd57ecff0194a4e1a41cbe23816e9eedc48542120af5761efefa4c",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/cards/K17.json"
+  },
+  "task12_knowledge/cards/K18.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "fbb80ee09214dd949ee9a069a26d1434a74f8852bc7f0e37efed71cb07ca4d13",
+    "product_sha256": "fbb80ee09214dd949ee9a069a26d1434a74f8852bc7f0e37efed71cb07ca4d13",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/cards/K18.json"
+  },
+  "task12_knowledge/corpus.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "7cdc7ccf0aac28fa7d9633254e21e529e9d4ee90023927b0cdd848d241a3c36b",
+    "product_sha256": "afb3c8462f9e401c8a87e773fc9848e9ab882d62ee2ff3742d05caa193888321",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/corpus.py"
+  },
+  "task12_knowledge/manifest.json": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "6cb4c383f25f2beb03d9633cb7b5bf1ae9945746bc13d0d9e6bf3c8cb8a7321b",
+    "product_sha256": "470198e1a14517097a605d455405d5c0fad8ba43137b1013829309cfad3b0551",
+    "reason": "Runtime dependency",
+    "source": "task12_knowledge/manifest.json"
+  },
+  "task12_runtime/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "a8f99f2ac6f60f43a4b2933994119f5998b8a367d205b71f3638d398d862a4dd",
+    "product_sha256": "a8f99f2ac6f60f43a4b2933994119f5998b8a367d205b71f3638d398d862a4dd",
+    "reason": "Runtime dependency",
+    "source": "task12_runtime/__init__.py"
+  },
+  "task12_runtime/answers.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "5e676c6b3668de2173d169ff8ba1a604d81a3ead772dbc440c06fe40dd186bda",
+    "product_sha256": "5e676c6b3668de2173d169ff8ba1a604d81a3ead772dbc440c06fe40dd186bda",
+    "reason": "Runtime dependency",
+    "source": "task12_runtime/answers.py"
+  },
+  "task12_runtime/prompts/knowledge_assistant_v1.md": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "b194f6d2c5d51624c1d7ebc455e640d33a9b5f11086fe84ee429cbcccd59518f",
+    "product_sha256": "b194f6d2c5d51624c1d7ebc455e640d33a9b5f11086fe84ee429cbcccd59518f",
+    "reason": "Runtime dependency",
+    "source": "task12_runtime/prompts/knowledge_assistant_v1.md"
+  },
+  "task12_runtime/rules.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "29acf2ff4b58cee0d8e671e5eed0b36908bb68e2a42d602b2c758c2c187b8d6a",
+    "product_sha256": "29acf2ff4b58cee0d8e671e5eed0b36908bb68e2a42d602b2c758c2c187b8d6a",
+    "reason": "Runtime dependency",
+    "source": "task12_runtime/rules.py"
+  },
+  "task12_runtime/surface.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "f46410490342cae2cadd6c374a7ae38840ca111f5dd85f8a3167194b2571eeb9",
+    "product_sha256": "f46410490342cae2cadd6c374a7ae38840ca111f5dd85f8a3167194b2571eeb9",
+    "reason": "Runtime dependency",
+    "source": "task12_runtime/surface.py"
+  },
+  "task13_runtime/__init__.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "a4f62b5d3805bb1bd39887991208a77e8dee2283550587e381c9badbfff074ed",
+    "product_sha256": "a4f62b5d3805bb1bd39887991208a77e8dee2283550587e381c9badbfff074ed",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/__init__.py"
+  },
+  "task13_runtime/admission.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "258294d3e3f856335eda254d3791a10710768c9bbfd14f61d237b785c8dea0a9",
+    "product_sha256": "258294d3e3f856335eda254d3791a10710768c9bbfd14f61d237b785c8dea0a9",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/admission.py"
+  },
+  "task13_runtime/answers.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "598c25aea4c63013fe4370ce318f07c672aa31c8c2b596e7a0fe5b8519a752b6",
+    "product_sha256": "598c25aea4c63013fe4370ce318f07c672aa31c8c2b596e7a0fe5b8519a752b6",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/answers.py"
+  },
+  "task13_runtime/bridge.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "7b3ebfac69e4b2576b695c4a99e7fb112e07bc6305ebe4b7d49739d6a32f4d3e",
+    "product_sha256": "cc51a19a93addeba77f9a6554d7ad0967a665d12bd55c244be6babb632cbf431",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/bridge.py"
+  },
+  "task13_runtime/common.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "04177bf12f4f6cbc1a8f4ba6b4f5938d50a7bd70b626a51b9597e3961b345cd7",
+    "product_sha256": "205d43219c835fbf19347b473a0cfc320ddc5481bd70ef4ead969da6535efd63",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/common.py"
+  },
+  "task13_runtime/dsh_driver.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "ed315202bf5015307ac30781da862137ebf5b9bb3ee935cc4887d23a9760dbf5",
+    "product_sha256": "6c24b2cf0095bc19ae3f5b4cbc2a5dd3b3f25fd1926e02acb24310f75ba522ca",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/dsh_driver.py"
+  },
+  "task13_runtime/dsh_plugins/task13.mjs": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "6a84b2d40dea5b77bcb8798f98065670f114bcc783c1151b772e26b85c65eadb",
+    "product_sha256": "29d843f68dbd2e82a78da2ee2fbf298f592319edae4df80a857f5e8d909ab2a5",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/dsh_plugins/task13.mjs"
+  },
+  "task13_runtime/dsh_profile/task13.patch.yml": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "f1cecd6ae577db77015f849e43dc39a25ce9fbd943f46bfef3669ddb0e501976",
+    "product_sha256": "f1cecd6ae577db77015f849e43dc39a25ce9fbd943f46bfef3669ddb0e501976",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/dsh_profile/task13.patch.yml"
+  },
+  "task13_runtime/evidence.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "ba44a3f74ce2ca1f8b3da220eaf526a6511240d8d502b0b64c8231c5cc582e5e",
+    "product_sha256": "ba44a3f74ce2ca1f8b3da220eaf526a6511240d8d502b0b64c8231c5cc582e5e",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/evidence.py"
+  },
+  "task13_runtime/host.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "89b7d59845d5275454cea1a6bbff1f3d1860ddb838da2ca1dd99417180395a12",
+    "product_sha256": "89b7d59845d5275454cea1a6bbff1f3d1860ddb838da2ca1dd99417180395a12",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/host.py"
+  },
+  "task13_runtime/launch_mcp.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "5a82daf54149a3a8e3d087e99892bd52759a5b7541e8292fed3b231a75c9b72f",
+    "product_sha256": "5a82daf54149a3a8e3d087e99892bd52759a5b7541e8292fed3b231a75c9b72f",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/launch_mcp.py"
+  },
+  "task13_runtime/mcp_entry.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "8409afd1facd101ffeb68629ceb9e9577d2088114e158fae6bb0d4fd2e9aa4f4",
+    "product_sha256": "33d829a81eab90849627b874eb0cfe2803a26e312cd5bc8fc24f1d8c5e02f5e3",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/mcp_entry.py"
+  },
+  "task13_runtime/quality.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": true,
+    "original_sha256": "3ffbc3eab0f83f6b108e54afa4f40dad649ec615bb082dddce0abcc3e44d494f",
+    "product_sha256": "afad94450966682ca2e26a891e2cbe4369db358fdab18c6e1620de57bce5be12",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/quality.py"
+  },
+  "task13_runtime/state.py": {
+    "modification_reason": "Task14: independent release/path/state/identity closure or runtime-only extraction; original remains unchanged; see README and extraction report",
+    "modified": false,
+    "original_sha256": "830df291718cad127d12142560da201bde275535bcf45732fac402ddebbd9e9c",
+    "product_sha256": "830df291718cad127d12142560da201bde275535bcf45732fac402ddebbd9e9c",
+    "reason": "Runtime dependency",
+    "source": "task13_runtime/state.py"
+  }
+}

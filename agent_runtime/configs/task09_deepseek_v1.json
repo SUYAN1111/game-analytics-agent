@@ -1,0 +1,54 @@
+{
+  "base_url": "https://api.deepseek.com",
+  "connection_path": "DSH_plain_ESM_plugin__internal_JSONL__Python_MCP_2.2.0__Task09_lazy_entry__Task08_Service",
+  "contract_version": "task09_deepseek_v1",
+  "credential_env": "DEEPSEEK_API_KEY",
+  "dataset_id": "m035c1fae9c52860eb04c4565ca",
+  "default_mode": "offline",
+  "experiment_id": "m03ef3c03af2f324e0e12d7ecf37",
+  "feature_set_id": "m03f86fba0d54aeb2d2793c09008",
+  "host_python": ".venv-dsh/Scripts/python.exe",
+  "limits": {
+    "budget_cny": 5,
+    "handshake_seconds": 60,
+    "heartbeat_seconds": 30,
+    "live_api_attempts": 32,
+    "model_requests_per_turn": 6,
+    "model_seconds": 180,
+    "request_body_bytes": 262144,
+    "tool_seconds": 600,
+    "tools_per_turn": 12,
+    "turn_seconds": 900
+  },
+  "max_output_tokens": 4096,
+  "model": "deepseek-flash",
+  "pricing": {
+    "assumption": "peak prices; local conservative estimate, not vendor hard billing cap",
+    "currency": "CNY",
+    "date": "2026-09-15",
+    "per_million_cached_input": 0.04,
+    "per_million_output": 8,
+    "per_million_uncached_input": 2
+  },
+  "provider": "deepseek-official",
+  "reasoning_effort": "off",
+  "retry_policy": {
+    "maxRetries": 0,
+    "mode": "normal"
+  },
+  "role": "analysis_demo",
+  "runtime_version": "0.1.5rc1",
+  "sdk_version": "0.1.5rc1",
+  "selected_candidate_id": "lr_c0p1",
+  "source_commit": "183f08e9c6dde7e36cd2318eaee70b0da08fb35e",
+  "source_tag": "dsh-v0.1.5-rc.1",
+  "temperature": 0,
+  "thinking": {
+    "type": "disabled"
+  },
+  "toolset_id": "tools0821fc6e3b48e2cf818e585ddd",
+  "wheel_sha256": {
+    "deepseek_harness_runtime_bin-0.1.5rc1-py3-none-win_amd64.whl": "d031a5ab4919c572fd7e48c7ef19ec8b1896e93d93c44b0937bb958c528f8acf",
+    "deepseek_harness_sdk-0.1.5rc1-py3-none-any.whl": "8d9897e97e8a95fd738cb2c3e2c563951d824e43847ec6f3b0fb172c0729b4d8"
+  }
+}

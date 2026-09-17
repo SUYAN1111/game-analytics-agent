@@ -1,0 +1,56 @@
+{
+    "card_id":  "K04",
+    "title":  "Q0至Q5互斥状态与优先级",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "q0",
+                     "q1",
+                     "q2",
+                     "q3",
+                     "q4",
+                     "q5",
+                     "状态",
+                     "未成熟"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K04.a",
+                       "section_title":  "资格与未成熟优先",
+                       "text":  "按Q0、Q1、Q2、Q3、Q4、Q5顺序互斥判断。Q0是资格unknown，或qualified但缺必要资格时间；Q1是明确not_qualified。资格确认且as_of\u003ct0+72h时为Q2，观察尚未成熟，即使窗口内已经看到开始也不能提前判Q4。qualified必要时间晚于快照属于输入矛盾，不能计算为有效观察。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/states"
+                                           },
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/time_rules"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K04.b",
+                       "section_title":  "成熟之后的覆盖与开始",
+                       "text":  "as_of\u003e=t0+72h已成熟，恰好窗口结束也算成熟。成熟但coverage_complete=false，或出现早于t0的可见目标开始异常，判Q3。成熟、完整且无上述异常，窗内至少一次有效开始判Q4，窗内无有效开始判Q5。Q3不等于正常未开始；Q5才进入M03分子。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/states"
+                                           },
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/time_rules"
+                                           }
+                                       ]
+                   }
+               ]
+}

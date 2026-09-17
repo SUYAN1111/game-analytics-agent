@@ -1,0 +1,55 @@
+# Overlay ONLY on the fixed dsh-v0.1.5-rc.1 sdk-minimal tree.
+# No nonexistent mcp-resources switch and no native old-protocol MCP plugin.
+- id: persistent-bash
+  disabled: true
+- id: persistent-pwsh
+  disabled: true
+- id: terminal-bash
+  disabled: true
+- id: terminal-pwsh
+  disabled: true
+- id: pty
+  disabled: true
+- id: subprocess
+  disabled: true
+- id: sandbox
+  disabled: true
+- id: sandbox-policy
+  disabled: true
+- id: jobs
+  disabled: true
+- id: session-log-deepseek
+  disabled: true
+  config:
+    enabled: false
+- id: plugin-package-inventory-deepseek
+  disabled: true
+  config:
+    enabled: false
+- id: tools
+  config:
+    mode: native
+- id: llm-deepseek
+  config:
+    thinking: disabled
+    reasoningEffort: "off"
+    maxTokens: 4096
+    streamIdleTimeoutMs: 180000
+    retryPolicy:
+      mode: normal
+      maxRetries: 0
+    models:
+      - id: deepseek-flash
+        inputModalities: [text]
+- id: agent-loop
+  config:
+    agents: []
+    maxParallelToolCalls: 1
+- id: system-prompt
+  config:
+    includeHarnessIdentity: false
+    includeRuntimeContext: false
+    personaPrefix: "{{task13_public_instructions}}"
+- insert:
+    - id: task13-registered-analysis
+      name: ../dsh_plugins/task13.mjs

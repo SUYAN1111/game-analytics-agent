@@ -1,0 +1,47 @@
+{
+    "card_id":  "K01",
+    "title":  "M03定义与分子分母",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "m03",
+                     "分子",
+                     "分母",
+                     "零分母"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K01.a",
+                       "section_title":  "指标、粒度与公式",
+                       "text":  "M03是取得剧情资格后72小时未开始占比。观察单位为user_id与story_id组合，不能只按玩家合并。只在资格确认、窗口成熟、覆盖完整且无异常的组合中计算：分子为Q5（窗内没有有效开始）；分母为Q4+Q5（完整有效观察）；rate=Q5/(Q4+Q5)，原值在0到1之间。候选数不是合格人数，也不是分母。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/metric"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K01.b",
+                       "section_title":  "零分母与解释范围",
+                       "text":  "当Q4+Q5为0时，分子和分母均为0，rate为null，状态不可计算；不能显示成0%。Q0/Q1/Q2/Q3不进入M03分母。存在Q0/Q2/Q3时，即使子集可计算也保留partial提示，不能说所有候选已完整观察。这是固定模拟数据的指标，不是实际游戏业务发现。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L30-L33"
+                                           },
+                                           {
+                                               "source_id":  "S05",
+                                               "sha256":  "30ddb4083664caf7487487326c50caa6b0ee019289701aca60c5feaed23f97dd",
+                                               "locator":  "L101-L103"
+                                           }
+                                       ]
+                   }
+               ]
+}

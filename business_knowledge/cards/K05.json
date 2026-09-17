@@ -1,0 +1,44 @@
+{
+    "card_id":  "K05",
+    "title":  "UTC快照、双时间与72小时边界",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "utc",
+                     "快照",
+                     "event_time",
+                     "available_at",
+                     "72小时",
+                     "支持范围"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K05.a",
+                       "section_title":  "双时间筛选与窗口端点",
+                       "text":  "时间使用严格UTC ISO 8601（Z或+00:00），非法时间和缺时区报错。event_time为实际发生时间，available_at为可被分析使用时间；只有event_time\u003c=as_of且available_at\u003c=as_of才可见，之后按逻辑事件ID去重。开始窗口为[t0,t0+72h)：恰好t0计入，恰好右端不计入。可见性等号与开始窗口的右开端点不能混淆。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/time_rules"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K05.b",
+                       "section_title":  "固定登记与支持范围",
+                       "text":  "当前业务登记支持V1—V6的已登记主快照和72小时口径；查询不允许用户任意传as_of、window或当前电脑时间。V7和48/96小时业务读数尚未支持；文档中的敏感性安排不能当作已验证能力，不能从72小时比例换算其他窗口。没有匹配登记应拒绝，而不是默认今天或猜测快照。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L9-L15"
+                                           }
+                                       ]
+                   }
+               ]
+}

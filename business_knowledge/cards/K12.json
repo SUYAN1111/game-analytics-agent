@@ -1,0 +1,53 @@
+{
+    "card_id":  "K12",
+    "title":  "冻结预测与解释边界",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "预测",
+                     "冻结",
+                     "原因",
+                     "因果",
+                     "隐藏倾向"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K12.a",
+                       "section_title":  "概率、覆盖与实际指标分开",
+                       "text":  "predict_registered只用获准的t0当时已知历史特征和冻结模型重放，不重新拟合预处理或模型。mean_p是成功预测组合的平均预测概率；prediction_coverage是成功数/预期资格数，缺失数另列。它们不同于按成熟完整观察计算的实际M03及观察覆盖率。prediction_as_of=t0是冻结重放的特征时点，executed_at另记；frozen_t0_replay不能称为历史已实际部署的首次预测。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L61-L69"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K12.b",
+                       "section_title":  "能力与因果限制",
+                       "text":  "仅使用已授权的固定模拟观测数据、业务配置和冻结模型。分析工具按用途读取获准输入，公开输出不返回逐人标签或明细。隐藏倾向、私有生成真值、未授权文件或网络不在获准访问范围，不能为解释原因开放。观测差异、共现或预测关联都不足以证明因果；不能直接外推真实玩家或真实游戏业务。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L61-L83"
+                                           },
+                                           {
+                                               "source_id":  "S05",
+                                               "sha256":  "30ddb4083664caf7487487326c50caa6b0ee019289701aca60c5feaed23f97dd",
+                                               "locator":  "L103-L103"
+                                           },
+                                           {
+                                               "source_id":  "S06",
+                                               "sha256":  "d2059d65e4174a4607cdbb74282fbb5f98198404cd22d10835024d937183944d",
+                                               "locator":  "/access_policy"
+                                           }
+                                       ]
+                   }
+               ]
+}

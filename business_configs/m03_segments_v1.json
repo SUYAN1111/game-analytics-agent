@@ -1,0 +1,31 @@
+{
+  "contract": "m03_segments_v1",
+  "case_id": "case_m03_main_v1",
+  "dataset_id": "m035c1fae9c52860eb04c4565ca",
+  "observation_start": "2024-11-06T01:00:00Z",
+  "snapshots": {
+    "fit_V3main": "2025-03-17T14:00:00Z",
+    "replay_V5main": "2025-05-12T14:00:00Z",
+    "replay_V6main": "2025-06-09T14:00:00Z"
+  },
+  "features": ["completed_active_dates_14d", "completed_sessions_14d", "median_session_minutes_14d", "session_45min_share_14d"],
+  "history_days": 14,
+  "k": [2, 3, 4],
+  "seeds": [20260916, 20260917, 20260918, 20260919, 20260920],
+  "representative_seed": 20260916,
+  "kmeans": {"init": "k-means++", "n_init": 10, "algorithm": "lloyd", "max_iter": 300, "tol": 0.0001, "copy_x": true},
+  "min_cluster_absolute": 20,
+  "min_cluster_fraction": 0.01,
+  "selection_tolerance": 0.01,
+  "public_min_count": 20,
+  "scaler": "StandardScaler_float64_ddof0",
+  "silhouette": "full_sample_euclidean",
+  "quantile_method": "linear",
+  "scope": "descriptive_cross_section_no_migration_no_causality",
+  "claims": {
+    "overall_fields": ["candidate_count", "eligible_count", "assigned_count", "unassigned_eligible_count", "insufficient_history_count", "coverage_incomplete_count", "observed_no_completed_session_count", "assignment_coverage"],
+    "group_fields": ["player_count", "share_of_assigned", "completed_active_dates_14d.mean", "completed_active_dates_14d.median", "completed_sessions_14d.mean", "completed_sessions_14d.median", "median_session_minutes_14d.mean", "median_session_minutes_14d.median", "session_45min_share_14d.mean", "session_45min_share_14d.median"],
+    "feature_units": {"completed_active_dates_14d":"UTC日期", "completed_sessions_14d":"会话", "median_session_minutes_14d":"分钟", "session_45min_share_14d":"比例"},
+    "count_unit": "玩家", "ratio_unit": "比例", "count_precision": 0, "statistic_precision": 4
+  }
+}

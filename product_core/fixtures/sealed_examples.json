@@ -1,0 +1,1160 @@
+{
+  "check_quality": {
+    "arguments": {
+      "case_id": "case_m03_main_v1",
+      "cohort_id": "cohort_V6",
+      "metric_id": "metric_m03_72h_v1",
+      "snapshot_set_id": "snapshots_m03_main_v1"
+    },
+    "data": {
+      "audit_artifact": {
+        "access": "controller_only",
+        "kind": "candidate_and_coverage_audit"
+      },
+      "coverage_semantics": "(Q4+Q5)/(Q3+Q4+Q5); zero denominator=null",
+      "definition": {
+        "attribute_rule": "region_at_open; language/client_at_t0_or_main_if_Q0_Q1; new_player_Q0_Q1_not_applicable",
+        "minimum_mature_group_size": 20,
+        "population_rule": "registered_at<=regional_open",
+        "unit": "user_id+story_id",
+        "window_hours": 72
+      },
+      "event_and_evidence_counts": {
+        "V6": {
+          "collection_checks": {
+            "deduplicated_records": 1290,
+            "excluded_rows": 60,
+            "input_rows": 1350,
+            "visible_rows": 1290
+          },
+          "qualification_checks": {
+            "excluded_rows": 0,
+            "input_rows": 5000,
+            "visible_record_id_count": 5000,
+            "visible_rows": 5000
+          },
+          "start_events": {
+            "deduplicated_event_count": 3662,
+            "input_event_rows": 3991,
+            "visible_event_rows": 3723
+          },
+          "watermark_checks": {
+            "deduplicated_records": 1320,
+            "excluded_rows": 66,
+            "input_rows": 1386,
+            "visible_rows": 1320
+          }
+        }
+      },
+      "function": "features.m03_history.story_state",
+      "group_by": "none",
+      "kind": "quality",
+      "quality_is_prerequisite": false,
+      "query_origin": "registered_python",
+      "rows": [
+        {
+          "Q0": 0,
+          "Q1": 982,
+          "Q2": 0,
+          "Q3": 0,
+          "Q4": 2440,
+          "Q5": 1578,
+          "candidate_count": 5000,
+          "comparison_key": "[\"overall\",\"none\",null]",
+          "denominator": 4018,
+          "display_rate": "39.27%",
+          "group_by": "none",
+          "group_value": null,
+          "numerator": 1578,
+          "observation_coverage": 1.0,
+          "quality_status": "ok",
+          "rate": 0.39273270283723244,
+          "row_key": "[\"V6\",\"[\\\"overall\\\",\\\"none\\\",null]\"]",
+          "row_type": "overall",
+          "source_table_id": "aggregate_b68add7dc6ade7f61093b98e",
+          "version_id": "V6"
+        }
+      ],
+      "snapshots": {
+        "V6": "2025-06-09T14:00:00Z"
+      },
+      "versions": [
+        "V6"
+      ]
+    },
+    "source": "artifacts/runs/task13/20260916T152548.772283Z-262e4d4cb5e3422185dcbee92963ca89/tasks/N16/H1/mcp/tool_calls.jsonl",
+    "source_sha256": "59b76aca5e5d6ebcbc13f8b1e01c32382da5ed453868779a9f24d6b3c637efb7"
+  },
+  "compare_results": {
+    "arguments": {
+      "left_evidence_id": "ev0dfb26b4af5a49b3b22bea04a57b8ee4",
+      "right_evidence_id": "eva4ee364a7c4e4ac682080867bf08e394"
+    },
+    "data": {
+      "definition": {
+        "attribute_rule": "region_at_open; language/client_at_t0_or_main_if_Q0_Q1; new_player_Q0_Q1_not_applicable",
+        "minimum_mature_group_size": 20,
+        "population_rule": "registered_at<=regional_open",
+        "unit": "user_id+story_id",
+        "window_hours": 72
+      },
+      "direction": "right_minus_left",
+      "group_by": "none",
+      "left_snapshots": {
+        "V3": "2025-03-17T14:00:00Z"
+      },
+      "parent_content_fingerprints": [
+        "6c29c2c8a999e01d2ef625c32ccec23c4caef482a57986452acb33160c17240b",
+        "27237dffd82190a1fb71b52620d3b7076fb4bf2a41a970e381924d032f7d8fd7"
+      ],
+      "right_snapshots": {
+        "V4": "2025-04-14T14:00:00Z"
+      },
+      "rows": [
+        {
+          "comparison_key": "[\"overall\",\"none\",null]",
+          "comparison_status": "comparable",
+          "count_differences": {
+            "Q0": 0,
+            "Q1": 120,
+            "Q2": 0,
+            "Q3": 0,
+            "Q4": 154,
+            "Q5": 126,
+            "candidate_count": 400,
+            "denominator": 280,
+            "numerator": 126
+          },
+          "display_percentage_point_difference": "0.40 pp",
+          "left": {
+            "Q0": 0,
+            "Q1": 739,
+            "Q2": 0,
+            "Q3": 0,
+            "Q4": 1830,
+            "Q5": 1231,
+            "candidate_count": 3800,
+            "comparison_key": "[\"overall\",\"none\",null]",
+            "denominator": 3061,
+            "display_rate": "40.22%",
+            "group_by": "none",
+            "group_value": null,
+            "numerator": 1231,
+            "observation_coverage": 1.0,
+            "quality_status": "ok",
+            "rate": 0.402156158118262,
+            "row_key": "[\"V3\",\"[\\\"overall\\\",\\\"none\\\",null]\"]",
+            "row_type": "overall",
+            "source_table_id": "aggregate_ab52c81b817e086a1b5e8fa5",
+            "version_id": "V3"
+          },
+          "left_row_key": "[\"V3\",\"[\\\"overall\\\",\\\"none\\\",null]\"]",
+          "percentage_point_difference": 0.4009660498918488,
+          "rate_difference": 0.004009660498918488,
+          "right": {
+            "Q0": 0,
+            "Q1": 859,
+            "Q2": 0,
+            "Q3": 0,
+            "Q4": 1984,
+            "Q5": 1357,
+            "candidate_count": 4200,
+            "comparison_key": "[\"overall\",\"none\",null]",
+            "denominator": 3341,
+            "display_rate": "40.62%",
+            "group_by": "none",
+            "group_value": null,
+            "numerator": 1357,
+            "observation_coverage": 1.0,
+            "quality_status": "ok",
+            "rate": 0.4061658186171805,
+            "row_key": "[\"V4\",\"[\\\"overall\\\",\\\"none\\\",null]\"]",
+            "row_type": "overall",
+            "source_table_id": "aggregate_cdf01b5e9d6032f64a4d7890",
+            "version_id": "V4"
+          },
+          "right_row_key": "[\"V4\",\"[\\\"overall\\\",\\\"none\\\",null]\"]"
+        }
+      ]
+    },
+    "source": "artifacts/runs/task13/20260916T152548.772283Z-262e4d4cb5e3422185dcbee92963ca89/tasks/N09/H0/mcp/tool_calls.jsonl",
+    "source_sha256": "7003911e2fba9426782fa4e2ca624ee37ee1220482b3f3252e7da9cf0da13bd5"
+  },
+  "inspect_context": {
+    "arguments": {
+      "case_id": "case_m03_main_v1",
+      "metric_id": "metric_m03_72h_v1"
+    },
+    "data": {
+      "case_id": "case_m03_main_v1",
+      "cohorts": {
+        "cohort_V1": [
+          "V1"
+        ],
+        "cohort_V2": [
+          "V2"
+        ],
+        "cohort_V3": [
+          "V3"
+        ],
+        "cohort_V4": [
+          "V4"
+        ],
+        "cohort_V5": [
+          "V5"
+        ],
+        "cohort_V5_V6": [
+          "V5",
+          "V6"
+        ],
+        "cohort_V6": [
+          "V6"
+        ],
+        "cohort_all": [
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ]
+      },
+      "group_by": [
+        "none",
+        "region_id",
+        "language",
+        "client",
+        "new_player"
+      ],
+      "limitations": [
+        "Fixed simulated observed data; no upstream collection proof",
+        "72h only",
+        "Frozen t0 replay is not an actual historical deployment",
+        "No arbitrary paths, SQL or per-person queries"
+      ],
+      "metric_definition": {
+        "attribute_rule": "region_at_open; language/client_at_t0_or_main_if_Q0_Q1; new_player_Q0_Q1_not_applicable",
+        "minimum_mature_group_size": 20,
+        "population_rule": "registered_at<=regional_open",
+        "unit": "user_id+story_id",
+        "window_hours": 72
+      },
+      "metric_id": "metric_m03_72h_v1",
+      "model_id": "model_m03_lr_c0p1_frozen_v1",
+      "prediction_cohorts": {
+        "cohort_V5": [
+          "V5"
+        ],
+        "cohort_V5_V6": [
+          "V5",
+          "V6"
+        ],
+        "cohort_V6": [
+          "V6"
+        ]
+      },
+      "public_context": {
+        "coverage_rules": {
+          "complete_union": "current complete intervals must cover the whole window; adjacent and overlapping intervals merge",
+          "confirmation_order": "watermark.checked_at>=max checked_at of ALL current complete intervals overlapping the window",
+          "conflicts": "required source with conflicting interval boundaries/latest states/latest watermarks is incomplete",
+          "evidence_visibility": "checked_at<=as_of and available_at<=as_of before retransmission/version/conflict handling",
+          "known_gap": "any positive-length overlap with a current gap blocks completeness; a different complete interval cannot repair it",
+          "limits": "provided evidence supports completeness; no proof of absence of invisible upstream loss",
+          "observation_coverage": "(Q4+Q5)/(Q3+Q4+Q5); zero denominator=null",
+          "source_requirement": "all required_source_ids must be complete",
+          "version_selection": "maximum checked_at, not upload time or historical maximum watermark",
+          "watermark": "latest visible watermark_at>=window_end",
+          "window": "only qualified combinations create [t0,t0+72h); otherwise not_applicable"
+        },
+        "field_uses": {
+          "available_at": "snapshot_visibility",
+          "coverage_complete": "derived_observation_audit_only",
+          "event_id": "logical_event_and_deduplication",
+          "record_id": "evidence_audit",
+          "session_id": "logical_event_and_join",
+          "source_id": "binding_and_evidence",
+          "story_id": "join_only",
+          "upload_id": "upload_audit",
+          "user_id": "join_only"
+        },
+        "m03_source_bindings": {
+          "R1": [
+            "src01"
+          ],
+          "R2": [
+            "src03"
+          ],
+          "R3": [
+            "src05"
+          ]
+        },
+        "meaning": "已确认取得资格、观察窗口成熟且完整无异常的用户×剧情组合中，72小时内未开始目标剧情的比例",
+        "metric": {
+          "denominator": [
+            "Q4",
+            "Q5"
+          ],
+          "id": "M03",
+          "numerator": "Q5",
+          "t0": "max(region_open_at,prereq_met_at)",
+          "unit": [
+            "user_id",
+            "story_id"
+          ],
+          "window": "[t0,t0+duration)",
+          "window_hours": 72,
+          "zero_denominator_rate": null
+        },
+        "provenance": {
+          "Task08_Analysis_Tools_and_MCP_Execution_Prompt.md": {
+            "sha256": "9a385c83307cd085972d7ff4551a83c74d1d99aab3e9a926d50f57335727489c"
+          },
+          "analysis_core/coverage.py": {
+            "sha256": "2ed24875a1009f9ca7d34436281da3e046a5ecedb47fee05ba4b6502e460aa06"
+          },
+          "business_configs/m03_v1.json": {
+            "sha256": "d2059d65e4174a4607cdbb74282fbb5f98198404cd22d10835024d937183944d"
+          },
+          "metrics/m03.py": {
+            "sha256": "f711f5125f25f7846a0fc1a6bec127cb2fae1ebd61faa39b3361422d8d110a75"
+          },
+          "preparation/m03_qualification.py": {
+            "sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e"
+          },
+          "schemas/m03_raw_tables_v1.json": {
+            "sha256": "481580a3153709ed789fec408061f36a125839b9c22c0835ce3a434d34cc64f3"
+          }
+        },
+        "source_catalog": [
+          {
+            "event_kind": "story_start",
+            "region_id": "R1",
+            "source_id": "src01"
+          },
+          {
+            "event_kind": "session",
+            "region_id": "R1",
+            "source_id": "src02"
+          },
+          {
+            "event_kind": "story_start",
+            "region_id": "R2",
+            "source_id": "src03"
+          },
+          {
+            "event_kind": "session",
+            "region_id": "R2",
+            "source_id": "src04"
+          },
+          {
+            "event_kind": "story_start",
+            "region_id": "R3",
+            "source_id": "src05"
+          },
+          {
+            "event_kind": "session",
+            "region_id": "R3",
+            "source_id": "src06"
+          }
+        ],
+        "state_priority": [
+          "Q0",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5"
+        ],
+        "states": {
+          "Q0": "资格未知，或已确认资格但缺少必要资格时间",
+          "Q1": "明确未取得资格",
+          "Q2": "已确认资格但观察窗口尚未成熟；即使已开始也保留Q2",
+          "Q3": "已成熟但覆盖不完整，或存在早于t0的可见目标开始异常",
+          "Q4": "成熟、完整且无异常，窗内至少一次有效开始",
+          "Q5": "成熟、完整且无异常，窗内没有有效开始"
+        },
+        "tables": {
+          "collection_checks": {
+            "constraints": [
+              "start_at<end_at<=checked_at<=available_at",
+              "fixed_boundaries_per_(source_id,interval_id)",
+              "half_open_interval",
+              "retransmission_versions_and_conflicts_follow_Task03"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "checked_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "end_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "interval_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "record_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "source_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "start_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "state": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "complete",
+                  "gap"
+                ]
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "source_id"
+                ],
+                "references": [
+                  "source_id"
+                ],
+                "scope": "primary_key",
+                "table": "source_catalog"
+              }
+            ],
+            "key_scope": "logical_record",
+            "primary_key": [
+              "record_id"
+            ]
+          },
+          "player_attributes": {
+            "constraints": [
+              "valid_to_is_null_or_valid_to>valid_from",
+              "non_overlapping_[valid_from,valid_to)_per_user",
+              "available_at>=valid_from"
+            ],
+            "fields": {
+              "attribute_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "client": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "PC",
+                  "Mobile"
+                ]
+              },
+              "language": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "L1",
+                  "L2"
+                ]
+              },
+              "region_id": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "R1",
+                  "R2",
+                  "R3"
+                ]
+              },
+              "user_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "valid_from": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "valid_to": {
+                "nullable": true,
+                "required": true,
+                "type": "utc_time"
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "user_id"
+                ],
+                "references": [
+                  "user_id"
+                ],
+                "scope": "primary_key",
+                "table": "players"
+              }
+            ],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "attribute_id"
+            ]
+          },
+          "players": {
+            "constraints": [
+              "one_row_per_player",
+              "registered_at<=available_at",
+              "cohort_version_in_configured_versions"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "cohort_version": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "registered_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "user_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "user_id"
+            ]
+          },
+          "qualification_checks": {
+            "constraints": [
+              "met:prereq_met_at<=checked_at<=available_at",
+              "not_met:prereq_met_at=null_and_checked_at<=available_at",
+              "record_id_not_shared_across_combinations",
+              "retransmission_and_evidence_conflicts_follow_Task02"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "checked_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "prereq_met_at": {
+                "nullable": true,
+                "required": true,
+                "type": "utc_time"
+              },
+              "record_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "state": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "met",
+                  "not_met"
+                ]
+              },
+              "story_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "user_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "user_id"
+                ],
+                "references": [
+                  "user_id"
+                ],
+                "scope": "primary_key",
+                "table": "players"
+              },
+              {
+                "fields": [
+                  "story_id"
+                ],
+                "references": [
+                  "story_id"
+                ],
+                "scope": "projection_existence",
+                "table": "story_calendar"
+              }
+            ],
+            "key_scope": "logical_record",
+            "primary_key": [
+              "record_id"
+            ]
+          },
+          "session_uploads": {
+            "constraints": [
+              "end_at>start_at",
+              "available_at>=end_at",
+              "same_session_id_same_(user_id,source_id,start_at,end_at)",
+              "source_kind=session_and_matches_user_region",
+              "non_overlapping_sessions_per_user",
+              "start_at>=registered_at",
+              "duration_derived_from_end_minus_start"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "end_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "session_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "source_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "start_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "upload_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "user_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "user_id"
+                ],
+                "references": [
+                  "user_id"
+                ],
+                "scope": "primary_key",
+                "table": "players"
+              },
+              {
+                "fields": [
+                  "source_id"
+                ],
+                "references": [
+                  "source_id"
+                ],
+                "scope": "primary_key",
+                "table": "source_catalog"
+              }
+            ],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "upload_id"
+            ]
+          },
+          "source_catalog": {
+            "constraints": [
+              "unique_(region_id,event_kind)",
+              "available_at<history_start"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "event_kind": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "story_start",
+                  "session"
+                ]
+              },
+              "region_id": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "R1",
+                  "R2",
+                  "R3"
+                ]
+              },
+              "source_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "source_id"
+            ]
+          },
+          "story_calendar": {
+            "constraints": [
+              "one_story_per_version",
+              "version_id_in_configured_versions",
+              "available_at<region_open_at",
+              "expected_story_minutes>0"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "expected_story_minutes": {
+                "nullable": false,
+                "required": true,
+                "type": "number"
+              },
+              "region_id": {
+                "nullable": false,
+                "required": true,
+                "type": "enum",
+                "values": [
+                  "R1",
+                  "R2",
+                  "R3"
+                ]
+              },
+              "region_open_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "story_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "version_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "story_id",
+              "region_id"
+            ]
+          },
+          "story_start_uploads": {
+            "constraints": [
+              "available_at>=event_time",
+              "same_event_id_same_(user_id,story_id,session_id,source_id,event_time)",
+              "session.user_id=user_id",
+              "session.start_at<=event_time<session.end_at",
+              "source_kind=story_start_and_matches_user_region",
+              "story_calendar_matches_user_region"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "event_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "event_time": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "session_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "source_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "story_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "upload_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "user_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "user_id"
+                ],
+                "references": [
+                  "user_id"
+                ],
+                "scope": "primary_key",
+                "table": "players"
+              },
+              {
+                "fields": [
+                  "story_id"
+                ],
+                "references": [
+                  "story_id"
+                ],
+                "scope": "projection_existence",
+                "table": "story_calendar"
+              },
+              {
+                "fields": [
+                  "session_id"
+                ],
+                "references": [
+                  "session_id"
+                ],
+                "scope": "logical_id",
+                "table": "session_uploads"
+              },
+              {
+                "fields": [
+                  "source_id"
+                ],
+                "references": [
+                  "source_id"
+                ],
+                "scope": "primary_key",
+                "table": "source_catalog"
+              }
+            ],
+            "key_scope": "physical_row",
+            "primary_key": [
+              "upload_id"
+            ]
+          },
+          "watermark_checks": {
+            "constraints": [
+              "watermark_at<=checked_at<=available_at",
+              "strictly_earlier_event_times_delivered_for_collected_records",
+              "not_a_collection_no_loss_proof",
+              "latest_checked_version_not_historical_max",
+              "retransmission_versions_and_conflicts_follow_Task03"
+            ],
+            "fields": {
+              "available_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "checked_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              },
+              "record_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "source_id": {
+                "nullable": false,
+                "required": true,
+                "type": "id"
+              },
+              "watermark_at": {
+                "nullable": false,
+                "required": true,
+                "type": "utc_time"
+              }
+            },
+            "foreign_keys": [
+              {
+                "fields": [
+                  "source_id"
+                ],
+                "references": [
+                  "source_id"
+                ],
+                "scope": "primary_key",
+                "table": "source_catalog"
+              }
+            ],
+            "key_scope": "logical_record",
+            "primary_key": [
+              "record_id"
+            ]
+          }
+        },
+        "targets": {
+          "derive_from": [
+            "players",
+            "player_attributes",
+            "story_calendar",
+            "source_catalog"
+          ],
+          "external_coverage_flag": false,
+          "fields": [
+            "user_id",
+            "story_id",
+            "region_open_at",
+            "required_source_ids"
+          ],
+          "from_start_events": false,
+          "inclusion": "registered_at<=own_region_version_open"
+        },
+        "time_rules": {
+          "as_of": "registered main snapshot; no current-clock fallback",
+          "event_retransmission": "same event_id and business content count once; conflicting visible content is an input error",
+          "event_visibility": "event_time<=as_of and available_at<=as_of; then deduplicate event_id",
+          "format": "UTC ISO 8601; Z or +00:00; invalid or missing timezone rejected",
+          "mature": "as_of>=t0+72h",
+          "qualification": "use consistent visible first-met evidence; historical not_met does not prove current not_qualified",
+          "qualification_evidence_visibility": "checked_at<=as_of and available_at<=as_of",
+          "qualification_time_conflict": "qualified necessary times later than as_of are an input error"
+        }
+      },
+      "role": "analysis_demo",
+      "snapshot_set_id": "snapshots_m03_main_v1",
+      "snapshots": {
+        "V1": "2025-01-20T14:00:00Z",
+        "V2": "2025-02-17T14:00:00Z",
+        "V3": "2025-03-17T14:00:00Z",
+        "V4": "2025-04-14T14:00:00Z",
+        "V5": "2025-05-12T14:00:00Z",
+        "V6": "2025-06-09T14:00:00Z"
+      },
+      "tools": [
+        "check_quality",
+        "compare_results",
+        "get_evidence",
+        "inspect_context",
+        "predict_registered",
+        "query_metric",
+        "read_model_card"
+      ]
+    },
+    "source": "artifacts/runs/task13/20260916T152548.772283Z-262e4d4cb5e3422185dcbee92963ca89/tasks/N01/H0/mcp/tool_calls.jsonl",
+    "source_sha256": "c165d2136a77509b33b3eba48eaaf20dc6020843a5fabe729a0b72d6a84a8398"
+  },
+  "predict_registered": {
+    "arguments": {
+      "case_id": "case_m03_main_v1",
+      "cohort_id": "cohort_V6",
+      "model_id": "model_m03_lr_c0p1_frozen_v1",
+      "time_mode": "frozen_t0_replay"
+    },
+    "data": {
+      "individual_predictions": {
+        "access": "controller_only",
+        "kind": "frozen_prediction_audit"
+      },
+      "kind": "frozen_prediction",
+      "model_id": "model_m03_lr_c0p1_frozen_v1",
+      "positive_class": "not_started_within_72h",
+      "producer": "registered_model_call",
+      "rows": [
+        {
+          "bins": [
+            {
+              "count": 554,
+              "lower": 0.0,
+              "mean_p": 0.15016513657775343,
+              "right_inclusive": false,
+              "upper": 0.2
+            },
+            {
+              "count": 1540,
+              "lower": 0.2,
+              "mean_p": 0.30135414935177673,
+              "right_inclusive": false,
+              "upper": 0.4
+            },
+            {
+              "count": 1249,
+              "lower": 0.4,
+              "mean_p": 0.4924801527939189,
+              "right_inclusive": false,
+              "upper": 0.6
+            },
+            {
+              "count": 663,
+              "lower": 0.6,
+              "mean_p": 0.6766090176323821,
+              "right_inclusive": false,
+              "upper": 0.8
+            },
+            {
+              "count": 12,
+              "lower": 0.8,
+              "mean_p": 0.8249058878531345,
+              "right_inclusive": true,
+              "upper": 1.0
+            }
+          ],
+          "expected_qualified_count": 4018,
+          "mean_p": 0.4034034932428878,
+          "missing_count": 0,
+          "predicted_count": 4018,
+          "prediction_coverage": 1.0,
+          "version_id": "V6"
+        }
+      ],
+      "time_mode": "frozen_t0_replay",
+      "versions": [
+        "V6"
+      ]
+    },
+    "source": "artifacts/runs/task13/20260916T152548.772283Z-262e4d4cb5e3422185dcbee92963ca89/tasks/N14/H0/mcp/tool_calls.jsonl",
+    "source_sha256": "c431060f84d1d2ccd28d8855ecc4240d8563fd755b7f1c5b8d2caea3a1ad7182"
+  },
+  "query_metric": {
+    "arguments": {
+      "case_id": "case_m03_main_v1",
+      "cohort_id": "cohort_V6",
+      "group_by": "none",
+      "metric_id": "metric_m03_72h_v1",
+      "snapshot_set_id": "snapshots_m03_main_v1"
+    },
+    "data": {
+      "audit_artifact": {
+        "access": "controller_only",
+        "kind": "candidate_and_coverage_audit"
+      },
+      "definition": {
+        "attribute_rule": "region_at_open; language/client_at_t0_or_main_if_Q0_Q1; new_player_Q0_Q1_not_applicable",
+        "minimum_mature_group_size": 20,
+        "population_rule": "registered_at<=regional_open",
+        "unit": "user_id+story_id",
+        "window_hours": 72
+      },
+      "event_and_evidence_counts": {
+        "V6": {
+          "collection_checks": {
+            "deduplicated_records": 1290,
+            "excluded_rows": 60,
+            "input_rows": 1350,
+            "visible_rows": 1290
+          },
+          "qualification_checks": {
+            "excluded_rows": 0,
+            "input_rows": 5000,
+            "visible_record_id_count": 5000,
+            "visible_rows": 5000
+          },
+          "start_events": {
+            "deduplicated_event_count": 3662,
+            "input_event_rows": 3991,
+            "visible_event_rows": 3723
+          },
+          "watermark_checks": {
+            "deduplicated_records": 1320,
+            "excluded_rows": 66,
+            "input_rows": 1386,
+            "visible_rows": 1320
+          }
+        }
+      },
+      "function": "features.m03_history.story_state",
+      "group_by": "none",
+      "kind": "mature_metric",
+      "query_origin": "registered_python",
+      "rows": [
+        {
+          "Q0": 0,
+          "Q1": 982,
+          "Q2": 0,
+          "Q3": 0,
+          "Q4": 2440,
+          "Q5": 1578,
+          "candidate_count": 5000,
+          "comparison_key": "[\"overall\",\"none\",null]",
+          "denominator": 4018,
+          "display_rate": "39.27%",
+          "group_by": "none",
+          "group_value": null,
+          "numerator": 1578,
+          "observation_coverage": 1.0,
+          "quality_status": "ok",
+          "rate": 0.39273270283723244,
+          "row_key": "[\"V6\",\"[\\\"overall\\\",\\\"none\\\",null]\"]",
+          "row_type": "overall",
+          "source_table_id": "aggregate_b68add7dc6ade7f61093b98e",
+          "version_id": "V6"
+        }
+      ],
+      "snapshots": {
+        "V6": "2025-06-09T14:00:00Z"
+      },
+      "versions": [
+        "V6"
+      ]
+    },
+    "source": "artifacts/runs/task13/20260916T152548.772283Z-262e4d4cb5e3422185dcbee92963ca89/tasks/N01/H0/mcp/tool_calls.jsonl",
+    "source_sha256": "c165d2136a77509b33b3eba48eaaf20dc6020843a5fabe729a0b72d6a84a8398"
+  }
+}

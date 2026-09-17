@@ -1,0 +1,167 @@
+{
+  "contract": "task12_combined_corpus_v1",
+  "scopes": [
+    {
+      "case_id": "case_m03_main_v1",
+      "metric_id": "metric_m03_72h_v1",
+      "definition_fingerprint": "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+      "knowledge_revision": "m03_knowledge_v1"
+    },
+    {
+      "case_id": "case_m03_main_v1",
+      "metric_id": "historical_session_segments_v1",
+      "definition_fingerprint": "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+      "knowledge_revision": "segments_knowledge_v1"
+    },
+    {
+      "case_id": "case_activity_week_v1",
+      "metric_id": "activity_association_v1",
+      "definition_fingerprint": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+      "knowledge_revision": "activity_knowledge_v1"
+    }
+  ],
+  "source": {
+    "S11": {
+      "sha256": "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+      "path": "schemas/m03_segments_v1.json"
+    },
+    "S12": {
+      "sha256": "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+      "path": "schemas/activity_rules_v1.json"
+    },
+    "S01": {
+      "path": "knowledge_sources/S01/host.json",
+      "sha256": "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451"
+    },
+    "S02": {
+      "path": "knowledge_sources/S02/ANALYSIS_TOOLS_AND_MCP_V1.md",
+      "sha256": "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80"
+    },
+    "S03": {
+      "path": "knowledge_sources/S03/m03_qualification.py",
+      "sha256": "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e"
+    },
+    "S04": {
+      "path": "knowledge_sources/S04/M03_FEATURES_AND_LABELS_V1.md",
+      "sha256": "ef63584b5277f545de2008636435f0cd803a2b19d40cdea6eb0798a667b8d38f"
+    },
+    "S05": {
+      "path": "knowledge_sources/S05/M03_BASELINE_MODELS_V1.md",
+      "sha256": "30ddb4083664caf7487487326c50caa6b0ee019289701aca60c5feaed23f97dd"
+    },
+    "S06": {
+      "path": "knowledge_sources/S06/m03_v1.json",
+      "sha256": "d2059d65e4174a4607cdbb74282fbb5f98198404cd22d10835024d937183944d"
+    }
+  },
+  "cards": [
+    {
+      "path": "business_knowledge/cards/K01.json",
+      "sha256": "4882d08af98d4cc981ac212845390142ffd5152aa228db895c8e18ce580d714c",
+      "card_id": "K01",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K02.json",
+      "sha256": "db95e7ee993d352d452a82a94b6c2c88ec8ef514bfef2a4a51d2728170b0e23e",
+      "card_id": "K02",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K03.json",
+      "sha256": "273feec1dee5dbfabdee051169d5ab15d6fca538e8d059a39538186a15392ad9",
+      "card_id": "K03",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K04.json",
+      "sha256": "388842624f8cedd81cfe208c49cfb1d2e3e05b5c84e1dd3b5504336152a70647",
+      "card_id": "K04",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K05.json",
+      "sha256": "d562e8bbdb574580bae42fa9643b82bad91099713901c63edb5429d97dfd8cea",
+      "card_id": "K05",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K06.json",
+      "sha256": "ddaaf64a36b9c6beb7d5a9ebb73ccc0915fbe1a950655a9c2fdb5d3b698c0a1b",
+      "card_id": "K06",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K07.json",
+      "sha256": "b3252740623423df8fc149438fba5adaa20ac177c39025374c9ace6b887ef3b5",
+      "card_id": "K07",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K08.json",
+      "sha256": "a7acb1b83761340769f4187d460a11edccb80f9a9a48d966fc41c133778a2035",
+      "card_id": "K08",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K09.json",
+      "sha256": "6a6440e1eb682219bcd924b7d966ce0a00f7d74494c409f32f5cc06d223b0e0b",
+      "card_id": "K09",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K10.json",
+      "sha256": "9dd2a9bb8a88761040ef9696ad32ae81b6fe8a18a06f0dc90e1fe828e25a00a9",
+      "card_id": "K10",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K11.json",
+      "sha256": "e0b3c6998d2e64970f657c27559fb21007b7fba29e204f476fe0f5cf144b6400",
+      "card_id": "K11",
+      "scope_index": 0
+    },
+    {
+      "path": "business_knowledge/cards/K12.json",
+      "sha256": "dc06f057c43974418fe9a4e1961dcc63f4ed595b42987cbf095bb67daa93934f",
+      "card_id": "K12",
+      "scope_index": 0
+    },
+    {
+      "path": "task11_knowledge/cards/K13.json",
+      "sha256": "4d09ea1d6012bc4b13bb9a090d3ca2f77022920ea0b8fd799f70e93c1c9ffafd",
+      "card_id": "K13",
+      "scope_index": 1
+    },
+    {
+      "path": "task11_knowledge/cards/K14.json",
+      "sha256": "04e9e54c27f96caba3b61ec7b26bed0da589e54a4da34954e1992231bc196548",
+      "card_id": "K14",
+      "scope_index": 1
+    },
+    {
+      "path": "task11_knowledge/cards/K15.json",
+      "sha256": "ba27804905a93a727b53b69d2cff68ddaed4d26ca4f42bc49a002f9621e5355d",
+      "card_id": "K15",
+      "scope_index": 1
+    },
+    {
+      "path": "task12_knowledge/cards/K16.json",
+      "sha256": "f231785348efd7dbab58afaf11bae7249df161f06a6c47c75b83164413197147",
+      "card_id": "K16",
+      "scope_index": 2
+    },
+    {
+      "path": "task12_knowledge/cards/K17.json",
+      "sha256": "3fe8feeefccd57ecff0194a4e1a41cbe23816e9eedc48542120af5761efefa4c",
+      "card_id": "K17",
+      "scope_index": 2
+    },
+    {
+      "path": "task12_knowledge/cards/K18.json",
+      "sha256": "fbb80ee09214dd949ee9a069a26d1434a74f8852bc7f0e37efed71cb07ca4d13",
+      "card_id": "K18",
+      "scope_index": 2
+    }
+  ]
+}

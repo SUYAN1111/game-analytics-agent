@@ -1,0 +1,20 @@
+[
+  {
+    "asset_manifest_sha256": "cbfae1119b268843f4af6b019ec2194063058b093cf70de100c3d2c24b5d51f6",
+    "offline": "artifacts/agent_hosts/task11/host11fe67ff4c200fb518ab5f6deb/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43/offline.json",
+    "offline_sha256": "c686816ef1953958827a0687b1ae688f6468d95007ce3452d520ab037f2451c2",
+    "output_manifest_sha256": "434aefb78b76559011360a96805a0f460a14368d0aa37614cd7df903ea6a933f",
+    "ready": "artifacts/agent_hosts/task11/host11fe67ff4c200fb518ab5f6deb/20260916T110606.430694Z-8fc3177964544167beb3a609522d3cf7/ready.json",
+    "ready_sha256": "7be0561ba9995e5245f293195b40a19793cacb56e04d12d797340a143bcdba40",
+    "sealed_run": "artifacts/runs/task11/20260916T105554.766332Z-b933e9de5f9e4b559e047dbcb35a8c43"
+  },
+  {
+    "asset_manifest_sha256": "69cd91d2c6d1f0d2c68c1db0cb967687d375ca8a3d8749b6dd01a8e44fc666c0",
+    "offline": "artifacts/agent_hosts/task12/host12d1c850483ca08de36a27f8d3/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e/offline.json",
+    "offline_sha256": "8e889bd80583051d2175e1548d8ecf5a01065507c3841970467b4f197926bec1",
+    "output_manifest_sha256": "cf3ed40bd7ca9628384f00b22a63773f945704946bee497d6ee93babe5d20689",
+    "ready": "artifacts/agent_hosts/task12/host12d1c850483ca08de36a27f8d3/20260916T133737.547498Z-58efdaf93105418d8669d1fa0b2ea863/ready.json",
+    "ready_sha256": "1a232188c7dc8e33bfbe87ba2d82044dc2c40c230689c12bc872cac8e698dab1",
+    "sealed_run": "artifacts/runs/task12/20260916T133335.345605Z-d6da53470de34c30aa28297d4f75c80e"
+  }
+]

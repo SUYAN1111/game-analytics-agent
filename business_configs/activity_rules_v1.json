@@ -1,0 +1,20 @@
+{
+  "case_id": "case_activity_week_v1",
+  "metric_id": "activity_association_v1",
+  "contract": "activity_week_basket_v1",
+  "upstream_dataset_id": "m035c1fae9c52860eb04c4565ca",
+  "activities": {"A01":"支线体验","A02":"地图探索","A03":"素材收集","A04":"战斗挑战","A05":"协作玩法","A06":"休闲小游戏"},
+  "sources": {"R1":"actsrc01","R2":"actsrc02","R3":"actsrc03"},
+  "window_seconds":604800,
+  "delivery_wait_seconds":86400,
+  "evaluations":{"discovery_V1_V3":["V1","V2","V3"],"validation_V4":["V4"],"validation_V5":["V5"],"validation_V6":["V6"]},
+  "thresholds":{"support":"1/20","confidence":"2/5","lift":"11/10","joint_count":50},
+  "max_itemset_size":3,
+  "max_antecedent_size":2,
+  "consequent_size":1,
+  "display_limit":10,
+  "sort":["lift_desc","confidence_desc","support_desc","antecedent_size_asc","antecedent_lex","consequent_lex"],
+  "public_min_count":20,
+  "basket_size_bins":["0","1","2","3","4+"],
+  "interpretation":"独立模拟活动案例；玩家固定周共现；含空篮子；不是因果、时序或推荐增益。禁止逐人跨案例连接。"
+}

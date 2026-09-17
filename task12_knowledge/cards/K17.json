@@ -1,0 +1,74 @@
+{
+    "card_id":  "K17",
+    "title":  "活动关联规则：公式、发现冻结与后续复核",
+    "knowledge_revision":  "activity_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_activity_week_v1",
+    "metric_id":  "activity_association_v1",
+    "definition_fingerprint":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "enabled":  true,
+    "keywords":  [
+                     "活动",
+                     "篮子",
+                     "关联规则",
+                     "支持度",
+                     "置信度",
+                     "提升度",
+                     "空篮子",
+                     "固定周",
+                     "共现",
+                     "冻结",
+                     "Apriori",
+                     "规则"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K17.a",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K17.a",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "有向共现规则A→B中，N是包含空篮子的全部有效篮子数，nA为同时含全部前件的篮子数，nB为含后件的篮子数，nAB为同时含前后件的篮子数。support=nAB/N，confidence=nAB/nA，lift=nAB×N/(nA×nB)。support与confidence是比例，lift是无量纲倍数；方向交换会改变置信度。",
+                       "section_title":  "支持度置信度提升度公式与方向"
+                   },
+                   {
+                       "chunk_id":  "K17.b",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K17.b",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "Apriori仅发现正向参与活动，逐层生成长度1至3项集并用频繁子集剪枝；前件1或2项，后件恰1项且不相交。开发门槛含等号：support至少0.05、confidence至少0.40、lift至少1.10、联合篮子至少50，使用精确未舍入比例。",
+                       "section_title":  "Apriori长度与固定四门槛"
+                   },
+                   {
+                       "chunk_id":  "K17.c",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K17.c",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "仅V1—V3各自固定周发现规则，先合并计数再算指标。按lift、confidence、support降序，再以前件长度和ID字典序排序。冻结全部合格规则及开发前10展示名单；V4/V5/V6只复核这份名单，不用验证表现改阈值、换规则或重新挖掘。保留下降或跌破门槛的结果。",
+                       "section_title":  "开发冻结名单与后续只复核"
+                   },
+                   {
+                       "chunk_id":  "K17.d",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K17.d",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "无合格规则是合法no_rules，不降低门槛或换种子。N=0时比例均null；N\u003e0且nA=0时support=0而confidence/lift=null；nA\u003e0且nB=0时support/confidence=0而lift=null。不可计算不等于0，不输出NaN或Infinity。",
+                       "section_title":  "无规则与不可计算边界"
+                   }
+               ]
+}

@@ -1,0 +1,15 @@
+{
+  "version": "host_bound_knowledge_v1",
+  "required_fields": ["answer_markdown", "claims", "knowledge_selections"],
+  "additional_fields": false,
+  "limits": {"claims": 12, "knowledge_selections": 8, "notes": 5, "blocks": 25, "body_characters": 1024, "json_characters": 20000},
+  "composition": "select finite evidence lists first; emit claims, knowledge_selections, then answer_markdown; JSON key order is not a validation requirement",
+  "uniqueness": "each selected fact and knowledge chunk once, even across repeated retrievals; each note once",
+  "numeric_selection_fields": ["id", "evidence_id", "field", "scope"],
+  "knowledge_selection_fields": ["id", "evidence_id", "chunk_id"],
+  "body": "one whole claim/knowledge/note reference per nonempty line; each selection exactly once",
+  "knowledge_scope": "current successful MCP session and current user turn; exact returned whole chunk",
+  "notes": ["limitations", "causality", "unsupported", "knowledge_not_found", "knowledge_unavailable"],
+  "rendering": "host verified numeric facts and escaped exact quotations; never recursively expand retrieved templates",
+  "status": "reference_checked_candidate"
+}

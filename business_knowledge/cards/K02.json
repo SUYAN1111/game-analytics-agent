@@ -1,0 +1,41 @@
+{
+    "card_id":  "K02",
+    "title":  "候选集合与纳入边界",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "候选",
+                     "注册",
+                     "targets"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K02.a",
+                       "section_title":  "候选来自元数据",
+                       "text":  "候选targets由players、player_attributes、story_calendar和source_catalog整理。每行是唯一user_id与story_id组合；只纳入所属区域该版本开放时已注册的玩家，registered_at\u003c=region_open_at，恰好相等也纳入。来源绑定所属区域story_start来源。不能从有开始事件的人反推候选，也不能因没有事件而删除候选。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/targets"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K02.b",
+                       "section_title":  "候选、资格与覆盖分开",
+                       "text":  "targets提供user_id、story_id、region_open_at、required_source_ids。每个必需来源都须核查。资格由检查记录整理；coverage_complete来自采集区间与交付水位，不能外部强填完整标记。候选可能未知、不合格、未成熟或覆盖不足，候选数量不等于最终完整观察的分母。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/coverage_rules"
+                                           }
+                                       ]
+                   }
+               ]
+}

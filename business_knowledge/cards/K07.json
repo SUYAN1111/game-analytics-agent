@@ -1,0 +1,43 @@
+{
+    "card_id":  "K07",
+    "title":  "采集区间覆盖、洞与已知gap",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "采集",
+                     "覆盖",
+                     "缺口",
+                     "gap",
+                     "complete"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K07.a",
+                       "section_title":  "必需来源与完整区间并集",
+                       "text":  "只为qualified组合建立[t0,t0+72h)窗口；其他资格状态覆盖not_applicable并传false。required_source_ids中的每个来源都要满足要求，其他来源不能替代。采集按(source_id,interval_id)选可见最大checked_at版本，不按上传时间选。选当前版本后，complete区间并集须覆盖全窗，重叠与首尾相接可以合并，中间缺1秒仍不完整。未被正向complete并集覆盖的洞与明确gap分开列出，不重复相加为缺失时长。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/coverage_rules"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K07.b",
+                       "section_title":  "已知缺口与冲突不能被掩盖",
+                       "text":  "当前任一gap与窗口有正长度交集就阻断完整性，另一interval_id的大complete不能盖掉它；修复须在原source_id、interval_id和固定边界下追加更晚checked_at的complete。窗口外gap不影响本窗。历史边界变化、最新同刻complete/gap矛盾均为来源冲突；必需来源冲突不能判完整。服务恢复、等待足够久、有或没有事件都不能单独证明完整，仍需交付水位。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/coverage_rules"
+                                           }
+                                       ]
+                   }
+               ]
+}

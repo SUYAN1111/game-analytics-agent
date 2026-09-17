@@ -1,0 +1,54 @@
+{
+    "card_id":  "K06",
+    "title":  "上传行、逻辑事件与证据重传",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "去重",
+                     "重传",
+                     "冲突",
+                     "upload_id",
+                     "event_id",
+                     "record_id"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K06.a",
+                       "section_title":  "三个层次的ID与计数",
+                       "text":  "upload_id标识一次上传；event_id标识剧情开始逻辑事件，session_id标识逻辑会话；record_id标识资格、采集或水位证据记录。开始input_event_rows是原始上传行数，visible_event_rows是双时间筛选后去重前行数，deduplicated_event_count是可见逻辑事件数。重传可以增加上传行数，但不重复增加逻辑事件数。资格、采集、水位的计数分别列出，不能混加。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S02",
+                                               "sha256":  "dae2393a63ccc185127502e838d4d49c942701a9cfea95f84f73ac03f0737d80",
+                                               "locator":  "L40-L42"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K06.b",
+                       "section_title":  "同ID一致性与版本",
+                       "text":  "同event_id且user_id、story_id、event_time一致，available_at不同可为重传；可见同ID业务内容冲突明确报输入错误。资格同record_id业务内容冲突保留为资格证据冲突；跨组合复用记录ID是输入错误。采集/水位表可见同record_id不同业务内容报输入错误；同内容可见重传取最早available_at。业务区间新检查必须追加新record_id，不能覆盖历史。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/time_rules"
+                                           },
+                                           {
+                                               "source_id":  "S03",
+                                               "sha256":  "493f6c6756b527702cca5f6985180942d3452b9fc1ab2929862a66729747674e",
+                                               "locator":  "L44-L112"
+                                           },
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/tables"
+                                           }
+                                       ]
+                   }
+               ]
+}

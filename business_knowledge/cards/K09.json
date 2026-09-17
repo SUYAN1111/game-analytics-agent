@@ -1,0 +1,61 @@
+{
+    "card_id":  "K09",
+    "title":  "九表字段关联与历史会话边界",
+    "knowledge_revision":  "m03_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "metric_m03_72h_v1",
+    "definition_fingerprint":  "73cc06c62ad20ce7c00b3398205f89cf50ae63c34214266bf5dc730c53e5ee2f",
+    "enabled":  true,
+    "keywords":  [
+                     "字段",
+                     "会话",
+                     "历史",
+                     "session",
+                     "表",
+                     "end_at"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K09.a",
+                       "section_title":  "元数据四表",
+                       "text":  "players以user_id唯一，含registered_at、cohort_version、available_at。player_attributes以attribute_id唯一，user_id关联玩家，含region_id/language/client及[valid_from,valid_to)有效期，valid_to可null，同玩家有效期不重叠。story_calendar以story_id×region_id为键，含version_id、region_open_at、expected_story_minutes、available_at。source_catalog以source_id为键，含region_id、event_kind、available_at；R1的story_start/session来源为src01/src02，R2为src03/src04，R3为src05/src06。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/tables"
+                                           },
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/source_catalog"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K09.b",
+                       "section_title":  "行为两表和证据三表",
+                       "text":  "session_uploads以upload_id为上传主键，session_id去重，关联user_id/source_id；start_at\u003cend_at\u003c=available_at，时长由结束减开始。story_start_uploads以upload_id为上传主键、event_id去重，关联user_id/story_id/session_id/source_id，event_time在会话区间内且不晚于available_at。qualification_checks以record_id记录met/not_met，not_met的prereq_met_at=null；collection_checks记录source_id/interval_id和[start_at,end_at)；watermark_checks记录source_id/watermark_at。三证据表均含checked_at、available_at，沿用各自时间、重传和冲突合同；除此及属性valid_to外各字段非空。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S01",
+                                               "sha256":  "35da4960ae6280f6fbc867594880fb667639edfb0c01e90f82c7ec1f867fb451",
+                                               "locator":  "/definition/public_context/tables"
+                                           }
+                                       ]
+                   },
+                   {
+                       "chunk_id":  "K09.c",
+                       "section_title":  "历史输入按完成与当时水位归属",
+                       "text":  "历史会话在有效水位和覆盖条件下，h=min(t0,当时最新可见session水位)，a_W=max(registered_at,历史观测起点,h-W天)，W为7或28。先筛available_at\u003c=t0再按session_id去重，取a_W\u003c=end_at\u003ch且end_at\u003ct0的完成会话。跨左端开始但窗内结束计完整时长；t0前开始、t0后结束的未来完整时长不能进入特征。不能写成end_at\u003c=t0，也不能固定以t0为窗口右端。缺水位、冲突或覆盖不足沿用报错；正常无会话的均值/占比/最近间隔可null，不补造数据。",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S04",
+                                               "sha256":  "ef63584b5277f545de2008636435f0cd803a2b19d40cdea6eb0798a667b8d38f",
+                                               "locator":  "L22-L36"
+                                           }
+                                       ]
+                   }
+               ]
+}

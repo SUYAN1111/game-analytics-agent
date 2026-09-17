@@ -1,0 +1,56 @@
+{
+    "card_id":  "K13",
+    "title":  "历史会话分群：候选玩家、14日时间与四列特征",
+    "knowledge_revision":  "segments_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_m03_main_v1",
+    "metric_id":  "historical_session_segments_v1",
+    "definition_fingerprint":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a",
+    "enabled":  true,
+    "keywords":  [
+                     "分群",
+                     "会话表",
+                     "历史终点",
+                     "零会话",
+                     "历史不足",
+                     "四列"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K13.a",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/candidates",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "候选是快照S时已注册且注册记录已到达的玩家，每玩家每快照一条。注册等于S也纳入；不由开始事件、资格或会话反推。区域属性在S有效且可见，由区域与session类型绑定来源；本轮不支持窗口内跨区域属性变化。",
+                       "section_title":  "分群候选：注册玩家、区域属性与来源绑定"
+                   },
+                   {
+                       "chunk_id":  "K13.b",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/time",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "来源历史终点h=min(S,按checked_at选择的最新可见水位)，a=h-14日。只纳入a\u003c=end_at\u003ch且end_at\u003cS、available_at\u003c=S的已完成会话；先筛选可见再按session_id去重。会话可在a前开始，计完整时长；水位回退、冲突或交付矛盾明确拒绝。",
+                       "section_title":  "分群时间：S与来源h、完整14日、会话完成时间"
+                   },
+                   {
+                       "chunk_id":  "K13.c",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S11",
+                                               "locator":  "/rules/states_features",
+                                               "sha256":  "79094368b3792d07907e54952e7d7918a88528702ec5fe3383eae96ac4d38f1a"
+                                           }
+                                       ],
+                       "text":  "四列依次为完成会话UTC日期数、完成会话数、会话分钟中位数、至少45分钟会话占比。要求注册与观测起点不晚于a，完整14日采集与交付证据。状态优先为历史不足、覆盖不足、完整观察零完成会话、eligible。零会话不是没活跃，日期数可为15。",
+                       "section_title":  "分群四列特征与排除：历史不足、覆盖不足、零会话"
+                   }
+               ]
+}

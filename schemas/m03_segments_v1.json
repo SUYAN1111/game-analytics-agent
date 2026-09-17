@@ -1,0 +1,20 @@
+{
+  "contract": "m03_segments_v1",
+  "feature_order": ["completed_active_dates_14d", "completed_sessions_14d", "median_session_minutes_14d", "session_45min_share_14d"],
+  "candidate_key": ["snapshot_id", "user_id"],
+  "states": ["insufficient_history", "coverage_incomplete", "observed_no_completed_session", "eligible"],
+  "nullable": "Non-eligible features may be null; complete zero-session rows have 0,0,null,null. Never impute.",
+  "frozen_model_format": "Non-executable JSON: feature order, development provenance, scaler means/scales, standardized and original canonical centers, ID map. Unavailable has no centers.",
+  "public_selection": {"fields": ["id", "evidence_id", "field", "scope"], "scope": ["segmentation_model_id", "snapshot_id", "segment_id"], "forbid": ["value", "pointer", "precision", "unit", "text"]},
+  "rules": {
+    "candidates": "候选是快照S时已注册且注册记录已到达的玩家，每玩家每快照一条。注册等于S也纳入；不由开始事件、资格或会话反推。区域属性在S有效且可见，由区域与session类型绑定来源；本轮不支持窗口内跨区域属性变化。",
+    "time": "来源历史终点h=min(S,按checked_at选择的最新可见水位)，a=h-14日。只纳入a<=end_at<h且end_at<S、available_at<=S的已完成会话；先筛选可见再按session_id去重。会话可在a前开始，计完整时长；水位回退、冲突或交付矛盾明确拒绝。",
+    "states_features": "四列依次为完成会话UTC日期数、完成会话数、会话分钟中位数、至少45分钟会话占比。要求注册与观测起点不晚于a，完整14日采集与交付证据。状态优先为历史不足、覆盖不足、完整观察零完成会话、eligible。零会话不是没活跃，日期数可为15。",
+    "development": "仅在V3主快照开发样本拟合StandardScaler，float64、ddof=0，常量列scale=1；只用四列。KMeans k为2/3/4，各5个固定seed，每次n_init=10、k-means++、lloyd、max_iter=300、tol=1e-4。随后冻结，不读取M03标签或后续快照进行选择。",
+    "selection": "一个k的五次候选均满足有限值、恰好k群、每群至少max(20,ceil(1%开发样本))、无收敛警告和未达迭代上限，才可行。取五次全样本欧氏silhouette均值，距最佳不超过0.01的最小k；固定seed=20260916为代表，不重拟合。ARI只描述初始化稳定性。无可行k则不可用。",
+    "freeze": "冻结中心逆变换回原单位按四列完整精度字典序编号G01起。后续快照只按冻结标准化尺度计算到全部中心的平方欧氏距离，精确并列选较小群ID。原始训练labels与规范重分配均保留，群人数和评价使用规范重分配。",
+    "profiles": "群画像是当前快照已分配玩家四列原量纲的均值、中位数、线性插值p25/p75；不同于开发模型中心。群占比以该快照已分配人数为分母，分配覆盖率以全部候选人数为分母；零分母为null。空群保留，统计为空。",
+    "disclosure": "任一非空群或候选状态分区小于20人，整张快照限制：不公开群、状态分区、eligible/assigned或覆盖率；仍可公开候选总数、模型与快照和限制说明。公开报告与Agent相同限制；逐人明细仅在开发审核包。",
+    "limits": "固定模拟数据的历史会话描述性横截面分群。V5/V6是同一冻结模型对不同快照候选的分配，不能解释为个人迁移、因果、付费意愿或心理特征。不读取未来完整会话时长，不把分群群号加入原M03模型。本轮未做关联规则或正式Agent评测。"
+  }
+}

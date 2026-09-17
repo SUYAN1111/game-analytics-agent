@@ -1,0 +1,74 @@
+{
+    "card_id":  "K18",
+    "title":  "活动分析：重复玩家、解释限制与公开披露",
+    "knowledge_revision":  "activity_knowledge_v1",
+    "language":  "zh-CN",
+    "case_id":  "case_activity_week_v1",
+    "metric_id":  "activity_association_v1",
+    "definition_fingerprint":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a",
+    "enabled":  true,
+    "keywords":  [
+                     "活动",
+                     "篮子",
+                     "关联规则",
+                     "支持度",
+                     "置信度",
+                     "提升度",
+                     "空篮子",
+                     "固定周",
+                     "共现",
+                     "冻结",
+                     "Apriori",
+                     "规则"
+                 ],
+    "chunks":  [
+                   {
+                       "chunk_id":  "K18.a",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K18.a",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "同一玩家可出现在不同版本周，篮子不能说成不同独立玩家。后续V4—V6是较晚时期复核，并非全新玩家外推或独立同分布测试。本轮不输出p值、显著性或未经设计的置信区间。",
+                       "section_title":  "重复玩家周与时间外推限制"
+                   },
+                   {
+                       "chunk_id":  "K18.b",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K18.b",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "共现不是因果、事件先后、心理类型、推荐或营销收益。共享活动程度也可形成相关组合。禁止输出个人身份、逐人连接活动与M03或历史会话分群、按区域或群再挖掘、当场改阈值或调用训练功能。",
+                       "section_title":  "共现非因果与拒绝逐人连接改阈值"
+                   },
+                   {
+                       "chunk_id":  "K18.c",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K18.c",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "公共最小数量为20，零格不触发。任一候选状态、固定0/1/2/3/4+篮子大小、活动参与及未参与或任一冻结规则2×2格出现1至19，整个评价分区restricted_granularity；只公开候选篮子数、身份、窗口及限制说明，其他计数比例规则全部隐藏。CSV、JSON、图和工具应用同一视图，不能从补集恢复。",
+                       "section_title":  "整分区最小数量披露"
+                   },
+                   {
+                       "chunk_id":  "K18.d",
+                       "source_refs":  [
+                                           {
+                                               "source_id":  "S12",
+                                               "locator":  "/rules/K18.d",
+                                               "sha256":  "9fe1ca0473c2255ed9c1b7a9c498fa6c5c6e38ef529e3c84ebf3a88b4ac2623a"
+                                           }
+                                       ],
+                       "text":  "三种分析分别解释：M03是取得剧情资格后72小时未开始的用户×剧情比例；历史会话分群是快照前完整历史会话的玩家描述；活动关联规则是区域开放固定7日玩家篮子的共现。它们的候选、有效分母、窗口与截止各自独立，不能把同一版本名当作同一观察单位。",
+                       "section_title":  "三种分析不同单位分母与截止"
+                   }
+               ]
+}

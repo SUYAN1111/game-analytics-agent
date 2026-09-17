@@ -1,0 +1,209 @@
+{
+  "config_version": "m03_features_v1",
+  "feature_order": [
+    "completed_sessions_7d",
+    "completed_active_dates_7d",
+    "observed_days_7d",
+    "completed_sessions_28d",
+    "completed_active_dates_28d",
+    "observed_days_28d",
+    "hours_since_last_completed_session_28d",
+    "mean_session_minutes_28d",
+    "session_45min_share_28d",
+    "prior_complete_story_count",
+    "prior_started_72h_count",
+    "prior_started_72h_rate",
+    "account_age_days",
+    "new_player",
+    "hours_since_region_open",
+    "expected_story_minutes",
+    "region_id",
+    "language",
+    "client"
+  ],
+  "features": {
+    "completed_sessions_7d": {
+      "type": "integer",
+      "formula": "N7",
+      "nullable": false
+    },
+    "completed_active_dates_7d": {
+      "type": "integer",
+      "formula": "UTC日期(end_at)去重数(S7)",
+      "nullable": false
+    },
+    "observed_days_7d": {
+      "type": "number",
+      "formula": "max(0,(h-a7)/86400)",
+      "nullable": false
+    },
+    "completed_sessions_28d": {
+      "type": "integer",
+      "formula": "N28",
+      "nullable": false
+    },
+    "completed_active_dates_28d": {
+      "type": "integer",
+      "formula": "UTC日期(end_at)去重数(S28)",
+      "nullable": false
+    },
+    "observed_days_28d": {
+      "type": "number",
+      "formula": "max(0,(h-a28)/86400)",
+      "nullable": false
+    },
+    "hours_since_last_completed_session_28d": {
+      "type": "number",
+      "formula": "(t0-max(S28.end_at))/3600",
+      "nullable": true
+    },
+    "mean_session_minutes_28d": {
+      "type": "number",
+      "formula": "sum(end-start)/(60*N28)",
+      "nullable": true
+    },
+    "session_45min_share_28d": {
+      "type": "number",
+      "formula": "count(duration_seconds>=2700)/N28",
+      "nullable": true
+    },
+    "prior_complete_story_count": {
+      "type": "integer",
+      "formula": "当前t0重算更早候选剧情的Q4+Q5",
+      "nullable": false
+    },
+    "prior_started_72h_count": {
+      "type": "integer",
+      "formula": "上述历史剧情Q4数量",
+      "nullable": false
+    },
+    "prior_started_72h_rate": {
+      "type": "number",
+      "formula": "prior_started_72h_count/prior_complete_story_count",
+      "nullable": true
+    },
+    "account_age_days": {
+      "type": "number",
+      "formula": "(t0-registered_at)/86400",
+      "nullable": false
+    },
+    "new_player": {
+      "type": "integer",
+      "formula": "int(t0-registered_at<168h)",
+      "nullable": false
+    },
+    "hours_since_region_open": {
+      "type": "number",
+      "formula": "(t0-region_open_at)/3600",
+      "nullable": false
+    },
+    "expected_story_minutes": {
+      "type": "number",
+      "formula": "t0可见日历字段，固定案例为45",
+      "nullable": false
+    },
+    "region_id": {
+      "type": "enum",
+      "formula": "t0可见有效属性",
+      "nullable": false
+    },
+    "language": {
+      "type": "enum",
+      "formula": "t0可见有效属性",
+      "nullable": false
+    },
+    "client": {
+      "type": "enum",
+      "formula": "t0可见有效属性",
+      "nullable": false
+    }
+  },
+  "observation_start": "2024-11-06T01:00:00Z",
+  "session_windows_days": [
+    7,
+    28
+  ],
+  "history_anchor": "h=min(t0,latest_visible_watermark_at)",
+  "left_boundary": "max(registered_at,observation_start,h-W*24h)",
+  "session_membership": "a_W<=end_at<h and end_at<t0 and available_at<=t0",
+  "label_window_hours": 72,
+  "label_snapshots": {
+    "V1": "2025-01-20T14:00:00Z",
+    "V2": "2025-02-17T14:00:00Z",
+    "V3": "2025-03-17T14:00:00Z",
+    "V4": "2025-04-14T14:00:00Z",
+    "V5": "2025-05-12T14:00:00Z",
+    "V6": "2025-06-09T14:00:00Z"
+  },
+  "splits": {
+    "V1": "train",
+    "V2": "train",
+    "V3": "train",
+    "V4": "selection",
+    "V5": "test",
+    "V6": "test"
+  },
+  "train_cutoff": "2025-03-17T14:00:00Z",
+  "selection_as_of": "2025-04-14T14:00:00Z",
+  "source_bindings": {
+    "R1": {
+      "story_start": "src01",
+      "session": "src02"
+    },
+    "R2": {
+      "story_start": "src03",
+      "session": "src04"
+    },
+    "R3": {
+      "story_start": "src05",
+      "session": "src06"
+    }
+  },
+  "null_rules": {
+    "session_derived": "仅N28=0为空，S7为空不影响S28衍生量",
+    "prior_rate": "仅历史完整窗口数为0时为空",
+    "imputation": "本轮不填补、不拟合、不删除正常null样本"
+  },
+  "allowed_groups": [
+    "version_id",
+    "region_id",
+    "language",
+    "client",
+    "new_player"
+  ],
+  "forbidden_features": [
+    "user_id",
+    "story_id",
+    "sample_id",
+    "version_id",
+    "cohort_version",
+    "t0",
+    "as_of",
+    "split",
+    "dataset_id",
+    "run_id",
+    "master_seed",
+    "active_tendency",
+    "time_tendency",
+    "current_start",
+    "future_session_minutes",
+    "q_state",
+    "coverage_complete",
+    "y",
+    "prediction_score"
+  ],
+  "roles": {
+    "X": "predictors_only",
+    "row_map": "alignment_only",
+    "y_train": "training",
+    "y_selection": "evaluation_selection",
+    "y_test": "evaluation_test",
+    "audits": "not_predictors"
+  },
+  "limitations": [
+    "固定属性主案例；跨区域变更明确拒绝",
+    "不验证真实上游无不可见漏采",
+    "恒定45分钟字段不声称具有区分能力",
+    "不执行拟合、模型训练或Agent评测"
+  ]
+}
