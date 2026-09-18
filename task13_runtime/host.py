@@ -72,8 +72,13 @@ class Host:
 
     def open(self):
         self.verify_frozen_asset()
-        executable = (ROOT / self.config["host_python"]).resolve(strict=True)
-        require(executable != Path(sys.executable).resolve(), "environment", "host must use independent venv")
+        if os.name == 'nt':
+            executable = (ROOT / self.config["host_python"]).resolve(strict=True)
+            require(executable != Path(sys.executable).resolve(), "environment", "host must use independent venv")
+            argv = [str(executable), "-m", "task13_runtime.dsh_driver"]
+        else:
+            require((ROOT/'_dsh_vendor/deepseek_harness').is_dir(), 'environment', 'isolated Linux SDK dependencies missing')
+            argv = [sys.executable, '-S', '-m', 'cloud_api.dsh_bootstrap']
         env = clean_environment()
         if self.mode == "offline": env["TASK09_OFFLINE_CREDENTIAL"] = self.canary
         if self.mode == "live":
@@ -81,7 +86,7 @@ class Host:
             env["DEEPSEEK_API_KEY"] = os.environ["DEEPSEEK_API_KEY"]
         with self.lifecycle_lock:
             require(not self.closing, 'session_closed', 'session cancelled before driver startup')
-            self.driver = DriverProcess([str(executable), "-m", "task13_runtime.dsh_driver"], ROOT, env, self.directory/"controller")
+            self.driver = DriverProcess(argv, ROOT, env, self.directory/"controller")
         self.cfg["owned_job_name"] = self.driver.job.name
         replace(self.directory/"config.json", self.cfg)
         self.driver.send({"config": str(self.directory/"config.json")})

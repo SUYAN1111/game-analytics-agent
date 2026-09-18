@@ -142,6 +142,7 @@ def clean_environment():
     temporary=STATE/"temporary"/str(os.getpid());temporary.mkdir(parents=True,exist_ok=True)
     return {k: v for k, v in os.environ.items() if k.upper() in allowed} | {
         "TEMP":str(temporary),"TMP":str(temporary),
+        **({'HOME':str(temporary),'TMPDIR':str(temporary)} if os.name != 'nt' else {}),
         "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8", "PYTHONNOUSERSITE": "1", "PYTHONDONTWRITEBYTECODE": "1"}
 
 

@@ -1,0 +1,4 @@
+# Vercel ASGI bootstrap only. Full pinned core and SDK are built into isolated trees.
+starlette==1.6.0
+anyio==4.13.0
+psycopg[binary]==3.3.3

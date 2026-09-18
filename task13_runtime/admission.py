@@ -7,7 +7,7 @@ class Admission:
         self.capability = capability
 
     def call(self, operation, **arguments):
-        with Client(self.capability['address'], family='AF_PIPE',
+        with Client(self.capability['address'], family=self.capability.get('family','AF_PIPE'),
                     authkey=bytes.fromhex(self.capability['auth'])) as connection:
             connection.send({'session':self.capability['session'], 'operation':operation, 'arguments':arguments})
             reply = connection.recv()

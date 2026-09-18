@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm ci --prefix web",
+  "buildCommand": "python scripts/build_vercel.py",
+  "outputDirectory": "web/dist",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 300,
+      "excludeFiles": "{.git/**,.venv-core/**,.venv-dsh/**,state/**,web/node_modules/**,.env,.env.local,.env.production,.env.development,.env.preview}"
+    }
+  },
+  "rewrites": [
+    {"source": "/api/:path*", "destination": "/api/index"},
+    {"source": "/_auth", "destination": "/api/index"},
+    {"source": "/", "destination": "/api/index"}
+  ],
+  "headers": [{"source":"/(.*)","headers":[
+    {"key":"X-Content-Type-Options","value":"nosniff"},
+    {"key":"Referrer-Policy","value":"no-referrer"},
+    {"key":"X-Frame-Options","value":"DENY"},
+    {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"}
+  ]}]
+}

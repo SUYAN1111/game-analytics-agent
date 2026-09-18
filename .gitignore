@@ -19,3 +19,6 @@ web/.vite/
 playwright-report/
 test-results/
 *.local
+_core_vendor/
+_dsh_vendor/
+.vercel/

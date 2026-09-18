@@ -1,0 +1,43 @@
+name: Cloud Linux acceptance (no paid API)
+on:
+  workflow_dispatch:
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: postgres
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    env:
+      APP_STATE_DIR: /tmp/agent-ci
+      PYTHONDONTWRITEBYTECODE: "1"
+      ASSET_BUNDLE_URL: ${{ vars.ASSET_BUNDLE_URL }}
+      DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:55432/postgres
+      CLOUD_TEST_DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:55432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: python -m pip install -r requirements.txt
+      - run: npm ci --prefix web
+      - run: python scripts/build_vercel.py
+      - run: python scripts/init_cloud_db.py
+      - run: python scripts/check_cloud_http.py
+      - run: python scripts/check_cloud_runtime.py
+      - run: python scripts/check_cloud_store.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cloud-runtime-results
+          path: /tmp/agent-ci/cloud-runtime-results.json

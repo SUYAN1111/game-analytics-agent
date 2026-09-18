@@ -1,0 +1,11 @@
+.git/
+.venv-core/
+.venv-dsh/
+state/
+.env
+.env.*
+!.env.example
+web/node_modules/
+_core_vendor/
+_dsh_vendor/
+__pycache__/

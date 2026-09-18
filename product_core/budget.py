@@ -1,5 +1,6 @@
 """One controller-owned ledger. Agent workers only hold per-session pipe capabilities."""
 import threading
+import os
 from multiprocessing.connection import Listener, Client
 from uuid import uuid4
 from agent_runtime.budget import Budget, cost
@@ -65,16 +66,22 @@ class Coordinator:
     def __init__(self, ledger, verify):
         self.ledger,self.verify=ledger,verify
         self.auth=bytes.fromhex(uuid4().hex+uuid4().hex)
-        self.address=r'\\.\pipe\task13-'+uuid4().hex
+        self.family = 'AF_PIPE' if os.name == 'nt' else 'AF_UNIX'
+        if os.name == 'nt': self.address=r'\\.\pipe\task13-'+uuid4().hex
+        else:
+            from product_core.paths import STATE
+            STATE.mkdir(parents=True, exist_ok=True)
+            self.address=str(STATE / ('ipc-'+uuid4().hex[:12]))
+            require(len(self.address.encode()) < 104, 'ipc', 'APP_STATE_DIR too long for Unix socket')
         self.sessions=set();self.errors=[]
         self.closed=False
-        self.listener=Listener(self.address,family='AF_PIPE',authkey=self.auth)
+        self.listener=Listener(self.address,family=self.family,authkey=self.auth)
         self.thread=threading.Thread(target=self.serve,daemon=True);self.thread.start()
 
     def capability(self, session):
         require(session not in self.sessions,'session','session already authorized')
         self.sessions.add(session)
-        return {'address':self.address,'auth':self.auth.hex(),'session':session}
+        return {'address':self.address,'family':self.family,'auth':self.auth.hex(),'session':session}
 
     def dispatch(self, request):
         session,op,args=(request[k] for k in ('session','operation','arguments'))
@@ -115,7 +122,7 @@ class Coordinator:
     def close(self):
         if self.closed:return
         require(self.thread.is_alive(),'coordinator','coordinator failed before shutdown')
-        with Client(self.address,family='AF_PIPE',authkey=self.auth) as conn:
+        with Client(self.address,family=self.family,authkey=self.auth) as conn:
             conn.send({'shutdown':True});conn.recv()
         self.thread.join(10);self.listener.close()
         require(not self.thread.is_alive(),'coordinator','coordinator did not stop')

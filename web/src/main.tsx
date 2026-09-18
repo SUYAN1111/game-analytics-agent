@@ -22,7 +22,7 @@ import {DataSource} from './data-source';
 type Job = {id:string; session_id:string; turn_id:string; text:string; status:string; created:number; updated:number;
   answer:{answer_markdown:string; status:string; message?:string; choices?:{text:string}[]; limitations?:string[]}|null; error:{code:string; message:string}|null;
   routing?:{kind:string;message?:string;limitations?:string[]}|null;
-  usage?:Usage; evidence:Evidence[]; events:ExecutionEvent[]};
+  execution_mode?:'request'; usage?:Usage; evidence:Evidence[]; events:ExecutionEvent[]};
 type Session = {id:string; title:string; status:string; created:number; jobs?:Job[]};
 type Health = {mode:string; period:string; mode_label:string; questions:string[]; fault_questions:string[];
   capabilities:{title:string;description:string;examples:string[]}[];
@@ -47,6 +47,7 @@ const predictionGuide='模型根据玩家获得参与资格时已有的信息，
 const guides:Record<string,string>={'剧情开始情况是怎么算出来的？':definitionGuide,'M03 的分子分母和适用范围是什么？':definitionGuide,'这些预测结果该怎么看？':predictionGuide,'冻结预测是什么意思？':predictionGuide};
 function KnowledgeAnswer({job}:{job:Job}){return guides[job.text]?<><p className="plain-guide">{guides[job.text]}</p><details className="verified-text"><summary>查看完整说明与来源原文</summary><SafeMarkdown text={job.answer?.answer_markdown||''}/></details></>:<SafeMarkdown text={job.answer?.answer_markdown||''}/>;}
 function App(){
+  const cloudRuns=useRef(new Set<string>());
   const reducedMotion=useReducedMotion();
   const [menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{
@@ -159,6 +160,17 @@ function App(){
     timer=setTimeout(poll,300);const clock=setInterval(()=>setTick(Date.now()),1000);
     return()=>{stopped=true;clearTimeout(timer);clearInterval(clock);};
   },[running?.id,deleting,opening]);
+  useEffect(()=>{
+    if(!running||running.execution_mode!=='request'||running.status==='cancelling'||cloudRuns.current.has(running.id))return;
+    const job=running;cloudRuns.current.add(job.id);
+    // Keep the execution request open; regular GET polling remains the source of truth.
+    // This is never retried automatically after a network failure.
+    void (async()=>{try{
+      const response=await fetch('/api/jobs/'+job.id+'/run',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+      if(!response.ok)throw new Error('execution request failed');
+      const reader=response.body?.getReader();if(reader)while(!(await reader.read()).done){/* consume progress heartbeat */}
+    }catch{if(selected.current===job.session_id)setError('分析连接中断，正在查询已保存的任务状态；不会自动重复调用模型。');}})();
+  },[running?.id,running?.execution_mode,running?.status]);
   useEffect(()=>{if(current?.status!=='closing'||running||deleting===current.id)return;const id=current.id;let disposed=false;const timer=setInterval(()=>{api<Session>('/sessions/'+id).then(s=>{if(!disposed&&selected.current===id&&deletingRef.current!==id)setCurrent(s);}).catch(e=>{if(!disposed&&deletingRef.current!==id)setError(String(e));});},700);return()=>{disposed=true;clearInterval(timer);};},[current?.id,current?.status,running?.id,deleting]);
   async function submit(value=text){
     if(submitting.current||running||!value.trim()||unavailable||health?.budget.stopped)return;

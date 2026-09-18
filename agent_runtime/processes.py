@@ -67,6 +67,9 @@ class Job:
 
 def belongs_to_job(pid, name):
     """Query the exact controller-named Job at the child's actual spawn time."""
+    if os.name != 'nt':
+        from agent_runtime.posix_processes import belongs
+        return belongs(pid, name)
     from ctypes import wintypes as w
     kernel = ctypes.WinDLL("kernel32", use_last_error=True)
     kernel.OpenJobObjectW.argtypes = [w.DWORD, w.BOOL, w.LPCWSTR]; kernel.OpenJobObjectW.restype = ctypes.c_void_p
@@ -120,7 +123,8 @@ class DriverProcess:
         self.log = self.directory / "lifecycle.jsonl"
         self.stderr = (self.directory / "stderr.log").open("x", encoding="utf-8")
         self.process = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, text=True, encoding="utf-8", bufsize=1, creationflags=0x00000004)
+            stderr=subprocess.PIPE, text=True, encoding="utf-8", bufsize=1,
+            **({'creationflags':0x00000004} if os.name == 'nt' else {'start_new_session':True}))
         secrets = tuple(env.get(k, "") for k in ("DEEPSEEK_API_KEY", "TASK09_OFFLINE_CREDENTIAL"))
         def stderr_reader():
             for line in self.process.stderr:
@@ -132,9 +136,12 @@ class DriverProcess:
         self.closed = False
         self.termination_pids = []
         try:
-            self.job = Job(self.process.pid)
+            if os.name == 'nt': self.job = Job(self.process.pid)
+            else:
+                from agent_runtime.posix_processes import PosixJob
+                self.job = PosixJob(self.process.pid)
             require(belongs_to_job(self.process.pid,self.job.name),"job","launcher not attached")
-            resume_initial_thread(self.process.pid)
+            if os.name == 'nt': resume_initial_thread(self.process.pid)
         except BaseException:
             if self.job is not None:self.job.close();self.job=None
             self.process.kill(); self.process.wait(); self.stderr_thread.join(timeout=2); self.stderr.close(); raise
