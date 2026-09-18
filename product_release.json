@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product1524db6cb877af039465938f21",
+  "release_id": "product151582ae48e32fe7cc2d987caa",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,7 +277,7 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "6cd2e8cf3cc69a64797d1781ff58797131f6fc41cf04f2f149c677f346b8702c",
+      "sha256": "0a5d46c32ad750d57ab7062c4cdb2feeb048c33fb7ea4dd309816de836d22fea",
       "size": 15930
     },
     "THIRD_PARTY.json": {
@@ -453,12 +453,12 @@
       "size": 71
     },
     "cloud_api/app.py": {
-      "sha256": "0de864d256da3f6cecb1e34fb0323cda4cd30f0a775f113802174c97d5b5a0b8",
-      "size": 9959
+      "sha256": "9ea5db8b773b13dd219883e84c6736fcdb85ff67f3e118bd7b9c95909c914464",
+      "size": 11485
     },
     "cloud_api/auth.py": {
-      "sha256": "664ab33968e7795909e29f2e409337dc6d984f898f557c9f343aa9c9cca8b59e",
-      "size": 1383
+      "sha256": "1767ba553ccf9ae5efa6a390b6253ea6b313de290666e5705c230f8e927865a4",
+      "size": 1783
     },
     "cloud_api/budget.py": {
       "sha256": "c3818a14878b177e36db468dba032266ea9f48dd9d97bacf1638b75a68785798",
@@ -485,20 +485,24 @@
       "size": 1981
     },
     "cloud_api/service.py": {
-      "sha256": "b619b627c8c0c9a610fcde4a4f6c47574a53d15c04c7e3ccf67d2ed3d1aaa788",
-      "size": 13265
+      "sha256": "eae6f034ff57a2eb3a4105b420b75d8ffb91c2a0aa183d994d59fad89477496c",
+      "size": 13591
     },
     "cloud_api/store.py": {
       "sha256": "db2b11f45e85db770afbb23f9b04a90594f4d34208d1363da8ee1ca2293d9475",
       "size": 2503
+    },
+    "cloud_api/visitors.py": {
+      "sha256": "ae78af4a6da9cc4d889521b533c3f32232e89d6a8945fdf7424bc20a6b65168e",
+      "size": 2374
     },
     "docs/AGENT_SCOPE.md": {
       "sha256": "ee4983c338e6103913b70daa5d91c3666180e9a95c435ff0f4bc163d84e6f281",
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "3eb57ec222e41956ea1548b867c1eb431a8df39be91812b4ed2aaa7efb5c701a",
-      "size": 11817
+      "sha256": "6d3752a5d91e1917ff71c59771f38be6ef3be1d87a3c5148e9ca3f43502d1ea1",
+      "size": 17117
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -521,8 +525,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "6850c00fcc1a34cda32f90583317dde20ca69d16f8e6dcd3a2e0ba66cc79e92b",
-      "size": 15744
+      "sha256": "d12d7641bdffcb67cf1a5f723aca378f11bb4da061030e60ef40c744e961ffca",
+      "size": 17906
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -737,8 +741,16 @@
       "size": 2987
     },
     "scripts/check_cloud_http.py": {
-      "sha256": "f4a95ad18b8eb74fee693af048a964e5d82e5789ddeb7bf1bcc720db341fcbe6",
-      "size": 2615
+      "sha256": "3513211a09f8f048ce532e342c8dc6979abc4383452e557217d0b3788f9e0e92",
+      "size": 2642
+    },
+    "scripts/check_cloud_login_browser.mjs": {
+      "sha256": "44505c8d4dc153fb44d35ccebd32a84e58cd24e0ec510a0d0e547604b0cb2e50",
+      "size": 6447
+    },
+    "scripts/check_cloud_public.py": {
+      "sha256": "bb726baee5585870f3fcca55727cafb66be605d1bf327d00d37ee3477918e840",
+      "size": 10970
     },
     "scripts/check_cloud_runtime.py": {
       "sha256": "4097f4f585a28c1526a21cb9807c95438f2cbafb8bc67ae86a9a6d7be834bf7f",
@@ -1026,7 +1038,7 @@
       "size": 5817
     },
     "web/build-manifest.json": {
-      "sha256": "19899b87772a07b680b7dcfbc5f4f343eac4388e3bdb7fa7d70ba9cb22101b2b",
+      "sha256": "4067851607fc4f3544cbe59d8c12fdc03a847fa92986dffed8f713c1d85a2584",
       "size": 16121
     },
     "web/index.html": {
@@ -1494,8 +1506,8 @@
       "size": 104978
     },
     "web/src/main.tsx": {
-      "sha256": "8a497de0a2a4026430193c2941a455b476e67e33728bf4902c76d3d2a53d9ed3",
-      "size": 32503
+      "sha256": "366cf71128f2dcebe1183af89bbc1126a4233e7ac9d6c545dc885c006e5718ec",
+      "size": 32928
     },
     "web/src/method-panel.tsx": {
       "sha256": "2b833f302c0bf9dd26f8e19973a9aa78618feb517352d9234ebb575aa59f44b5",
@@ -1526,8 +1538,8 @@
       "size": 2997
     },
     "web/src/studio.css": {
-      "sha256": "7a692567efbae4acf4f8b259bf626c72dd209e71d498e8d3f87d4db2eb0203d4",
-      "size": 16254
+      "sha256": "37da47786745f07ec86b4bf337d67a63c50195187eabe0d0764292db55dbd1c0",
+      "size": 16416
     },
     "web/src/style.css": {
       "sha256": "801deedd4563f9776a35dc0061e7cfa439cdc7ab458c3d38384459ad9a4de393",

@@ -68,3 +68,29 @@
 本地按官方 JSON schema 的字段约束校验完整配置，并确认无效的 `fluid` 字符串会被拒绝。官方 schema 混用了 draft-04 声明和新版本队列约束，校验采用 Draft7 的实例验证，不声称通过官方 schema 自身的元验证。运行下载的官方 `isLargeFunctionsEnabled()` 确认仓库开关被接受，并用缺失值、`0` 作负向对照；这不是一次 Vercel 部署。报告在忽略目录 `state/vercel-size/`。
 
 此次没有裁剪冻结资产、合并两套 Python 依赖、变更分析工具或新增付费 API 调用；没有提交、推送或操作远端项目。仍需用户推送后，在原 Vercel 项目确认日志出现 `Vercel large functions build flag: enabled`，再确认最终部署成功及公网功能。构建进程读到开关不等于平台已接受大包或云端运行验收通过。
+
+## Vercel 部署成功与首屏登录引导（后续改为默认公开体验）
+
+用户截图确认提交 `bd33501` 的生产部署已 Ready，正式地址为 `https://game-analytic-agent.vercel.app`。用户补齐生产环境的 `APP_ORIGIN` 并重新部署后，页面由“云端配置尚未完成”变为“请刷新页面并输入访问码”，但没有显示表单。
+
+只读 HTTP 实测确认：`/` 返回 200 静态工作台 HTML；`/_auth` 返回 200，包含实际访问码表单；`/api/health` 返回 `401/access`。这说明首页直接提供静态壳，后台认证仍然生效，单纯刷新首页无法打开登录表单。此次检查没有提交公网登录表单，也没有读取或索取用户访问码。
+
+前端收到明确的 `401/access` 后使用 `location.replace('/_auth')` 进入固定同源的访问码页，不接受返回数据指定跳转地址，也不重试或重放被拒绝的操作。服务初始化失败时，左下角显示“服务连接失败”与错误颜色；其他 401、配置 503 不会误跳转。后台访问码、浏览器身份隔离、预算和数据权限均未改变。
+
+`scripts/check_cloud_login_browser.mjs` 使用真实无头 Chrome、临时本地 PGlite / Cloud API 和固定测试访问码 `local-cloud-test-access`。浏览器故意用构建后的静态 HTML 覆盖首页，以复现 Vercel 的访问路径，再验证自动跳转、真实表单登录、API 可用、刷新不循环且 owner 稳定、登录过期重新验证、配置 503 与其他 401 不跳转。7 项检查全部通过，无浏览器脚本异常，无分析任务提交，`paid_calls=0`。本地临时 API 默认地址为 `http://127.0.0.1:8767`（可用 `CLOUD_LOGIN_TEST_ORIGIN` 修改，仅接受回环地址），需要已安装的 Chrome 及网页依赖；验证入口为 `node scripts/check_cloud_login_browser.mjs`。报告与截图在忽略目录 `state/cloud-login/`。
+
+前端 TypeScript / Vite 构建通过。以上为私密邀请模式的验证记录；用户随后要求简历体验免输入码，当前实现及待部署范围以下节为准，不将本地浏览器成功表述为已完成云端分析测试。
+
+## 简历作品默认免登录访问
+
+用户要求 HR 打开链接后直接使用。`APP_ACCESS_MODE` 缺省改为 `public`，保留可选 `invite` 模式。原 `APP_ACCESS_CODE` 在公开模式下仅用于后台 HMAC 签名；已有五项环境变量保留，不需要新建项目、上传新资产或修改 Neon schema。生产入口仍固定使用真实 DeepSeek，不接受环境变量将其切换为离线桩。
+
+首次健康检查自动设置签名、HttpOnly 的浏览器身份，再由前端加载历史。直接访问静态首页也能完成这一步，避免首页由 CDN 提供时看不到访问入口。伪造签名被拒绝，跨浏览器记录隔离不变；已有有效邀请会话迁移到公开模式时保留历史。旧 `/_auth` 在公开模式下回到工作台，原前端 `401/access` 跳转仅供可选邀请模式使用。
+
+公开分析限额为每浏览器 24 小时 10 次、同一网络 24 小时 30 次；同一网络全部问题提交在 10 分钟内最多 60 次。使用现有 `login_limits` 表，在创建任务的同一个全局锁事务内计数；超额回滚，重复提交不重复计数，取消和删除历史不退款。仅在 Vercel 环境读取平台管理的 `x-vercel-forwarded-for`，本地环境忽略转发头；数据库保存带密钥的网络摘要，不保存原始 IP。平台头依据见 [Vercel 请求头说明](https://vercel.com/docs/headers/request-headers)。这些限额不能代替身份认证，全站模型费用预留和预算暂停继续生效，未提高或重置线上预算。
+
+`scripts/check_cloud_public.py` 在临时本地 PostgreSQL 兼容实例上通过 12 项检查：默认公开入口、首次身份建立与并行稳定性、签名伪造与归属拒绝、幂等和排队回滚、浏览器/网络限额、窗口到期与问候频率、预算暂停、两个独立 Service 实例竞争最后一个名额、可选邀请模式及历史迁移、网络摘要和费用账本不变、生产模式不受测试变量影响。已加入手动 Linux 工作流，新增代码的 Linux 运行待用户推送触发。原 `scripts/check_cloud_http.py` 显式使用邀请模式，原有私密访问回归也通过。
+
+`scripts/check_cloud_login_browser.mjs` 更新为公开体验浏览器检查，历史文件名保留。真实无头 Chrome 从模拟 CDN 的静态首页进入，API 使用临时本地 Cloud API，先确认 `offline` 模式后提交问候和版本比较。10 项检查通过，真实 DSH/MCP 比较产生 7 项证据；刷新恢复、390×844 手机布局、跨浏览器拒绝、实际删除、旧入口跳转、服务错误提示均通过，无脚本异常。报告与截图在忽略目录 `state/cloud-public-browser/`，`paid_calls=0`。该脚本仅接受回环地址，需要已安装的 Chrome、网页依赖及临时 API，执行命令仍为 `node scripts/check_cloud_login_browser.mjs`。
+
+此轮没有读取生产密钥、访问码或数据库凭据，没有操作公网账户、提交或推送代码，也没有运行公网付费分析。更新推送并在原 Vercel 项目部署后，还需验证实际生产网址可免登录完成 DeepSeek 分析。

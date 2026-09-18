@@ -35,7 +35,15 @@ async function api<T>(path:string, body?:unknown):Promise<T> {
   let response:Response,value;
   try{response=await fetch('/api'+path, body === undefined ? {} : {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});value=await response.json();}
   catch{throw new Error('暂时无法连接服务，请稍后重试。');}
-  if (!response.ok) throw new Error(value.error?.message || '服务暂时不可用，请稍后再试。');
+  if (!response.ok) {
+    // Vercel can serve the static shell before the Python homepage route.
+    // The API remains authoritative; never retry or replay a rejected action.
+    if(response.status===401&&value.error?.code==='access'){
+      window.location.replace('/_auth');
+      throw new Error('正在打开访问验证…');
+    }
+    throw new Error(value.error?.message || '服务暂时不可用，请稍后再试。');
+  }
   return value;
 }
 function SafeMarkdown({text}:{text:string}) {
@@ -218,7 +226,7 @@ function App(){
       <button className="new-button" disabled={!!deleting||sending} onClick={newSession}>＋ 新建对话</button>
       <div className="section-label">对话记录 <span>{sessions.length.toString().padStart(2,'0')}</span></div>
       <nav aria-label="历史对话">{sessions.length===0?<p className="muted">从第一个问题开始，分析记录会出现在这里。</p>:sessions.map(s=><div className="history-row" key={s.id} data-session-id={s.id}><button disabled={!!deleting||sending} className={'history '+(current?.id===s.id?'selected':'')} onClick={()=>{setMenuOpen(false);setShowSources(false);open(s.id).catch(e=>setError(String(e)));}}><span>{s.title}</span><small>{deleting===s.id?'正在删除…':`${new Date(s.created*1000).toLocaleDateString('zh-CN')} · ${s.status==='open'?'对话中':'只读记录'}`}</small></button><button className="history-delete" aria-label={'删除对话：'+s.title} title="删除对话" disabled={!!deleting||sending} onClick={()=>deleteSession(s)}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>)}</nav>
-      <div className="sidebar-footer"><span className="service-indicator"/>{health?.mode==='live'?'模型 · DeepSeek':health?'本地模式':'正在连接服务'}<small>玩家行为分析助手</small></div>
+      <div className="sidebar-footer" role="status"><span className="service-indicator" data-state={health?'connected':error?'failed':'connecting'}/>{health?.mode==='live'?'模型 · DeepSeek':health?'本地模式':error?'服务连接失败':'正在连接服务'}<small>玩家行为分析助手</small></div>
     </aside>
     <main inert={menuOpen}><header className="workspace-header"><div className="header-title"><button className="menu-toggle" aria-label="展开导航" aria-expanded={menuOpen} aria-controls="sidebar" onClick={()=>setMenuOpen(v=>!v)}>☰</button><h1>{showSources?'数据源':hasTurns?current?.title:'分析工作台'}</h1></div><div className="header-actions"><button className="source-trigger" ref={sourceButton} onClick={()=>setShowSources(v=>!v)}>{showSources?'返回分析':'管理数据源'}</button><UsageDetails key={current?.id||'new'} usage={sumUsage(current?.jobs?.map(j=>j.usage)||[])} scope="本对话" running={!!running} stale={!!connectionLost}/></div></header>
       <div className="data-context"><span className="data-context-icon" aria-hidden="true">▤</span><span>玩家行为数据</span><span className="data-tag">模拟数据</span></div>

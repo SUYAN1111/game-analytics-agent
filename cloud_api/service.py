@@ -74,11 +74,15 @@ class CloudService(Service):
             previous=db.execute("SELECT text,answer FROM jobs WHERE session_id=? AND id<>? AND status IN ('succeeded','partial') ORDER BY created DESC LIMIT 2",(row['session_id'],jid)).fetchall()
             return dict(row), decision, list(reversed(previous)), token, deadline
 
-    def submit(self, owner, sid, text, idem):
+    def submit(self, owner, sid, text, idem, *, public_network=None):
         with self.cv,self.store.connect() as db:
+            previous=db.execute('SELECT id FROM jobs WHERE session_id=? AND idem=?',(sid,idem)).fetchone()
             value=super().submit(owner,sid,text,idem)
             if value['status']=='queued' and db.execute("SELECT count(*) FROM jobs WHERE status IN ('queued','running','cancelling')").fetchone()[0]>1:
                 raise APIError(429,'queue_full','已有分析正在执行，请稍后再发送。')
+            if public_network is not None and not previous:
+                from cloud_api.visitors import admit
+                admit(db,owner,public_network,analysis=value['status']=='queued')
             return value
 
     def cancel(self, owner, jid):

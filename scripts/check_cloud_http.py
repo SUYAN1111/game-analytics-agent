@@ -14,7 +14,7 @@ def main():
     url=os.environ['CLOUD_TEST_DATABASE_URL']
     if urlsplit(url).hostname not in ('127.0.0.1','localhost'):raise SystemExit('Use a disposable local database')
     origin='http://testserver'
-    app=create_app(test_settings={'APP_ORIGIN':origin,'APP_ACCESS_CODE':'test-access-code-at-least-16','DATABASE_URL':url})
+    app=create_app(test_settings={'APP_ORIGIN':origin,'APP_ACCESS_MODE':'invite','APP_ACCESS_CODE':'test-access-code-at-least-16','DATABASE_URL':url})
     headers={'Origin':origin}
     with TestClient(app) as client,TestClient(app) as other:
         assert client.get('/api/sessions').status_code==401

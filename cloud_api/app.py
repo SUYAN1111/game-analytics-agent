@@ -25,19 +25,37 @@ def create_app(*, test_settings=None):
     test=bool(test_settings)
     origin=settings.get('APP_ORIGIN','').rstrip('/')
     secret=settings.get('APP_ACCESS_CODE','')
+    access_mode=settings.get('APP_ACCESS_MODE','public')
+    public=access_mode=='public'
     url=settings.get('DATABASE_URL','')
-    configured=bool(origin and url and 16<=len(secret)<=128 and (test or settings.get('DEEPSEEK_API_KEY')))
+    configured=bool(access_mode in ('public','invite') and origin and url and 16<=len(secret)<=128 and (test or settings.get('DEEPSEEK_API_KEY')))
     origins={origin}
     if settings.get('VERCEL_URL'):origins.add('https://'+settings['VERCEL_URL'])
     if not test and (urlsplit(origin).scheme!='https' or urlsplit(origin).path):configured=False
     service=CloudService(url,mode=settings.get('CLOUD_TEST_MODE','offline') if test else 'live') if configured else None
 
-    def error(code,message,status):return JSONResponse({'error':{'code':code,'message':message}},status_code=status)
+    def error(code,message,status):return JSONResponse({'error':{'code':code,'message':message}},status_code=status,headers={'Cache-Control':'no-store'})
+
+    def browser_owner(request):
+        owner=request.cookies.get('web_owner','')
+        if not re.fullmatch('[0-9a-f]{64}',owner):return None
+        if not public or auth.valid_owner(owner,request.cookies.get('web_owner_signature',''),secret):return owner
+        # Keep existing private-mode history when a previously authenticated browser migrates.
+        if auth.valid(request.cookies.get('app_access',''),secret):return owner
+        return None
+
+    def set_owner(response,owner):
+        response.set_cookie('web_owner',owner,httponly=True,secure=not test,samesite='strict',max_age=31536000,path='/')
+        if public:
+            response.set_cookie('web_owner_signature',auth.owner_signature(owner,secret),httponly=True,
+                                secure=not test,samesite='strict',max_age=31536000,path='/')
+        return response
 
     def ensure_owner(request,response):
         # Establish identity before the page makes parallel API requests.
-        if not re.fullmatch('[0-9a-f]{64}',request.cookies.get('web_owner','')):
-            response.set_cookie('web_owner',secrets.token_hex(32),httponly=True,secure=not test,samesite='strict',max_age=31536000,path='/')
+        owner=browser_owner(request)
+        if not owner or (public and not auth.valid_owner(owner,request.cookies.get('web_owner_signature',''),secret)):
+            set_owner(response,owner or secrets.token_hex(32))
         return response
 
     async def api(request):
@@ -50,6 +68,7 @@ def create_app(*, test_settings=None):
             return error('origin','请求来源不允许。',403)
         try:
             if request.url.path=='/_auth':
+                if public:return ensure_owner(request,RedirectResponse('/',status_code=303,headers={'Cache-Control':'no-store'}))
                 if request.method=='GET':return HTMLResponse(auth.PAGE)
                 raw=await limited_body(request,2048)
                 code=parse_qs(raw.decode('utf8')).get('code',[''])[0]
@@ -65,11 +84,13 @@ def create_app(*, test_settings=None):
                 response=RedirectResponse('/',status_code=303)
                 response.set_cookie('app_access',auth.issue(secret),httponly=True,secure=not test,samesite='strict',max_age=86400,path='/')
                 return ensure_owner(request,response)
-            if not auth.valid(request.cookies.get('app_access',''),secret):
+            if not public and not auth.valid(request.cookies.get('app_access',''),secret):
                 return error('access','请刷新页面并输入访问码。',401)
-            cookie=request.cookies.get('web_owner','')
-            fresh=not re.fullmatch('[0-9a-f]{64}',cookie)
-            owner=secrets.token_hex(32) if fresh else cookie
+            owner=browser_owner(request)
+            if public and not owner and request.url.path!='/api/health':
+                return error('visitor_required','请刷新页面后重试，并允许此网站保存 Cookie。',401)
+            fresh=not owner
+            owner=owner or secrets.token_hex(32)
             await run_in_threadpool(service.sweep)
             path,method,ids=request.url.path,request.method,request.path_params
             body=None
@@ -89,7 +110,9 @@ def create_app(*, test_settings=None):
             elif path.endswith('/turns'):
                 turn=Turn.model_validate(body)
                 if not turn.text.strip():return error('invalid_request','请输入问题。',422)
-                value=await run_in_threadpool(service.submit,owner,ids['sid'],turn.text,turn.idempotency_key)
+                from cloud_api.visitors import network_key
+                network=network_key(request,secret,vercel=bool(settings.get('VERCEL'))) if public else None
+                value=await run_in_threadpool(service.submit,owner,ids['sid'],turn.text,turn.idempotency_key,public_network=network)
             elif path.endswith('/run'):
                 claim=await run_in_threadpool(service.claim,owner,ids['jid'])
                 if not claim:return JSONResponse({'accepted':False})
@@ -117,7 +140,8 @@ def create_app(*, test_settings=None):
                 value=await run_in_threadpool(service.job,owner,ids['jid'],int(seq))
             else:value=await run_in_threadpool(service.session,owner,ids['sid'])
             response=JSONResponse(value,status_code=201 if path=='/api/sessions' and method=='POST' else 202 if path.endswith('/turns') else 200)
-            if fresh:response.set_cookie('web_owner',owner,httponly=True,secure=not test,samesite='strict',max_age=31536000,path='/')
+            if fresh or (public and not auth.valid_owner(owner,request.cookies.get('web_owner_signature',''),secret)):
+                set_owner(response,owner)
             response.headers['Cache-Control']='no-store'
             return response
         except APIError as exc:return error(exc.code,exc.message,exc.status)
@@ -128,7 +152,7 @@ def create_app(*, test_settings=None):
 
     async def home(request):
         if not configured:return HTMLResponse('<h1>玩家洞察</h1><p>云端配置尚未完成。</p>',status_code=503)
-        if not auth.valid(request.cookies.get('app_access',''),secret):return HTMLResponse(auth.PAGE,headers={'Cache-Control':'no-store'})
+        if not public and not auth.valid(request.cookies.get('app_access',''),secret):return HTMLResponse(auth.PAGE,headers={'Cache-Control':'no-store'})
         from product_core.paths import ROOT
         return ensure_owner(request,HTMLResponse((ROOT/'web/dist/index.html').read_text('utf8'),headers={'Cache-Control':'no-cache'}))
 

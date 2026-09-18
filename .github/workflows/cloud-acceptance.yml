@@ -38,6 +38,7 @@ jobs:
         run: python scripts/check_cloud_bootstrap.py
       - run: python scripts/init_cloud_db.py
       - run: python scripts/check_cloud_http.py
+      - run: python scripts/check_cloud_public.py
       - name: Verify failure reports remain available and redacted
         run: python scripts/check_cloud_diagnostics.py
       - run: python scripts/check_cloud_runtime.py
@@ -49,3 +50,4 @@ jobs:
           path: |
             /tmp/agent-ci/cloud-bootstrap-results.json
             /tmp/agent-ci/cloud-runtime-results.json
+            /tmp/agent-ci/cloud-public-results.json

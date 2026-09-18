@@ -1,8 +1,19 @@
-"""A small invite-code gate for the shared, bounded demonstration budget."""
+"""Signed anonymous browser identities and the optional private invite gate."""
 import hashlib
 import hmac
+import re
 import secrets
 import time
+
+
+def owner_signature(owner, secret):
+    return hmac.new(secret.encode(),('public-owner-v1:'+owner).encode(),hashlib.sha256).hexdigest()
+
+
+def valid_owner(owner, signature, secret):
+    return bool(re.fullmatch('[0-9a-f]{64}',owner or '') and
+                re.fullmatch('[0-9a-f]{64}',signature or '') and
+                hmac.compare_digest(signature,owner_signature(owner,secret)))
 
 
 def issue(secret):
