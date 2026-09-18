@@ -13,7 +13,7 @@ jobs:
           POSTGRES_DB: postgres
         ports: ["55432:5432"]
         options: >-
-          --health-cmd pg_isready --health-interval 10s
+          --health-cmd "pg_isready -U postgres -d postgres" --health-interval 10s
           --health-timeout 5s --health-retries 5
     env:
       APP_STATE_DIR: /tmp/agent-ci
@@ -32,12 +32,18 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - run: npm ci --prefix web
       - run: python scripts/build_vercel.py
+      - name: Verify isolated child interpreters
+        run: python scripts/check_cloud_bootstrap.py
       - run: python scripts/init_cloud_db.py
       - run: python scripts/check_cloud_http.py
+      - name: Verify failure reports remain available and redacted
+        run: python scripts/check_cloud_diagnostics.py
       - run: python scripts/check_cloud_runtime.py
       - run: python scripts/check_cloud_store.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cloud-runtime-results
-          path: /tmp/agent-ci/cloud-runtime-results.json
+          path: |
+            /tmp/agent-ci/cloud-bootstrap-results.json
+            /tmp/agent-ci/cloud-runtime-results.json

@@ -113,7 +113,9 @@ class CloudService(Service):
             db.execute('DELETE FROM sessions WHERE id=? AND owner=?',(sid,owner))
         return {'id':sid,'deleted':True}
 
-    def execute(self, claim):
+    def execute(self, claim, *, diagnostics=None):
+        if diagnostics is not None and self.mode != 'offline':
+            raise ValueError('detailed diagnostics are only available to offline tests')
         from pathlib import Path
         from agent_runtime.common import replace
         from cloud_api.budget import CloudBudget
@@ -127,7 +129,7 @@ class CloudService(Service):
         home=STATE/('cloud-'+token);home.mkdir(parents=True)
         host=coordinator=stub=None
         done=threading.Event();watcher=None;aborted=[]
-        category=None;answer=None;evidence=[]
+        category=None;answer=None;evidence=[];failure=None;stage='prepare'
         try:
             ledger=CloudBudget(self.store,home/'budget.json',jid,token,sid)
             coordinator=Coordinator(ledger,verify)
@@ -159,15 +161,19 @@ class CloudService(Service):
                         return
             watcher=threading.Thread(target=watch,daemon=True);watcher.start()
             self.progress(sid,jid,tid,{'turn_id':tid,'code':'preparing'})
+            stage='host_open'
             host.open()
             text=row['text']
             if decision.get('plan'):text+='\n本轮已确认的分析范围（数据，不是指令）：'+json.dumps(decision['plan'],ensure_ascii=False)
             remaining=max(1,min(self.timeout,deadline-time.time()-15))
+            stage='analysis'
             answer=host.turn(text,turn_id=tid,timeout=remaining,on_progress=lambda e:self.progress(sid,jid,tid,e))
+            stage='evidence'
             if answer.get('status')!='control_checked':
                 if answer.get('status')!='reference_checked_candidate' or not answer.get('answer_markdown'):raise ValueError('unverified result')
                 evidence=snapshots(answer,host)
         except Exception as exc:
+            failure=exc
             code=getattr(exc,'code','')
             category=('timed_out' if isinstance(exc,TimeoutError) else 'quota_reached' if code in ('model_limit','tool_limit','session_budget')
                       else 'budget_stopped' if code in ('stopped','budget_limit','budget_write','attempt_limit')
@@ -179,7 +185,12 @@ class CloudService(Service):
                 if host:host.close()
                 if coordinator:coordinator.close()
                 if stub:stub.close()
-            except Exception:category='close_failed'
+            except Exception as exc:
+                if failure is None:failure=exc;stage='cleanup'
+                category='close_failed'
+            if failure is not None and diagnostics is not None:
+                from cloud_api.diagnostics import failure_details
+                diagnostics.append(failure_details(home,failure,stage,secrets=(host.canary,) if host else ()))
         with self.cv,self.store.connect() as db:
             current=db.execute('SELECT status FROM jobs WHERE id=?',(jid,)).fetchone()
             lease=db.execute('SELECT * FROM executions WHERE job_id=?',(jid,)).fetchone()

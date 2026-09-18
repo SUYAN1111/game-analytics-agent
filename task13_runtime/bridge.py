@@ -56,15 +56,18 @@ class Connection:
 
     async def __aenter__(self):
         from mcp import Client
-        from mcp.client.stdio import StdioServerParameters, stdio_client
+        from mcp.client.stdio import StdioServerParameters
+        from cloud_api.core_bootstrap import core_command
+        from cloud_api.mcp_transport import owned_stdio_client
         self.directory.mkdir(parents=True, exist_ok=True)
         self.stderr = (self.directory/"stderr.log").open("x", encoding="utf-8")
-        parameters = StdioServerParameters(command=self.original_python,
-            args=["-m", "task13_runtime.launch_mcp", "--directory", str(self.directory/"server")],
+        command = core_command('task13_runtime.launch_mcp', '--directory', str(self.directory/'server'), executable=self.original_python)
+        parameters = StdioServerParameters(command=command[0], args=command[1:],
             env=clean_environment(), cwd=str(ROOT))
+        job_name = read(self.directory.parent/'config.json')['owned_job_name']
         @asynccontextmanager
         async def transport():
-            async with stdio_client(parameters, errlog=self.stderr) as (incoming, outgoing):
+            async with owned_stdio_client(parameters, errlog=self.stderr, job_name=job_name) as (incoming, outgoing):
                 yield Wire(incoming, self.directory/"mcp_wire.jsonl", "server_to_client"), Wire(outgoing, self.directory/"mcp_wire.jsonl", "client_to_server")
         self.client = Client(transport(), read_timeout_seconds=60, cache=None)
         began = time.monotonic()

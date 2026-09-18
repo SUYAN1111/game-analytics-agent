@@ -19,7 +19,8 @@ def main():
     names = set(manifest['source_files'])
     names.add('task13_runtime/progress.py')
     names.add('task13_runtime/request_scope.py')
-    names.update(('sitecustomize.py','requirements.txt','.python-version','vercel.json','.vercelignore','agent_runtime/posix_processes.py'))
+    names.discard('sitecustomize.py')
+    names.update(('requirements.txt','.python-version','vercel.json','.vercelignore','agent_runtime/posix_processes.py'))
     for directory in ('web', 'web_api', 'scripts', 'docs', 'cloud_api', 'api'):
         for p in (ROOT/directory).rglob('*'):
             if p.is_file() and not any(part in ('node_modules','dist','__pycache__','.vite') for part in p.relative_to(ROOT).parts):

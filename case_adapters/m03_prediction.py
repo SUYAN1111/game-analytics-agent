@@ -31,8 +31,7 @@ class FrozenPrediction:
 
     def predict(self, versions, request_id):
         import subprocess
-        import sys
-        from mcp.client.stdio import get_default_environment
+        from cloud_api.core_bootstrap import core_command
         # Only this child executes the model. It receives no observed tables, y, old
         # predictions, mature query rows, report roots or unused resource permissions.
         request = {"definition": self.definition,
@@ -43,8 +42,8 @@ class FrozenPrediction:
         write(path, request)
         with (self.audit / (request_id+"_worker_stderr.log")).open("x", encoding="utf-8") as err:
             try:
-                result = subprocess.run([sys.executable, "-m", "case_adapters.m03_prediction", "--request", str(path),
-                    "--request-sha", sha(path)], cwd=ROOT, shell=False, stdout=subprocess.PIPE, stderr=err,
+                result = subprocess.run(core_command('case_adapters.m03_prediction', '--request', str(path),
+                    '--request-sha', sha(path)), cwd=ROOT, shell=False, stdout=subprocess.PIPE, stderr=err,
                     encoding="utf-8", timeout=150, env=__import__("agent_runtime.common",fromlist=["clean_environment"]).clean_environment())
             except subprocess.TimeoutExpired as exc:
                 from analysis_tools.contracts import ToolError

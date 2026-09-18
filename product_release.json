@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product1535b06ac135b127fe432713cc",
+  "release_id": "product15a3232ab0ca8fdcc3d2a2b3e5",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "2d19b10d16b2fe5ffc8e3927ec477152ba21718366267383f6bd10678240196b",
-      "size": 15599
+      "sha256": "2c9faaf3bd22b7c18a03332d8a1f2b61bba45820196586474f2990fa2155c84c",
+      "size": 15665
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -297,8 +297,8 @@
       "size": 17985
     },
     "agent_runtime/common.py": {
-      "sha256": "38627e53f6d70cd18f368e1fb0492807f9549adc66c0366dc974ff3f52a3ebda",
-      "size": 7288
+      "sha256": "eb6805dffc80aac5786100e5645933dd66957260b3ecb11320bc6e451f630939",
+      "size": 7502
     },
     "agent_runtime/configs/task09_deepseek_v1.json": {
       "sha256": "31f812ddc0d8c453cebf07b1c90b6fe9419e235a1981939969805d81ea8d9300",
@@ -441,8 +441,8 @@
       "size": 61
     },
     "case_adapters/m03_prediction.py": {
-      "sha256": "42e94ca80b0f34062266819070fb9d519f393d5d5ac2c0fdb41bf5d379d25947",
-      "size": 8568
+      "sha256": "018c778c04316d21483b90131c148e00cb4721a2bc108058687290f1107ee48f",
+      "size": 8536
     },
     "case_adapters/m03_tools.py": {
       "sha256": "624cf8d56bb4cacba2aedf800545e722da738a01303634f101662778b0d156ba",
@@ -464,17 +464,29 @@
       "sha256": "c3818a14878b177e36db468dba032266ea9f48dd9d97bacf1638b75a68785798",
       "size": 3310
     },
+    "cloud_api/core_bootstrap.py": {
+      "sha256": "e232035cf6aac62187d9eb97fb03566cd61e676e3211f03883f2a972a91dbb20",
+      "size": 1877
+    },
+    "cloud_api/diagnostics.py": {
+      "sha256": "bb9adc71d40502db9dd830956c34a08cad69765d4f89703f3296ef9792c67556",
+      "size": 1425
+    },
     "cloud_api/dsh_bootstrap.py": {
       "sha256": "0170fff1b929de126405670f38fa63b1854fb1af3a060d40b59c053cfa90dbcc",
       "size": 442
+    },
+    "cloud_api/mcp_transport.py": {
+      "sha256": "e92a3639b0f678b463c6e1bd30434415bffea45211239c5a6a326e3372bcd41e",
+      "size": 2318
     },
     "cloud_api/schema.sql": {
       "sha256": "5f290bdd0752a9a2edce78a5d4edaba261e41b2c8dece4d810a47a999d4a8d15",
       "size": 1981
     },
     "cloud_api/service.py": {
-      "sha256": "ba4cdfa4091f797ee81aca437165c4b03de7536d4f289f978f9f7747be6a80b4",
-      "size": 12623
+      "sha256": "b619b627c8c0c9a610fcde4a4f6c47574a53d15c04c7e3ccf67d2ed3d1aaa788",
+      "size": 13265
     },
     "cloud_api/store.py": {
       "sha256": "db2b11f45e85db770afbb23f9b04a90594f4d34208d1363da8ee1ca2293d9475",
@@ -485,8 +497,8 @@
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "06b4549f8434410db24bfdcb28fd7931b865d3635678502e07727b42747239ff",
-      "size": 2990
+      "sha256": "fac3c8294f2ff03cc42b18f46689630efa8ed4b609387ffcc95decd15a3e15b6",
+      "size": 5524
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -509,8 +521,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "a95cb4015de8c629e2cf431b6f832b552750d557ff8d4ded445fec4f767c315b",
-      "size": 11977
+      "sha256": "9dea57bd8fd9e07cc2c98ff7d77d4b104e15671a02a5199faa2e44dddc9fd744",
+      "size": 12479
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -716,13 +728,21 @@
       "sha256": "74b1b593750ee09c3e90dfcdb12ef26c5f49af272fac60af4ba611040b769724",
       "size": 1177
     },
+    "scripts/check_cloud_bootstrap.py": {
+      "sha256": "bee2b7c5bcbd9a21443d7c1f316ae646dbe6cdc07083ba682ddd2dd9011e09c9",
+      "size": 2293
+    },
+    "scripts/check_cloud_diagnostics.py": {
+      "sha256": "94b8ab91c64441165bc161f8d7472545d840bd52bd320da79c7f839f48aaa3db",
+      "size": 2987
+    },
     "scripts/check_cloud_http.py": {
       "sha256": "f4a95ad18b8eb74fee693af048a964e5d82e5789ddeb7bf1bcc720db341fcbe6",
       "size": 2615
     },
     "scripts/check_cloud_runtime.py": {
-      "sha256": "9038161e76247e60eccaaf3d7f24a362a45fa4a2add7ec4f0bfc53463ec93576",
-      "size": 2067
+      "sha256": "4097f4f585a28c1526a21cb9807c95438f2cbafb8bc67ae86a9a6d7be834bf7f",
+      "size": 2642
     },
     "scripts/check_cloud_store.py": {
       "sha256": "515f701439b31b213912bcbc551fa6ae3fa3ee106f70e14d7b1dcc3a292726f5",
@@ -753,8 +773,8 @@
       "size": 1448
     },
     "scripts/seal_release.py": {
-      "sha256": "b6ba3b7cd9942b212fddeef6da955a168dc779628454420063a950bd88eaef56",
-      "size": 2439
+      "sha256": "5863c2c75c5f15f343a799d3eadafa1708c55169457de288f20af1ddb81cf7fc",
+      "size": 2458
     },
     "scripts/source_test_fixtures.py": {
       "sha256": "c03fdfc30bec0041e0743ee27ced4aa62f2aa70ea9c297da5a431d616b07d2cb",
@@ -803,10 +823,6 @@
     "segmentation/profiles.py": {
       "sha256": "da6ffe66274f7ea355f917f5531066f25e2ee7115f51d74ea6076cbc4ee8ead2",
       "size": 3539
-    },
-    "sitecustomize.py": {
-      "sha256": "9c990ebe55e28269d8629ba89561fcbc99bcf786825bbcbb8b4c66e1dc066b3c",
-      "size": 252
     },
     "task10_runtime/__init__.py": {
       "sha256": "5124b5a02e2860535b70bca26ea135379d56876a52e32923bfee3a6b93e06b01",
@@ -921,8 +937,8 @@
       "size": 1947
     },
     "task13_runtime/bridge.py": {
-      "sha256": "c1e00007e3fae868a2b94d3e1a80b6438d4e43557416a6cb4027ba2890078d7d",
-      "size": 12954
+      "sha256": "c505db9bf762a5fddfee147d55e3d18c577ec2bca1ac00cfc02fa7660ed080de",
+      "size": 13207
     },
     "task13_runtime/common.py": {
       "sha256": "205d43219c835fbf19347b473a0cfc320ddc5481bd70ef4ead969da6535efd63",
@@ -933,8 +949,8 @@
       "size": 7368
     },
     "task13_runtime/dsh_plugins/task13.mjs": {
-      "sha256": "989f15b4fd22ca12e6e412c0a71f71438dba005dfc16813894397908f4a50c58",
-      "size": 19592
+      "sha256": "b2a39e30f290e99b845b7db3e510664c7ec9347768255faedfa6629f22f91c72",
+      "size": 19762
     },
     "task13_runtime/dsh_profile/task13.patch.yml": {
       "sha256": "f1cecd6ae577db77015f849e43dc39a25ce9fbd943f46bfef3669ddb0e501976",

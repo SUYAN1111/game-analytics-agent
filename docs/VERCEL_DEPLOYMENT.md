@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-这次已添加云端代码、数据库持久化、构建配置和 Linux 自动验收。**目前通过的是 Windows 本地验证，尚未在 Linux 或 Vercel 实机通过验收，也没有上线。** 按下面顺序操作；Linux 验收通过后再部署。
+这次已添加云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；首次 Linux 构建与 HTTP 检查通过，分析启动失败后已本地修复，等待重新验收。Vercel 尚未上线。** 按下面顺序操作；Linux 验收通过后再部署。具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -57,6 +57,8 @@ https://github.com/你的用户名/仓库名/releases/download/cloud-assets-v1/a
 这个流程在 Linux / Python 3.14 上安装隔离依赖、下载并校验资产、构建网页，在临时 PostgreSQL 16 上验证访问隔离，以及版本比较、口径说明、预测、分群、玩法关联五类真实工具链。模型使用本地测试桩，**不需要 DeepSeek 密钥，也不调用付费模型**。Actions 自身使用你的 GitHub 账户额度；若账户提示额度或账单要求，先查看提示，不需要为此直接升级套餐。
 
 全部步骤变绿才进入下一步。若变红，保留失败步骤的日志用于定位；不要跳过校验或在云端重新封版来强行通过。结果 JSON 可在此次运行的 Artifacts 中下载。这里不会自动操作你的 Vercel 项目。
+
+修复代码后，先手动提交并推送，再从 **Run workflow → main** 新建运行。不要在旧失败页面点 **Re-run jobs**，它仍使用原提交。资产不变时不需要重复上传附件或修改 `ASSET_BUNDLE_URL`。新增入口预检报告为 `cloud-bootstrap-results.json`；分析失败也会生成含脱敏诊断的 `cloud-runtime-results.json`。
 
 ## 4. 创建免费数据库并初始化
 

@@ -34,14 +34,17 @@ export async function apply(ctx) {
   phase('DSH插件加载，等待真实MCP握手及工具发现');
   const fail = (code, message) => { const e = new Error(message); e.code=code; throw e; };
   const safeEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) =>
-    /^(SYSTEMROOT|WINDIR|COMSPEC|PATH|PATHEXT|TEMP|TMP|USERPROFILE|APPDATA|LOCALAPPDATA|PROGRAMFILES|PROGRAMFILES\(X86\)|OS|APP_ASSET_DIR|APP_STATE_DIR|APP_DEBUG|APP_READ_AUDIT)$/i.test(key)));
+    /^(SYSTEMROOT|WINDIR|COMSPEC|PATH|PATHEXT|TEMP|TMP|HOME|TMPDIR|LD_LIBRARY_PATH|USERPROFILE|APPDATA|LOCALAPPDATA|PROGRAMFILES|PROGRAMFILES\(X86\)|OS|APP_ASSET_DIR|APP_STATE_DIR|APP_DEBUG|APP_READ_AUDIT)$/i.test(key)));
   Object.assign(safeEnv,{PYTHONUTF8:'1',PYTHONIOENCODING:'utf-8',PYTHONNOUSERSITE:'1',PYTHONDONTWRITEBYTECODE:'1'});
   let closed=false, blocked=false, turnBlocked=false, currentTurn=null, toolCount=0, contextReady=false, contextEvidenceId=null;
   let discoveryRequired=false, discoveryReady=false, discoveryEvidenceId=null, contextAttempts=0, repairRequestUsed=false;
   const pending = new Map();
   const toolAdmissions = new Map();
   let taskToolCount=0;
-  const child = spawn(cfg.original_python, ['-m','task13_runtime.bridge','--config',process.env.TASK13_BRIDGE_CONFIG],
+  const bridgeArgs = process.platform === 'win32'
+    ? ['-m','task13_runtime.bridge']
+    : ['-S','-m','cloud_api.core_bootstrap','task13_runtime.bridge'];
+  const child = spawn(cfg.original_python, [...bridgeArgs,'--config',process.env.TASK13_BRIDGE_CONFIG],
     {cwd:cfg.project_root,env:safeEnv,stdio:['pipe','pipe','pipe'],windowsHide:true,shell:false});
   child.stderr.on('data', data=>process.stderr.write(data));
   log('plugin.jsonl',{event:'bridge_spawned',dsh_pid:process.pid,bridge_pid:child.pid,credential_present_in_bridge_env:false});

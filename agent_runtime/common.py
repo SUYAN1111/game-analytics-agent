@@ -138,6 +138,9 @@ def clean_environment():
     # An allowlist, not removal of one key from an otherwise inherited environment.
     allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "PATH", "PATHEXT", "TEMP", "TMP", "PROCESSOR_ARCHITECTURE", "PROCESSOR_ARCHITEW6432",
                "USERPROFILE", "APPDATA", "LOCALAPPDATA", "PROGRAMFILES", "PROGRAMFILES(X86)", "OS", "APP_ASSET_DIR", "APP_STATE_DIR", "APP_DEBUG", "APP_READ_AUDIT"}
+    # The hosted Python executable/native extensions may need its library path.
+    # Never inherit PYTHONPATH, LD_PRELOAD, database or model credentials here.
+    if os.name != 'nt': allowed.add('LD_LIBRARY_PATH')
     from product_core.paths import STATE
     temporary=STATE/"temporary"/str(os.getpid());temporary.mkdir(parents=True,exist_ok=True)
     return {k: v for k, v in os.environ.items() if k.upper() in allowed} | {

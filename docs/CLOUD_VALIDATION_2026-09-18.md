@@ -15,9 +15,24 @@
 
 ## 尚未执行
 
-- Linux / Python 3.14 的实际 DSH 子进程、依赖包和进程组生命周期。当前电脑无可用 Linux/Docker 环境。
-- 真实 PostgreSQL 16、Neon 连接池、多实例竞争的完整实测。
+- 修复后的 Linux DSH/MCP 五能力和进程组生命周期验收。首次 Linux 运行的通过项与失败项见下节；当前电脑无可用 Linux/Docker 环境。
+- 真实 PostgreSQL 16 的持久化完整回归、Neon 连接池和多实例竞争实测；首次 Linux HTTP 检查已连接真实 PostgreSQL 16 通过。
 - Vercel 的构建、路由、原生依赖执行、300 秒截止、2 GB 内存限制、冷启动、部署包体、断线行为和免费额度消耗。
 - 适配后的云端真实 DeepSeek 自由表达与追问。此前 Windows 本地真实 DeepSeek 结果见原报告，本轮无新增付费调用。
 
 手动 GitHub 工作流 `.github/workflows/cloud-acceptance.yml` 会运行 Linux + PostgreSQL 16 + 本地模型桩的 HTTP 和五能力验收。Vercel 上仍须按 [部署指南](VERCEL_DEPLOYMENT.md) 做实际测试。不能将本轮通过结论表述为“已在 Vercel 上线”或“保证全免费”。
+
+## 首次 Linux 失败排查与本地修复
+
+[GitHub Actions 35299773816](https://github.com/SUYAN1111/game-analytics-agent/actions/runs/35299773816)，提交 `e4a68d4`，Ubuntu 24.04 / Python 3.14.7 / PostgreSQL 16：
+
+- 依赖安装、公开资产下载与完整性检查、前端构建、数据库初始化、HTTP 身份隔离与删除检查通过。
+- 五能力检查的第一个比较任务返回 `failed`、证据数 0。原实现清理了内部日志，不能仅凭此运行确认最内层异常；Node.js Action 弃用提示属于警告。
+- 本地复现：清除 `PYTHONPATH` 后，`python -m` 不会自动执行当前目录的 `sitecustomize.py`。原来的 Linux 桥接、MCP、预测子进程依赖这条隐式加载路径，而所需依赖只装在 `_core_vendor`。
+- 改为固定模块白名单的 `python -S -m cloud_api.core_bootstrap`，显式加载核心依赖。DSH 继续使用独立入口及 Pydantic 2.12.5，核心使用 2.13.4。删除失效的 site hook，传递必要的 Linux 动态库路径，不继承模型或数据库凭据。
+- 审查固定 MCP 2.2.0 代码发现，默认 stdio 传输在 Linux 使用 `start_new_session=True`。新增仅在独立桥接进程内生效的版本绑定适配，保留 MCP 协议与传输，令 MCP 留在宿主进程组，并在启动时验证归属。服务进程退出与宿主最终清理分工明确；实际 Linux 回收仍待 CI 验证。
+- 离线检查失败时也写出报告，在删除临时运行目录前收集有限的启动日志，脱敏后仅交给离线测试。网页公开错误不增加内部细节。新增依赖入口预检和故障注入检查。
+
+修复后的 Windows 本地回归：HTTP 检查通过；故障注入验证失败报告、脱敏、临时目录清理及公开 DTO 隔离通过；五类真实 DSH/MCP 分别得到 7、2、5、10、3 项证据，全部成功，新 Service 恢复与删除通过；新增引导入口的依赖隔离检查及 MCP 适配的归属拒绝、退出、还原逻辑检查通过。依赖探针为适配 Windows 的 pywin32 补充了原生模块搜索目录，不能当作 Linux 运行结果。没有调用付费 API。
+
+本机详细记录位于忽略目录 `state/cloud-failure/regression/`。需要手动提交并推送修复后，从 **Run workflow → main** 新建一次运行；旧提交的 **Re-run jobs** 不会读取本次修复。资产附件和 `ASSET_BUNDLE_URL` 继续复用。
