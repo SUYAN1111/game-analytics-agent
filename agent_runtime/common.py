@@ -134,7 +134,7 @@ def lines(path):
                 yield json.loads(line)
 
 
-def clean_environment():
+def clean_environment(*, temporary_root=None):
     # An allowlist, not removal of one key from an otherwise inherited environment.
     allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "PATH", "PATHEXT", "TEMP", "TMP", "PROCESSOR_ARCHITECTURE", "PROCESSOR_ARCHITEW6432",
                "USERPROFILE", "APPDATA", "LOCALAPPDATA", "PROGRAMFILES", "PROGRAMFILES(X86)", "OS", "APP_ASSET_DIR", "APP_STATE_DIR", "APP_DEBUG", "APP_READ_AUDIT"}
@@ -142,9 +142,21 @@ def clean_environment():
     # Never inherit PYTHONPATH, LD_PRELOAD, database or model credentials here.
     if os.name != 'nt': allowed.add('LD_LIBRARY_PATH')
     from product_core.paths import STATE
-    temporary=STATE/"temporary"/str(os.getpid());temporary.mkdir(parents=True,exist_ok=True)
+    # A cloud request owns the lifetime of all its descendants' temporary files.
+    # Replacing this with a fresh PID directory at each boundary leaks native
+    # executable caches between requests, even after the process tree has exited.
+    selected=temporary_root if temporary_root is not None else os.environ.get('APP_RUNTIME_TMP')
+    temporary=Path(selected).resolve() if selected is not None else STATE/"temporary"/str(os.getpid())
+    require(temporary!=STATE.resolve() and temporary.is_relative_to(STATE.resolve()),
+            'environment','runtime temporary directory must be inside the state root')
+    temporary.mkdir(parents=True,exist_ok=True)
     return {k: v for k, v in os.environ.items() if k.upper() in allowed} | {
+        "APP_RUNTIME_TMP":str(temporary),
         "TEMP":str(temporary),"TMP":str(temporary),
+        # The pinned single-file DSH executable extracts native addons here.
+        # Explicit on Windows too, so local tests exercise the cloud cache path.
+        "PKG_NATIVE_CACHE_PATH":str(temporary/'native-cache'),
+        "XDG_CACHE_HOME":str(temporary/'cache'),
         **({'HOME':str(temporary),'TMPDIR':str(temporary)} if os.name != 'nt' else {}),
         "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8", "PYTHONNOUSERSITE": "1", "PYTHONDONTWRITEBYTECODE": "1"}
 

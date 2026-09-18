@@ -79,7 +79,7 @@ class Host:
         else:
             require((ROOT/'_dsh_vendor/deepseek_harness').is_dir(), 'environment', 'isolated Linux SDK dependencies missing')
             argv = [sys.executable, '-S', '-m', 'cloud_api.dsh_bootstrap']
-        env = clean_environment()
+        env = clean_environment(temporary_root=self.directory/'temporary')
         if self.mode == "offline": env["TASK09_OFFLINE_CREDENTIAL"] = self.canary
         if self.mode == "live":
             require(bool(os.environ.get("DEEPSEEK_API_KEY")), "credential", "set DEEPSEEK_API_KEY locally; it is not read from global DSH config")

@@ -33,12 +33,14 @@ def main():
     report={'status':'FAIL','platform':sys.platform,'cases':results,'paid_calls':0,
             'assets_from_archive':archive_directory is not None}
     STATE.mkdir(parents=True,exist_ok=True)
-    done=threading.Event();peak={'files_bytes':0}
+    report_path=Path(os.environ.get('CLOUD_TEST_REPORT_PATH',STATE/'cloud-runtime-results.json'))
+    report_path.parent.mkdir(parents=True,exist_ok=True)
+    done=threading.Event();peak={'files_bytes':0,'native_cache_bytes':0}
     existing={p for p in STATE.glob('cloud-*') if p.is_dir()}
     existing_temporary=set((STATE/'temporary').glob('*'))
     monitor_errors=[]
     def sample_storage():
-        size=0
+        size=cache_size=0;largest=[]
         # A developer's STATE may also contain old reports, fixtures and local
         # browser history. Measure only assets and scratch owned by this run.
         roots=([Path(archive_directory.name)] if archive_directory else [])
@@ -49,10 +51,20 @@ def main():
                 try:
                     if path.is_file():
                         value=path.stat()
-                        size+=value.st_blocks*512 if hasattr(value,'st_blocks') else ((value.st_size+4095)//4096)*4096
+                        allocated=value.st_blocks*512 if hasattr(value,'st_blocks') else ((value.st_size+4095)//4096)*4096
+                        size+=allocated
+                        if 'native-cache' in path.parts:cache_size+=allocated
+                        if allocated>=1024*1024:largest.append((allocated,str(path.relative_to(root))))
                 except FileNotFoundError:pass  # Owned scratch may be deleted during sampling.
         peak['files_bytes']=max(peak['files_bytes'],size)
-        if limit:peak['filesystem_used_bytes']=max(peak.get('filesystem_used_bytes',0),shutil.disk_usage(tempfile.gettempdir()).used)
+        peak['native_cache_bytes']=max(peak['native_cache_bytes'],cache_size)
+        current={'files_bytes':size,'native_cache_bytes':cache_size}
+        if limit:
+            used=shutil.disk_usage(tempfile.gettempdir()).used
+            peak['filesystem_used_bytes']=max(peak.get('filesystem_used_bytes',0),used)
+            current['filesystem_used_bytes']=used
+        current['largest_files']=[{'bytes':n,'path':p} for n,p in sorted(largest,reverse=True)[:6]]
+        return current
     def monitor():
         try:
             while not done.wait(.05):sample_storage()
@@ -61,7 +73,8 @@ def main():
     if limit:
         assert shutil.disk_usage(tempfile.gettempdir()).total<=int(limit), 'test must run on a genuinely limited filesystem'
         report['filesystem_capacity_bytes']=shutil.disk_usage(tempfile.gettempdir()).total
-    sample_storage();watcher=threading.Thread(target=monitor,daemon=True);watcher.start()
+    baseline=sample_storage();report['storage_baseline']=baseline
+    watcher=threading.Thread(target=monitor,daemon=True);watcher.start()
     try:
         # Repeat the disk-heavy path on the warm instance, not just one cold job.
         for name,text in cases+[('compare_again',cases[0][1])]:
@@ -72,11 +85,20 @@ def main():
             service.execute(claim,diagnostics=case['diagnostics'])
             value=service.job('runtime-check',job['id'])
             case.update(status=value['status'],error=value['error'],evidence=len(value['evidence']))
+            case['storage_after']=sample_storage()
             print(json.dumps(case,ensure_ascii=False),flush=True)
             assert value['status']=='succeeded' and value['evidence'],case
             fresh=CloudService(url,mode='offline');assert fresh.session('runtime-check',sid)['jobs'][0]['answer']==value['answer']
             fresh.delete_session('runtime-check',sid)
             assert not [p for p in STATE.glob('cloud-*') if p.is_dir() and p not in existing], 'completed request left scratch directories behind'
+            assert not [p for p in (STATE/'temporary').glob('*') if p not in existing_temporary], 'descendants leaked PID-based temporary directories'
+            assert case['storage_after']['native_cache_bytes']==0, 'native runtime cache survived request cleanup'
+            if limit:
+                assert case['storage_after']['filesystem_used_bytes']<=baseline['filesystem_used_bytes']+1024*1024, 'warm requests retain disk space after cleanup'
+            # Keep completed results outside the quota in Linux CI even if a
+            # later request consumes every remaining byte of the test volume.
+            report['peak_storage']=dict(peak)
+            report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')
         assert not monitor_errors, monitor_errors
         assert peak['files_bytes']<450*1024*1024, peak
         report['status']='PASS'
@@ -87,6 +109,7 @@ def main():
     finally:
         done.set();watcher.join(5);sample_storage()
         report['peak_storage']=peak
-        (STATE/'cloud-runtime-results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')
-        if archive_directory:archive_directory.cleanup()
+        try:report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')
+        finally:
+            if archive_directory:archive_directory.cleanup()
 if __name__=='__main__':main()

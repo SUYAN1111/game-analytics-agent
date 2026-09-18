@@ -34,7 +34,7 @@ export async function apply(ctx) {
   phase('DSH插件加载，等待真实MCP握手及工具发现');
   const fail = (code, message) => { const e = new Error(message); e.code=code; throw e; };
   const safeEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) =>
-    /^(SYSTEMROOT|WINDIR|COMSPEC|PATH|PATHEXT|TEMP|TMP|HOME|TMPDIR|LD_LIBRARY_PATH|USERPROFILE|APPDATA|LOCALAPPDATA|PROGRAMFILES|PROGRAMFILES\(X86\)|OS|APP_ASSET_DIR|APP_STATE_DIR|APP_DEBUG|APP_READ_AUDIT)$/i.test(key)));
+    /^(SYSTEMROOT|WINDIR|COMSPEC|PATH|PATHEXT|TEMP|TMP|HOME|TMPDIR|LD_LIBRARY_PATH|USERPROFILE|APPDATA|LOCALAPPDATA|PROGRAMFILES|PROGRAMFILES\(X86\)|OS|APP_ASSET_DIR|APP_STATE_DIR|APP_RUNTIME_TMP|PKG_NATIVE_CACHE_PATH|XDG_CACHE_HOME|APP_DEBUG|APP_READ_AUDIT)$/i.test(key)));
   Object.assign(safeEnv,{PYTHONUTF8:'1',PYTHONIOENCODING:'utf-8',PYTHONNOUSERSITE:'1',PYTHONDONTWRITEBYTECODE:'1'});
   let closed=false, blocked=false, turnBlocked=false, currentTurn=null, toolCount=0, contextReady=false, contextEvidenceId=null;
   let discoveryRequired=false, discoveryReady=false, discoveryEvidenceId=null, contextAttempts=0, repairRequestUsed=false;
