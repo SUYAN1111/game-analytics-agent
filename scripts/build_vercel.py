@@ -40,7 +40,11 @@ def assets():
                 target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
 
 def main():
-    if sys.platform!='linux' or sys.version_info[:2]!=(3,14):raise SystemExit('Cloud build requires Linux / Python 3.14')
+    environment=f'{sys.platform} / Python {sys.version.split()[0]} ({sys.executable})'
+    print('Cloud build environment: '+environment,flush=True)
+    if sys.platform!='linux' or sys.version_info[:2]!=(3,14):
+        raise SystemExit('Cloud build requires Linux / Python 3.14; got '+environment+
+            '. Use the uv build command from vercel.json; the system python may have a different version.')
     os.chdir(ROOT)
     core=[line for line in (ROOT/'requirements-core.lock').read_text().splitlines() if line and not line.startswith('pywin32==')]
     core+=['psycopg[binary]==3.3.3']

@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-这次已添加云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；首次 Linux 构建与 HTTP 检查通过，分析启动失败后已本地修复，等待重新验收。Vercel 尚未上线。** 按下面顺序操作；Linux 验收通过后再部署。具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；提交 `34a8051` 的 Linux 自动验收已通过，Neon 已完成初始化。首次 Vercel 部署遇到构建 Python 版本不匹配，本次已修正启动命令，等待重新部署；尚未上线。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -87,16 +87,18 @@ ON CONFLICT (id) DO NOTHING;
 | Root Directory | 仓库根目录 `./`，不要选 `web` |
 | Framework Preset | `Other` |
 | Install Command | `npm ci --prefix web` |
-| Build Command | `python scripts/build_vercel.py` |
+| Build Command | `uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py` |
 | Output Directory | `web/dist` |
 | Node.js Version | `24.x` |
-| Python | `.python-version` 已指定 `3.14` |
+| Python | 函数运行时由 `.python-version` 指定 `3.14`；构建命令另用 `uv --python 3.14` 明确选择版本 |
 | Fluid compute | 启用 |
 | 函数最长时间 | `vercel.json` 已设置 300 秒 |
 
 这些命令已写入 `vercel.json`，控制台不要覆盖成单独的 Vite 前端构建。当前 Vercel Python 支持 ASGI 和流式响应；Hobby Fluid 函数最长 300 秒。参见 [Python 运行时](https://vercel.com/docs/functions/runtimes/python) 和 [函数限制](https://vercel.com/docs/functions/limitations)。
 
-本项目包含分析依赖和约 226 MiB 解压资产，需启用 Large Functions。该功能当前为公开测试版，可用 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 启用，支持至 5 GB，并要求 Fluid compute；最终包体仍须以实际构建结果为准。参见 [官方公告](https://vercel.com/changelog/vercel-functions-can-now-be-up-to-5-gb-in-package-size)。
+不要将 Build Command 简化为 `python scripts/build_vercel.py`：`Other` 预设下，这可能调用构建镜像的默认 Python，而不是 `.python-version` 所要求的函数运行时版本。`uv` 明确选择 Python 3.14，并提供构建脚本需要的固定版本 pip；不会把两套分析依赖合并。构建日志会显示实际 Python 版本。参见 [uv 的版本选择说明](https://docs.astral.sh/uv/guides/scripts/#using-different-python-versions)。
+
+本项目包含分析依赖和约 226 MiB 解压资产，需使用 Large Functions。该功能当前为公开测试版，支持至 5 GB，并要求 Fluid compute；新建项目自动加入，已有项目可用 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 启用。若变量显示 `Populated by System`，无需手动填写或重复添加。最终包体仍须以实际构建结果为准。参见 [官方公告](https://vercel.com/changelog/vercel-functions-can-now-be-up-to-5-gb-in-package-size)。
 
 ## 6. 填写 Vercel 环境变量
 
@@ -109,7 +111,6 @@ ON CONFLICT (id) DO NOTHING;
 | `APP_ACCESS_CODE` | 自己生成并保存的随机访问码，16～128 个字符，建议 32 个英数字符 |
 | `APP_ORIGIN` | 最终网页地址，例如 `https://你的项目名.vercel.app`，不要带页面路径 |
 | `ASSET_BUNDLE_URL` | 第 2 步的公开资产 ZIP 下载链接 |
-| `VERCEL_SUPPORT_LARGE_FUNCTIONS` | `1` |
 
 `APP_ACCESS_CODE` 用于阻止路人直接消耗你的模型额度；分享时把网址和访问码发给指定体验者。访问码不是 DeepSeek 密钥。不要设置任何 `VITE_DEEPSEEK_API_KEY` 或将数据库连接字符串放进前端。
 
@@ -119,7 +120,9 @@ ON CONFLICT (id) DO NOTHING;
 
 ## 7. 部署后逐项验收
 
-点击 **Deploy**，观察日志。成功后打开生产地址，输入访问码，再做以下检查。真实分析会产生 DeepSeek 调用费用；先查看云端账本初始限额和供应商账户余额。
+首次部署前若还不知道准确域名，可以先填写其余四个应用变量并点击 **Deploy**。构建成功后复制 Vercel 分配的生产域名，设置 `APP_ORIGIN=https://实际域名`，保存并 **Redeploy**。没有填写 `APP_ORIGIN` 时页面显示“云端配置尚未完成”是配置检查的结果，不代表构建失败。不要猜测域名，也不要用部署详情页的控制台地址。
+
+构建和配置完成后打开生产地址，输入访问码，再做以下检查。真实分析会产生 DeepSeek 调用费用；先查看云端账本初始限额和供应商账户余额。
 
 1. 首页可打开，模型显示 DeepSeek；发送“你好”能得到本地能力提示，不增加模型用量。
 2. 输入“比较两个版本的剧情开始情况”，确认过程反馈、最终结果、引用和用量都出现。
@@ -136,7 +139,7 @@ ON CONFLICT (id) DO NOTHING;
 
 目标是 Vercel Hobby + Neon Free，**不购买独立服务器**。但不能提前保证任何访问量都完全免费：账号资格、构建、计算、流量、存储、数据库及 GitHub Actions 均有各自的额度，应以控制台显示为准。DeepSeek API 费用独立于托管平台，不因使用免费托管而免除。
 
-本次没有登录云端账户、创建数据库、部署、充值、购买服务、提交或推送 Git，也没有新增付费 API 调用。必须先通过 Linux 验收及上述云端实测，才能确认这套代码在你的免费额度内满足使用需求。
+账号注册、数据上传、数据库初始化与部署由仓库维护者手动操作。当前 Linux 验收已通过，Vercel 首次构建失败后正等待修复版重试。仍须完成上述云端实测，才能确认这套代码在你的免费额度内满足使用需求；构建修复没有新增付费 API 调用。
 
 云端目前全站同时执行一项分析，单次执行留出清理时间后最多约 260 秒，平台硬上限为 300 秒。超时或进程丢失不会自动重跑；未结算预留会保留并阻止继续消耗。请求之间只带入最近两轮已核验回答和范围信息，不恢复整个旧 DSH 进程；新一轮数字必须重新取证。
 
@@ -148,10 +151,11 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 
 | 现象 | 先检查 |
 | --- | --- |
+| `Cloud build requires Linux / Python 3.14` | Build Command 是否为本页完整的 `uv run` 命令；控制台不要覆盖成旧的 `python scripts/build_vercel.py` |
 | 构建找不到资产 | `ASSET_BUNDLE_URL` 是否为附件直链、未登录能否下载 |
 | source/build/asset integrity 报错 | 是否完整提交本次发布清单、源码、构建清单；是否被修改了换行符 |
 | 包体超过限制 | Fluid compute 和 Large Functions 是否已生效；查看实际包体日志 |
-| 页面显示配置未完成 | 六个环境变量是否填写，修改后是否 Redeploy |
+| 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
 | 503 / 数据库不可用 | Neon 是否初始化了 schema 和预算、连接字符串是否正确且带 SSL |
 | 403 | 浏览器生产域名是否与 `APP_ORIGIN` 相同 |
 | 分析超时或暂停 | 函数日志、任务事件和费用账本；不要删除账本或自动重发 |

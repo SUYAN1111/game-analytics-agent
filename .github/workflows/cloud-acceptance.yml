@@ -29,9 +29,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements.txt uv==0.12.16
       - run: npm ci --prefix web
-      - run: python scripts/build_vercel.py
+      - run: uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py
       - name: Verify isolated child interpreters
         run: python scripts/check_cloud_bootstrap.py
       - run: python scripts/init_cloud_db.py

@@ -162,7 +162,7 @@ flowchart TD
 | 真实 DeepSeek 基线 | 15 个案例中 11 个符合预期，发现 4 项问题 | [首轮报告](docs/LIVE_VALIDATION_2026-09-18.md) |
 | 针对性真实模型回归 | 修复范围映射、引用、上下文纠正和无关请求分流；6 条回归符合预期 | [修复与回归](docs/LIVE_REPAIRS_2026-09-18.md) |
 | 云端适配器的本地验证 | Windows + PGlite 下五类真实工具、持久化、访问隔离与删除检查通过 | [云端适配本地报告](docs/CLOUD_VALIDATION_2026-09-18.md) |
-| Linux / Neon / Vercel | 首次 Linux 构建与 PostgreSQL HTTP 检查通过；分析运行失败后已本地修复，待重新验收。Neon / Vercel 尚未上线 | [云端排查记录](docs/CLOUD_VALIDATION_2026-09-18.md) |
+| Linux / Neon / Vercel | 提交 `34a8051` 的 Linux 自动验收通过，Neon 初始化完成；首次 Vercel 构建因 Python 版本检查退出，已修正构建命令，等待重新部署 | [云端排查记录](docs/CLOUD_VALIDATION_2026-09-18.md) |
 
 离线测试替换的是模型调用，仍执行真实 DSH/MCP 与分析代码；它验证工具和控制逻辑，不证明任意自由表达都能被正确理解。历史报告记录各自验证时的版本，早期默认模式和部署计划不代表当前状态。
 

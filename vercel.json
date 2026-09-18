@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm ci --prefix web",
-  "buildCommand": "python scripts/build_vercel.py",
+  "buildCommand": "uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py",
   "outputDirectory": "web/dist",
   "functions": {
     "api/index.py": {

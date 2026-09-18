@@ -15,9 +15,9 @@
 
 ## 尚未执行
 
-- 修复后的 Linux DSH/MCP 五能力和进程组生命周期验收。首次 Linux 运行的通过项与失败项见下节；当前电脑无可用 Linux/Docker 环境。
-- 真实 PostgreSQL 16 的持久化完整回归、Neon 连接池和多实例竞争实测；首次 Linux HTTP 检查已连接真实 PostgreSQL 16 通过。
-- Vercel 的构建、路由、原生依赖执行、300 秒截止、2 GB 内存限制、冷启动、部署包体、断线行为和免费额度消耗。
+- 本次构建命令修改后的 Linux 重跑；提交 `34a8051` 的 Linux 全部检查已通过，见下方后续记录。当前电脑无可用 Linux/Docker 环境。
+- Neon 连接池和云端多实例竞争实测；真实 PostgreSQL 16 的自动化检查已在上述 Linux 运行通过。
+- Vercel 成功构建后的路由、原生依赖执行、300 秒截止、内存限制、冷启动、部署包体、断线行为和免费额度消耗。首次 Vercel 构建的失败和修复见后续记录。
 - 适配后的云端真实 DeepSeek 自由表达与追问。此前 Windows 本地真实 DeepSeek 结果见原报告，本轮无新增付费调用。
 
 手动 GitHub 工作流 `.github/workflows/cloud-acceptance.yml` 会运行 Linux + PostgreSQL 16 + 本地模型桩的 HTTP 和五能力验收。Vercel 上仍须按 [部署指南](VERCEL_DEPLOYMENT.md) 做实际测试。不能将本轮通过结论表述为“已在 Vercel 上线”或“保证全免费”。
@@ -36,3 +36,15 @@
 修复后的 Windows 本地回归：HTTP 检查通过；故障注入验证失败报告、脱敏、临时目录清理及公开 DTO 隔离通过；五类真实 DSH/MCP 分别得到 7、2、5、10、3 项证据，全部成功，新 Service 恢复与删除通过；新增引导入口的依赖隔离检查及 MCP 适配的归属拒绝、退出、还原逻辑检查通过。依赖探针为适配 Windows 的 pywin32 补充了原生模块搜索目录，不能当作 Linux 运行结果。没有调用付费 API。
 
 本机详细记录位于忽略目录 `state/cloud-failure/regression/`。需要手动提交并推送修复后，从 **Run workflow → main** 新建一次运行；旧提交的 **Re-run jobs** 不会读取本次修复。资产附件和 `ASSET_BUNDLE_URL` 继续复用。
+
+## 后续 Linux 通过与首次 Vercel 构建
+
+用户提供的 GitHub Actions 截图显示：提交 `34a8051`、分支 `main` 的新运行状态为 Success，总计 3 分 42 秒，Linux 任务 3 分 38 秒，并生成一份验收附件。该工作流包含依赖隔离、HTTP、失败报告、五类真实工具和 PostgreSQL 持久化检查。Node.js Action 弃用提示仍为警告，不影响本次成功状态。Neon 表结构与初始预算也已由用户在 SQL Editor 中初始化并确认。
+
+首次 Vercel 日志显示 `npm ci` 完成，随后执行 `python scripts/build_vercel.py`，因 `Cloud build requires Linux / Python 3.14` 退出。原日志未打印 Python 具体版本；在 Vercel Linux 构建环境中，可确定版本检查没有满足 3.14。`.python-version` 的函数运行时配置不足以保证 `Other` 预设的自定义构建命令使用同一解释器。
+
+修复将构建命令改为 `uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py`，明确选择解释器并提供 pip，保留两套 vendor 依赖、资产清单和发布锚点校验。GitHub 工作流也使用相同命令，构建脚本打印实际平台、Python 版本和解释器路径，版本不匹配时给出具体信息。npm 的 audit 和 esbuild 安装脚本警告并非本次退出原因；此次没有使用 `npm audit fix --force` 或变更前端锁文件。
+
+本地隔离测试从 `vercel.json` 读取实际命令，只将最后的构建脚本替换为环境探针：在 `UV_PYTHON=3.12` 下仍选择了 Python 3.14.7，pip 为固定的 25.3；原构建脚本在 Windows 上继续于依赖安装前拒绝执行，并打印实际环境。测试记录在忽略目录 `state/vercel-build-check/environment-result.json`，没有调用付费 API。该测试确认版本选择与 pip 可用，不代替完整 Linux 构建。
+
+本次修复尚待真实 Vercel 重新构建与公网验收；Linux CI 成功不等于 Vercel 已部署成功。此前的资产 ZIP、Neon 数据和 Vercel 环境变量继续复用。
