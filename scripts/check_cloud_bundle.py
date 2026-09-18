@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
@@ -117,11 +118,32 @@ def main():
             else:raise AssertionError('Unsafe archive accepted')
             archive.write_bytes(original_archive)
             from concurrent.futures import ThreadPoolExecutor
-            with ThreadPoolExecutor(max_workers=2) as pool:
-                paths=list(pool.map(lambda _:install_archive(bundle,root/'concurrent-cache'),range(2)))
+            with patch('cloud_api.asset_bundle.zipfile.ZipFile',wraps=zipfile.ZipFile) as opened:
+                with ThreadPoolExecutor(max_workers=2) as pool:
+                    paths=list(pool.map(lambda _:install_archive(bundle,root/'concurrent-cache'),range(2)))
+                assert opened.call_count==1, 'concurrent cold starts must unpack only one copy'
             assert paths[0]==paths[1]
             assert install_archive(bundle,root/'concurrent-cache')==paths[0]
             checks.append('concurrent cold starts and verified warm-cache reuse retain a complete asset set')
+            process_cache=root/'process-cache'
+            code="from cloud_api.asset_bundle import install_archive; import sys; print(install_archive(sys.argv[1],sys.argv[2]))"
+            processes=[subprocess.Popen([sys.executable,'-B','-c',code,str(bundle),str(process_cache)],
+                        cwd=ROOT,env=clean_environment(),stdout=subprocess.PIPE,stderr=subprocess.PIPE) for _ in range(2)]
+            peak_stages=0;started=time.monotonic()
+            try:
+                while any(p.poll() is None for p in processes):
+                    peak_stages=max(peak_stages,len(list(process_cache.glob('unpack-*'))))
+                    assert time.monotonic()-started<90, 'concurrent asset installer timed out'
+                    time.sleep(.01)
+                for process in processes:
+                    stdout,stderr=process.communicate()
+                    assert process.returncode==0,stderr.decode('utf8','replace')
+                assert peak_stages==1, 'independent workers allocated duplicate staging trees'
+            finally:
+                for process in processes:
+                    if process.poll() is None:process.kill()
+                    process.communicate()
+            checks.append('independent worker processes share one extraction and cannot double asset staging space')
             damaged=paths[0]/'association/public/discovery_V1_V3.json'
             damaged.write_bytes(b'corrupted')
             try:install_archive(bundle,root/'concurrent-cache')

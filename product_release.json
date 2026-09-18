@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product15cab6013e8b908cecd765eddb",
+  "release_id": "product1505e24460a0b4074a47f659f6",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "c389b4d331aa75b30b56233a0b4c387957ee42c9522a33d4a03fbdb0516c88d3",
-      "size": 15961
+      "sha256": "5fcf512b4ed481a379b813a7d3efd8a0cb94bf55edf36f7d1abdc58af780f427",
+      "size": 15998
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -457,8 +457,8 @@
       "size": 11485
     },
     "cloud_api/asset_bundle.py": {
-      "sha256": "117f52bbc7b92d2396b4637b576af4bf0055b773be4f65e047e2d1c113c35ca7",
-      "size": 5444
+      "sha256": "60012cfc8f14e1f9f6ff50b015058e71daadbb3267315a35dd8b54dce77d5ad9",
+      "size": 6894
     },
     "cloud_api/auth.py": {
       "sha256": "1767ba553ccf9ae5efa6a390b6253ea6b313de290666e5705c230f8e927865a4",
@@ -505,8 +505,8 @@
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "b4be894a402a01a94e8716ab05957cb34b6e8a770c6b9bccb1e820c1577f66c6",
-      "size": 25168
+      "sha256": "ae0114cbd7112e1012b791fab4b179858e8c3186e2fc3e7343e9a3b283c4932c",
+      "size": 28868
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -529,8 +529,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "b91d699562b82075b0f6e54c4b05b313b5ba72e54234a84c93788495ed943d37",
-      "size": 20557
+      "sha256": "ba56f3272a627e9a3dbc4b7362f29780934afcadd66e61e9c1daad15bbcba4c8",
+      "size": 21307
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -573,8 +573,8 @@
       "size": 8486
     },
     "features/observed.py": {
-      "sha256": "29bdf9598b561acb82f6bd7bc3cebde1ccecabeeea3f9ebda0b1a85b502aa20d",
-      "size": 11552
+      "sha256": "cac92db8a29f20d63dec87d175874ed22fd27a849ce7119e58685cbe472cabe2",
+      "size": 13319
     },
     "knowledge_core/__init__.py": {
       "sha256": "5bf4185a4b7a77aaed1c9c07cdba073017fdff8a3152dcdc59169f8a9daca5f7",
@@ -741,8 +741,8 @@
       "size": 2293
     },
     "scripts/check_cloud_bundle.py": {
-      "sha256": "2e322d5a88aff16fcf91ca3d18092a05401a75c8c97d9cefd07ecaca11162eb5",
-      "size": 11315
+      "sha256": "7c121000f7fa5f05a5e9d755ae67983b2f6c7733632af411e2f24c22bfe55589",
+      "size": 12845
     },
     "scripts/check_cloud_cleanup.py": {
       "sha256": "56f5a799d688dd7244788a14d846d6186e8addf4dd29b803c98fdfa5e4a0105b",
@@ -765,8 +765,8 @@
       "size": 10970
     },
     "scripts/check_cloud_runtime.py": {
-      "sha256": "43db7dc47c1ac72f7577215047231f552d2a90ab345805fd2206535402cecec9",
-      "size": 3152
+      "sha256": "05164b0d3e5f6ba09877c75e4345cc8644a6a2bbab8a3c3be21ce14cd8637e36",
+      "size": 5394
     },
     "scripts/check_cloud_store.py": {
       "sha256": "515f701439b31b213912bcbc551fa6ae3fa3ee106f70e14d7b1dcc3a292726f5",
@@ -775,6 +775,10 @@
     "scripts/check_execution_store.py": {
       "sha256": "6032410b75a7211e7b53dc9d074dae8addb27000c2605c5196e075954930d494",
       "size": 2919
+    },
+    "scripts/check_observed_storage.py": {
+      "sha256": "dbfc48492197e8e5c6e5f4c74437524b2eb452517afc253d06cdf173d38db90c",
+      "size": 6305
     },
     "scripts/check_public_usage.py": {
       "sha256": "242c646c9e05b002a04b21d5ad72db0d4b2e35c43331da6a4e318dd4caefe696",

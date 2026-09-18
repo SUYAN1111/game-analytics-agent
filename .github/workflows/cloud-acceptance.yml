@@ -38,6 +38,8 @@ jobs:
         run: python scripts/check_cloud_bundle.py
       - name: Verify isolated child interpreters
         run: python scripts/check_cloud_bootstrap.py
+      - name: Verify compact indexes preserve every player's session data
+        run: python scripts/check_observed_storage.py
       - run: python scripts/init_cloud_db.py
       - run: python scripts/check_cloud_http.py
       - run: python scripts/check_cloud_public.py
@@ -45,10 +47,17 @@ jobs:
         run: python scripts/check_cloud_diagnostics.py
       - name: Verify driver exit and cleanup failures without paid requests
         run: python scripts/check_cloud_cleanup.py
-      - name: Verify five tool chains using installed runtime assets
-        run: python scripts/check_cloud_runtime.py
+      - name: Verify five tool chains and warm reuse on a 512 MiB temporary filesystem
+        run: |
+          mkdir -p /tmp/cloud-runtime-tmp
+          sudo mount -t tmpfs -o size=512m,mode=1777 tmpfs /tmp/cloud-runtime-tmp
+          trap 'cp /tmp/cloud-runtime-tmp/state/cloud-runtime-results.json /tmp/agent-ci/cloud-runtime-results.json 2>/dev/null || true; sudo umount /tmp/cloud-runtime-tmp' EXIT
+          python scripts/check_cloud_runtime.py
         env:
           CLOUD_TEST_ASSET_ARCHIVE: "1"
+          CLOUD_TEST_DISK_LIMIT: "536870912"
+          TMPDIR: /tmp/cloud-runtime-tmp
+          APP_STATE_DIR: /tmp/cloud-runtime-tmp/state
       - run: python scripts/check_cloud_store.py
       - uses: actions/upload-artifact@v4
         if: always()
@@ -60,3 +69,4 @@ jobs:
             /tmp/agent-ci/cloud-public-results.json
             /tmp/agent-ci/cloud-bundle-results.json
             /tmp/agent-ci/cloud-cleanup-results.json
+            /tmp/agent-ci/observed-storage-results.json

@@ -1,4 +1,9 @@
-"""One observed-only SQLite session index; source profiles keyed by visible versions."""
+"""Observed-only session offsets; source profiles keyed by visible versions.
+
+The immutable JSONL is already installed and verified by the resource gate. Keep
+byte locations in SQLite instead of duplicating every session's JSON in scratch
+space. Binary offsets work for UTF-8, either newline style, and unsorted uploads.
+"""
 
 import json
 import sqlite3
@@ -48,6 +53,7 @@ class ObservedIndex:
         self.tables = {n: [] for n in TABLE_FIELDS if n != "session_uploads"}
         self.user_cache, self.profile_cache = OrderedDict(), OrderedDict()
         self.profile_catalog = {}
+        self.session_source = None
         self.database = Path(database)
         require(not self.database.exists(), "index_exists", str(database))
         self.database.parent.mkdir(parents=True, exist_ok=True)
@@ -59,22 +65,29 @@ class ObservedIndex:
             require({p.name for p in path.iterdir()} == {n + ".jsonl" for n in TABLE_FIELDS}, "observed_boundary", "仅接受九张观测表")
         self.db = sqlite3.connect(database)
         try:
-            self.db.execute("CREATE TABLE sessions(upload TEXT PRIMARY KEY, uid TEXT, lid TEXT, row TEXT)")
+            self.db.execute("CREATE TABLE sessions(upload TEXT PRIMARY KEY, uid TEXT, lid TEXT, row TEXT, byte_offset INTEGER, byte_length INTEGER)")
             for table in TABLE_FIELDS:
                 started = clock.perf_counter()
                 count = 0
-                incoming = fixture[table] if fixture is not None else read_rows(path / (table + ".jsonl"))
-                for raw in incoming:
+                if table == "session_uploads" and fixture is None:
+                    incoming = self._session_rows(path / (table + ".jsonl"))
+                else:
+                    rows = fixture[table] if fixture is not None else read_rows(path / (table + ".jsonl"))
+                    incoming = ((raw, None, None) for raw in rows)
+                for raw, offset, length in incoming:
                     row = validate_row(table, raw)
                     if table == "session_uploads":
-                        self.db.execute("INSERT INTO sessions VALUES (?,?,?,?)", (row["upload_id"], row["user_id"], row["session_id"], canonical(row)))
+                        self.db.execute("INSERT INTO sessions VALUES (?,?,?,?,?,?)", (row["upload_id"], row["user_id"], row["session_id"],
+                            canonical(row) if fixture is not None else None, offset, length))
                     else:
                         self.tables[table].append(row)
                     count += 1
                     if count % 100000 == 0:
                         progress(f"观测索引 {table}: {count}行，{clock.perf_counter()-started:.1f}秒")
                 progress(f"观测索引 {table}: 完成{count}行，{clock.perf_counter()-started:.1f}秒")
-            self.db.execute("CREATE INDEX sessions_user ON sessions(uid,lid,upload)")
+            # Upload IDs already have a unique index; don't duplicate them in a
+            # second covering index. Sorting is bounded to one player's sessions.
+            self.db.execute("CREATE INDEX sessions_user ON sessions(uid)")
             self.db.execute("CREATE INDEX sessions_logical ON sessions(lid)")
             self.db.commit()
             self.db.execute("PRAGMA query_only=ON")
@@ -104,8 +117,26 @@ class ObservedIndex:
                 prepare_evidence(self.source_rows[source, "collection_checks"], self.source_rows[source, "watermark_checks"], "1900-01-01T00:00:00Z")
             self._validate_links()
         except BaseException:
-            self.db.close()
+            self.close()
             raise
+
+    def _session_rows(self, path):
+        self.session_source = path.open("rb")
+        while True:
+            offset = self.session_source.tell()
+            line = self.session_source.readline()
+            if not line:
+                return
+            yield json.loads(line.decode("utf-8")), offset, len(line)
+
+    def _session_at(self, row, offset, length):
+        if row is not None:  # Small explicit in-memory test fixtures only.
+            return json.loads(row)
+        self.session_source.seek(offset)
+        line = self.session_source.read(length)
+        require(len(line) == length, "observed_changed", "session source was truncated")
+        # Return the same normalized timestamps and whitelist as the original index.
+        return validate_row("session_uploads", json.loads(line.decode("utf-8")))
 
     def _validate_links(self):
         players = self.by_user["players"]
@@ -124,8 +155,8 @@ class ObservedIndex:
 
     def sessions(self, uid):
         if uid not in self.user_cache:
-            self.user_cache[uid] = [json.loads(row) for (row,) in self.db.execute(
-                "SELECT row FROM sessions WHERE lid IN (SELECT lid FROM sessions WHERE uid=?) ORDER BY lid,upload", (uid,))]
+            self.user_cache[uid] = [self._session_at(*row) for row in self.db.execute(
+                "SELECT row,byte_offset,byte_length FROM sessions WHERE lid IN (SELECT lid FROM sessions WHERE uid=?) ORDER BY lid,upload", (uid,))]
             if len(self.user_cache) > 16:
                 self.user_cache.popitem(last=False)
         self.user_cache.move_to_end(uid)
@@ -184,4 +215,8 @@ class ObservedIndex:
         return self.profile_cache[key]
 
     def close(self):
-        self.db.close()
+        try:
+            self.db.close()
+        finally:
+            if self.session_source is not None:
+                self.session_source.close()

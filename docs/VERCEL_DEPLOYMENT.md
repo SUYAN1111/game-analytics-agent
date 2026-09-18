@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Neon 已初始化，Vercel 已部署。`5be7190` 的资产归档更新后，公网日志从资产缺失变为分析子进程退出，页面显示 `close_failed`。本轮修复错误记录与清理流程，通过 7 项故障检查及五类真实工具回归；线上退出原因仍待新版完整日志确认，不能视为公网验收完成。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Neon 已初始化，Vercel 已部署。完整公网日志确认 `close_failed` 的起因是临时磁盘写满。已将 SQLite 索引从约 342 MiB 缩小到 132 MiB，并串行解压数据；本地全部玩家数据核对、五类真实工具和重复统计通过。仍须推送本次更新、运行新增的 512 MiB 磁盘限制 Linux 验收，并验证公网分析。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -12,7 +12,7 @@
 
 现有 `.gitignore` 已排除 `.env`、`assets/`、`state/`、虚拟环境、依赖、构建产物及数据库文件。提交前在编辑器的“暂存的更改”里确认没有密钥和这些目录。不要修改 `.gitattributes` 的 `* -text`：发布校验固定文件字节，自动改换行符会导致云端校验失败。
 
-本次错误处理更新建议提交说明：`fix: preserve cloud failure causes and complete cleanup`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目、上传附件或运行初始化 SQL。`runtime-assets.zip` 是构建时生成的文件，已被 `.gitignore` 排除，不提交到 Git。
+本次磁盘占用修复建议提交说明：`fix: reduce cloud temporary disk usage`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目、上传附件或运行初始化 SQL。`runtime-assets.zip` 是构建时生成的文件，已被 `.gitignore` 排除，不提交到 Git。
 
 ## 2. 上传模拟数据资产包
 
@@ -53,6 +53,8 @@ https://github.com/你的用户名/仓库名/releases/download/cloud-assets-v1/a
 | `ASSET_BUNDLE_URL` | 上一步复制的公开 ZIP 下载链接 |
 
 然后进入 **Actions → Cloud Linux acceptance (no paid API) → Run workflow**，选择本次代码所在分支。
+
+新版工作流会在真正限制为 **512 MiB** 的临时文件系统中，解压完整数据包，执行五类分析并重复一次剧情统计，验证连续请求的空间占用及清理。它使用本地模型桩，不调用付费 API。检查产物中的 `cloud-runtime-results.json` 应为 `PASS`，包含磁盘容量、峰值占用和六次执行结果。
 
 这个流程在 Linux / Python 3.14 上安装隔离依赖、下载并校验资产、构建网页，在临时 PostgreSQL 16 上验证访问隔离，以及版本比较、口径说明、预测、分群、玩法关联五类真实工具链。模型使用本地测试桩，**不需要 DeepSeek 密钥，也不调用付费模型**。Actions 自身使用你的 GitHub 账户额度；若账户提示额度或账单要求，先查看提示，不需要为此直接升级套餐。
 
@@ -154,7 +156,7 @@ Vercel 的 Python 打包器会移除 `.gitignore`、`web/package-lock.json` 和 
 
 目标是 Vercel Hobby + Neon Free，**不购买独立服务器**。但不能提前保证任何访问量都完全免费：账号资格、构建、计算、流量、存储、数据库及 GitHub Actions 均有各自的额度，应以控制台显示为准。DeepSeek API 费用独立于托管平台，不因使用免费托管而免除。
 
-账号注册、数据上传、数据库初始化与部署由仓库维护者手动操作。已有版本的 Linux 验收和 Vercel 部署已通过；本次运行时归档修复在 Windows 本地通过 15 项打包检查及五类真实 DSH/MCP 分析，模型使用离线桩。仍须推送后执行新版 Linux 检查、部署并完成上述公网实测。此次修改没有调用付费 API。
+账号注册、数据上传、数据库初始化与部署由仓库维护者手动操作。已有版本的 Linux 验收和 Vercel 部署已通过；本次磁盘占用修复在 Windows 本地通过 16 项打包检查、全部玩家会话核对、五类真实 DSH/MCP 分析及重复统计，模型使用离线桩，采样临时文件占用峰值约 382 MiB。仍须推送后执行新版 Linux 检查、部署并完成上述公网实测。此次修改没有调用付费 API。
 
 公开模式限制每个浏览器在 24 小时窗口内最多提交 10 次分析，同一网络最多 30 次，并将同一网络的全部问题提交限制为 10 分钟内 60 次。窗口从第一次接受请求时开始，不按午夜重置；问候、范围外提示等不占分析次数，但计入提交频率。重复请求不重复扣次数；删除历史或取消已接收的分析不会返还次数。计数保存在现有 `login_limits` 表，并与创建任务在同一事务内完成，不需要增加数据库表。后台只存网络地址的带密钥摘要，不存原始 IP。
 
@@ -178,6 +180,7 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 | 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
 | 开始分析后立即 `asset_missing` | 在项目 **Logs** 搜索错误摘要的 `job_id`，查看 `analysis_failed` 的具体阶段和文件。若缺少 `association/public/` 数据，确认部署了运行时归档修复且新构建日志出现 `Sealed runtime asset archive`。公开错误文字不能单独证明需要重新上传资产 |
 | `close_failed` 或日志 `driver_exit` | 保存同一 `job_id` 下全部 `analysis_failed` 记录，包括 `analysis`、`watch`、`cleanup_host` / `cleanup_coordinator`。新版记录退出码、停止原因、嵌套异常和有界脱敏错误日志；`driver_exit` 本身不能证明内存不足或模型服务故障。不要反复提交已计费问题 |
+| `database or disk is full` / `No space left on device` | 临时磁盘不足；确认部署了紧凑会话索引和串行解压更新，并运行新版 512 MiB Linux 验收。增加函数包体上限不能解决运行时磁盘不足；不要重置费用账本或重新上传同一数据包 |
 | 新版仍提示输入访问码 | 确认部署了免登录更新且 `APP_ACCESS_MODE` 没有设置为 `invite`；默认公开模式无需输入码 |
 | 提示允许 Cookie | 允许此站点保存 Cookie 后刷新，首次健康检查会自动建立浏览器身份 |
 | 提示分析次数用完 | 等待相应窗口到期；删除对话不会重置次数，已有结果仍能查看 |

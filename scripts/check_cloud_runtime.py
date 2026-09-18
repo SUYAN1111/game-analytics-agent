@@ -1,7 +1,10 @@
 """Linux/Windows cloud adapter test with real DSH+MCP and a local model stub."""
 import json
 import os
+import shutil
 import sys
+import tempfile
+import threading
 from pathlib import Path
 from urllib.parse import urlsplit
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
@@ -30,8 +33,38 @@ def main():
     report={'status':'FAIL','platform':sys.platform,'cases':results,'paid_calls':0,
             'assets_from_archive':archive_directory is not None}
     STATE.mkdir(parents=True,exist_ok=True)
+    done=threading.Event();peak={'files_bytes':0}
+    existing={p for p in STATE.glob('cloud-*') if p.is_dir()}
+    existing_temporary=set((STATE/'temporary').glob('*'))
+    monitor_errors=[]
+    def sample_storage():
+        size=0
+        # A developer's STATE may also contain old reports, fixtures and local
+        # browser history. Measure only assets and scratch owned by this run.
+        roots=([Path(archive_directory.name)] if archive_directory else [])
+        roots += [p for p in STATE.glob('cloud-*') if p.is_dir() and p not in existing]
+        roots += [p for p in (STATE/'temporary').glob('*') if p not in existing_temporary]
+        for root in roots:
+            for path in root.rglob('*'):
+                try:
+                    if path.is_file():
+                        value=path.stat()
+                        size+=value.st_blocks*512 if hasattr(value,'st_blocks') else ((value.st_size+4095)//4096)*4096
+                except FileNotFoundError:pass  # Owned scratch may be deleted during sampling.
+        peak['files_bytes']=max(peak['files_bytes'],size)
+        if limit:peak['filesystem_used_bytes']=max(peak.get('filesystem_used_bytes',0),shutil.disk_usage(tempfile.gettempdir()).used)
+    def monitor():
+        try:
+            while not done.wait(.05):sample_storage()
+        except Exception as exc:monitor_errors.append(str(exc))
+    limit=os.environ.get('CLOUD_TEST_DISK_LIMIT')
+    if limit:
+        assert shutil.disk_usage(tempfile.gettempdir()).total<=int(limit), 'test must run on a genuinely limited filesystem'
+        report['filesystem_capacity_bytes']=shutil.disk_usage(tempfile.gettempdir()).total
+    sample_storage();watcher=threading.Thread(target=monitor,daemon=True);watcher.start()
     try:
-        for name,text in cases:
+        # Repeat the disk-heavy path on the warm instance, not just one cold job.
+        for name,text in cases+[('compare_again',cases[0][1])]:
             case={'case':name,'status':'running','diagnostics':[]};results.append(case)
             sid=service.sessions('runtime-check',True)['id']
             job=service.submit('runtime-check',sid,text,'cloud-runtime-'+name)
@@ -43,12 +76,17 @@ def main():
             assert value['status']=='succeeded' and value['evidence'],case
             fresh=CloudService(url,mode='offline');assert fresh.session('runtime-check',sid)['jobs'][0]['answer']==value['answer']
             fresh.delete_session('runtime-check',sid)
+            assert not [p for p in STATE.glob('cloud-*') if p.is_dir() and p not in existing], 'completed request left scratch directories behind'
+        assert not monitor_errors, monitor_errors
+        assert peak['files_bytes']<450*1024*1024, peak
         report['status']='PASS'
     except Exception as exc:
         report['error']={'type':type(exc).__name__,'message':scrub(exc)[:4000]}
         if results and results[-1]['status']=='running':results[-1]['status']='failed'
         raise
     finally:
+        done.set();watcher.join(5);sample_storage()
+        report['peak_storage']=peak
         (STATE/'cloud-runtime-results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')
         if archive_directory:archive_directory.cleanup()
 if __name__=='__main__':main()

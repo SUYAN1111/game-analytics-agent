@@ -4,11 +4,15 @@ Only standard-library imports: the entrypoint must install assets and set
 APP_ASSET_DIR before any module imports product_core.paths.
 """
 import hashlib
+import errno
 import json
+import os
 import re
 import stat
 import tempfile
+import time
 import zipfile
+from contextlib import contextmanager
 from pathlib import Path, PurePosixPath
 
 from agent_runtime.common import HostError
@@ -73,15 +77,53 @@ def build_archive(root, assets):
     return output
 
 
+@contextmanager
+def installation_lock(cache_root):
+    """OS-owned lock: simultaneous cold starts must not unpack duplicate trees.
+
+    The kernel releases the lock if a worker dies; the tiny lock file stays.
+    """
+    with (cache_root/'.install.lock').open('a+b') as stream:
+        if not stream.seek(0, 2):
+            stream.write(b'\0');stream.flush()
+        started=time.monotonic()
+        while True:
+            try:
+                stream.seek(0)
+                if os.name=='nt':
+                    import msvcrt
+                    msvcrt.locking(stream.fileno(),msvcrt.LK_NBLCK,1)
+                else:
+                    import fcntl
+                    fcntl.flock(stream.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
+                break
+            except OSError as exc:
+                if exc.errno not in (errno.EACCES,errno.EAGAIN):raise
+                if time.monotonic()-started>60:fail('asset installation lock timed out')
+                time.sleep(.05)
+        try:
+            yield
+        finally:
+            stream.seek(0)
+            if os.name=='nt':msvcrt.locking(stream.fileno(),msvcrt.LK_UNLCK,1)
+            else:fcntl.flock(stream.fileno(),fcntl.LOCK_UN)
+
+
 def install_archive(root, cache_root):
     """Validate, unpack, and atomically publish one immutable asset-set directory.
 
-    Concurrent processes may prepare separate staging trees; only one wins the
-    directory rename. An existing but damaged cache is rejected, never repaired
-    silently or accepted on the strength of a marker file.
+    Serialize cold starts so staging never doubles the temporary disk footprint.
+    An existing but damaged cache is rejected, never repaired silently or accepted
+    on the strength of a marker file.
     """
     root,cache_root=Path(root),Path(cache_root)
     manifest=sealed_manifest(root)
+    cache_root.mkdir(parents=True,exist_ok=True)
+    with installation_lock(cache_root):
+        return _install_archive(root,cache_root,manifest)
+
+
+def _install_archive(root, cache_root, manifest):
     target=cache_root/manifest['asset_set_id']
     if target.exists() or target.is_symlink():
         verify_tree(target,manifest)
