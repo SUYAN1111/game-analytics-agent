@@ -50,7 +50,7 @@ def main():
             '. Use the uv build command from vercel.json; the system python may have a different version.')
     os.chdir(ROOT)
     from product_core.release import verify
-    verify(False)
+    verify(False,include_build_sources=True)
     print('Source integrity verified before dependency installation.',flush=True)
     core=[line for line in (ROOT/'requirements-core.lock').read_text().splitlines() if line and not line.startswith('pywin32==')]
     core+=['psycopg[binary]==3.3.3']
@@ -59,6 +59,6 @@ def main():
     assets()
     subprocess.run(['npm','run','build','--prefix','web'],check=True)
     from web_api.build import verify_build
-    verify();verify_build()
+    verify(include_build_sources=True);verify_build()
     print('Linux dependencies, assets, source and frontend build verified; cloud runtime still needs acceptance testing.')
 if __name__=='__main__':main()

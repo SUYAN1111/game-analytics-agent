@@ -192,9 +192,12 @@ class CloudService(Service):
             except Exception as exc:
                 if failure is None:failure=exc;stage='cleanup'
                 category='close_failed'
-            if failure is not None and diagnostics is not None:
-                from cloud_api.diagnostics import failure_details
-                diagnostics.append(failure_details(home,failure,stage,secrets=(host.canary,) if host else ()))
+            if failure is not None:
+                from cloud_api.diagnostics import failure_details,log_failure
+                private=(host.canary,) if host else ()
+                log_failure(jid,stage,failure,secrets=private)
+                if diagnostics is not None:
+                    diagnostics.append(failure_details(home,failure,stage,secrets=private))
         with self.cv,self.store.connect() as db:
             current=db.execute('SELECT status FROM jobs WHERE id=?',(jid,)).fetchone()
             lease=db.execute('SELECT * FROM executions WHERE job_id=?',(jid,)).fetchone()

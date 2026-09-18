@@ -16,7 +16,7 @@ from product_core.paths import STATE
 
 
 def main():
-    installed = release.verify(False)
+    installed = release.verify(False,include_build_sources=True)
     checks = []
     STATE.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='release-integrity-', dir=STATE) as directory:

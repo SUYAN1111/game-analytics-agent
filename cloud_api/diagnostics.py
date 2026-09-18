@@ -1,4 +1,6 @@
-"""Bounded offline failure reports, never configs, transcripts or raw tool data."""
+"""Redacted server errors and bounded offline reports; no raw configs or tool data."""
+import json
+import logging
 import os
 import re
 import traceback
@@ -14,6 +16,13 @@ def scrub(value, secrets=()):
     text = re.sub(r'(?i)postgres(?:ql)?://[^\s\"\'<>]+', '[REDACTED_DATABASE_URL]', text)
     text = re.sub(r'(?i)(password|auth|access_code)\s*[:=]\s*[^\s,;}]+', r'\1=[REDACTED]', text)
     return text
+
+
+def log_failure(job_id, stage, exc, *, secrets=()):
+    # Private platform logs retain the cause; public job responses stay generic.
+    record = {'job_id': job_id, 'stage': stage, 'type': type(exc).__name__,
+              'code': getattr(exc, 'code', None), 'message': scrub(exc, secrets)[:2000]}
+    logging.getLogger('cloud_api').error('analysis_failed %s', json.dumps(record, ensure_ascii=False))
 
 
 def failure_details(home, exc, stage, *, secrets=()):

@@ -9,7 +9,7 @@ def main():
     a=p.parse_args()
     if a.command=='verify':
         from product_core.release import verify
-        m=verify();print(json.dumps({'release_id':m['release_id'],'assets':len(m['asset_files']),'status':'verified'}));return
+        m=verify(include_build_sources=True);print(json.dumps({'release_id':m['release_id'],'assets':len(m['asset_files']),'status':'verified'}));return
     if a.command=='smoke':
         if a.live:p.error('smoke is strictly offline')
         from product_core.smoke import main as smoke

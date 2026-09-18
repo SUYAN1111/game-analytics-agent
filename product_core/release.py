@@ -44,9 +44,16 @@ def check_file(root,name,entry):
         if actual==entry['json_sha256']:return
         fail('JSON content changed '+name+' (not just formatting); check the deployed commit and project overrides')
     fail('missing/changed '+name)
-def verify(include_assets=True):
+def build_only_source(name):
+    # Vercel's Python builder omits these build inputs from the function bundle.
+    # They remain pinned and mandatory during the source/build check. Runtime
+    # serves the compiled web/dist assets, not the web/public source directory.
+    return name in ('.gitignore','web/package-lock.json') or name.startswith('web/public/')
+
+def verify(include_assets=True, *, include_build_sources=False):
     m=manifest()
-    for n,e in m['source_files'].items():check_file(ROOT,n,e)
+    for n,e in m['source_files'].items():
+        if include_build_sources or not build_only_source(n):check_file(ROOT,n,e)
     if include_assets:
         for n,e in m['asset_files'].items():check_file(ASSETS,n,e)
     return m

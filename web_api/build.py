@@ -4,7 +4,7 @@ from product_core.release import verify, read, check_file
 
 
 def verify_build():
-    verify(False)
+    verify(False,include_build_sources=True)
     directory=ROOT/'web/dist'
     manifest=read(ROOT/'web/build-manifest.json')
     actual={p.relative_to(directory).as_posix() for p in directory.rglob('*') if p.is_file()}

@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地与 Linux 自动验收已通过，Neon 已完成初始化，提交 `bd33501` 的 Vercel 部署已 Ready。新版默认免登录访问及访客限额已通过本地接口和真实浏览器验证，待推送部署；新版公网 DeepSeek 分析仍待验收。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Neon 已初始化，Vercel 已部署。默认免登录代码已提交为 `df59e03`；公网分析随后出现 `asset_missing`。已复现并修复 Vercel 打包移除构建文件导致的校验失败，本地打包布局检查和离线分析已通过，待推送及公网验收。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -12,7 +12,7 @@
 
 现有 `.gitignore` 已排除 `.env`、`assets/`、`state/`、虚拟环境、依赖、构建产物及数据库文件。提交前在编辑器的“暂存的更改”里确认没有密钥和这些目录。不要修改 `.gitattributes` 的 `* -text`：发布校验固定文件字节，自动改换行符会导致云端校验失败。
 
-本次免登录更新建议提交说明：`feat: enable public access with bounded analysis usage`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目或运行初始化 SQL。
+本次打包修复建议提交说明：`fix: verify runtime files correctly after Vercel packaging`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目或运行初始化 SQL。
 
 ## 2. 上传模拟数据资产包
 
@@ -99,7 +99,9 @@ ON CONFLICT (id) DO NOTHING;
 
 不要将 Build Command 简化为 `python scripts/build_vercel.py`：`Other` 预设下，这可能调用构建镜像的默认 Python，而不是 `.python-version` 所要求的函数运行时版本。`uv` 明确选择 Python 3.14，并提供构建脚本需要的固定版本 pip；不会把两套分析依赖合并。构建日志会显示实际 Python 版本。参见 [uv 的版本选择说明](https://docs.astral.sh/uv/guides/scripts/#using-different-python-versions)。
 
-构建先校验源码，再安装依赖，以便尽早报告缺文件或内容变化。`vercel.json` 的原始字节哈希和 JSON 内容哈希同时登记在发布清单中：缩进、换行和对象键顺序可以变化，但增删字段、改值、调整路由数组顺序及重复 JSON 键都不能通过。其余源码、锁文件、资产和前端构建继续严格校验字节；构建过程不会恢复配置、忽略字段或自动重新封版。
+构建先校验完整源码，再安装依赖，以便尽早报告缺文件或内容变化。`vercel.json` 的原始字节哈希和 JSON 内容哈希同时登记在发布清单中：缩进、换行和对象键顺序可以变化，但增删字段、改值、调整路由数组顺序及重复 JSON 键都不能通过。构建阶段的其余源码、锁文件、资产和前端产物继续严格校验字节，构建过程不会自动重新封版。
+
+Vercel 的 Python 打包器会移除 `.gitignore`、`web/package-lock.json` 和 `web/public/` 等构建输入。因此运行时不要求这三类文件存在；它们仍登记在发布清单中，并在构建阶段和本地完整校验中检查。运行时代码、知识资料、模型、数据和发布清单锚点仍严格校验。`scripts/check_cloud_bundle.py` 在临时目录中模拟平台移除规则，再启动不发送模型请求的 live Host 验证资源可加载，并验证真实文件被改动时仍会拒绝。已加入 Linux 工作流，报告名为 `cloud-bundle-results.json`。打包规则见 [Vercel Python 源码](https://github.com/vercel/vercel/blob/main/packages/python/src/index.ts)。
 
 本项目包含分析依赖、DSH 原生程序和约 226 MiB 解压资产。实际 Vercel 日志报告包体 774.37 MB，超过普通 Python 函数的 500 MB 限制。Large Functions 公开测试版支持至 5 GB，需要 Fluid compute 和 Active CPU。仓库通过 `fluid: true` 和构建环境变量 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 显式申请启用；不再仅依赖新项目的默认设置。参见 [函数限制与启用方法](https://vercel.com/docs/functions/limitations) 和 [Fluid compute 配置](https://vercel.com/docs/fluid-compute)。
 
@@ -170,6 +172,7 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 | `JSON content changed vercel.json` | 已排除仅排版不同；核对实际部署提交与项目覆盖配置，保留日志，不删除字段或跳过检查 |
 | 包体超过 500 MB | 是否部署了含 `fluid` / `build.env` 的新提交；日志中大包开关是否为 `enabled`；项目变量覆盖与平台资格 |
 | 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
+| 开始分析后立即 `asset_missing` | 确认已部署打包校验修复；在项目 **Logs** 搜索错误摘要的 `job_id`，查看 `analysis_failed` 的具体阶段和文件。公开错误文字不能单独证明需要重新上传资产 |
 | 新版仍提示输入访问码 | 确认部署了免登录更新且 `APP_ACCESS_MODE` 没有设置为 `invite`；默认公开模式无需输入码 |
 | 提示允许 Cookie | 允许此站点保存 Cookie 后刷新，首次健康检查会自动建立浏览器身份 |
 | 提示分析次数用完 | 等待相应窗口到期；删除对话不会重置次数，已有结果仍能查看 |

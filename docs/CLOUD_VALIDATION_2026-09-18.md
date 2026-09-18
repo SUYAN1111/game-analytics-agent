@@ -94,3 +94,17 @@
 `scripts/check_cloud_login_browser.mjs` 更新为公开体验浏览器检查，历史文件名保留。真实无头 Chrome 从模拟 CDN 的静态首页进入，API 使用临时本地 Cloud API，先确认 `offline` 模式后提交问候和版本比较。10 项检查通过，真实 DSH/MCP 比较产生 7 项证据；刷新恢复、390×844 手机布局、跨浏览器拒绝、实际删除、旧入口跳转、服务错误提示均通过，无脚本异常。报告与截图在忽略目录 `state/cloud-public-browser/`，`paid_calls=0`。该脚本仅接受回环地址，需要已安装的 Chrome、网页依赖及临时 API，执行命令仍为 `node scripts/check_cloud_login_browser.mjs`。
 
 此轮没有读取生产密钥、访问码或数据库凭据，没有操作公网账户、提交或推送代码，也没有运行公网付费分析。更新推送并在原 Vercel 项目部署后，还需验证实际生产网址可免登录完成 DeepSeek 分析。
+
+## Vercel 打包后的文件校验失败
+
+免登录版本已提交为 `df59e03`。用户提供公网任务 `abc6e4dd8d5642558881b6ecf45280c5` 的错误摘要：`asset_missing`，约 4 秒失败，页面显示预计成本为零。该错误是 `asset_integrity` / `knowledge_integrity` 的通用映射，公开摘要没有包含具体文件。
+
+对照 [Vercel Python 打包器](https://github.com/vercel/vercel/blob/main/packages/python/src/index.ts) 的 `predefinedExcludes`，发现平台默认移除 `.gitignore`、`**/public/**` 和 `**/package-lock.json` 等文件。当前完整源码清单包含其中 107 个文件。将发布源码复制到临时目录并按这些规则移除后，原校验稳定报 `product_integrity: missing/changed .gitignore`。原 Linux CI 和浏览器测试使用未打包目录，因此没有覆盖此差异；没有取得该次公网任务的内部堆栈，不能声称已逐项核对其线上文件清单。
+
+修复将构建校验与运行时校验区分：`verify(..., include_build_sources=True)` 仍要求完整已封版源码；构建前后、本地 `product_core verify` 及前端构建校验显式使用完整模式。默认运行时校验仅免除 `.gitignore`、`web/package-lock.json` 和 `web/public/`，不对其他缺失文件自动放行。代码、知识资料、模型、分析数据及发布清单锚点仍按原规则核验。
+
+新增 `scripts/check_cloud_bundle.py`，按独立的平台排除规则复制封版文件及真实资产，9 项检查通过：运行时校验、完整构建拒绝缺文件、运行代码与知识变更拒绝、模型缺失/变更拒绝、清单锚点、打包目录中 live Host 的真实资源初始化，以及后台日志脱敏。live Host 没有调用 `open` 或发送模型请求；该检查已加入 Linux 工作流，Windows 本地通过，新版 Linux 运行待推送触发。完整发布完整性 18 项和前端产物校验也通过。
+
+另在临时本地 PostgreSQL / CloudService 中执行一次版本比较，使用离线模型桩及真实 DSH/MCP，返回 `succeeded`、7 项证据、无分析错误；报告 `state/cloud-bundle-analysis.json`。离线桩的请求也会登记在临时账本中，不代表真实 DeepSeek 用量。本次没有使用生产密钥或付费模型；测试对话已清理，生产预算未修改。
+
+后台新增有界脱敏的 `analysis_failed` 日志，保留任务 ID、失败阶段和具体原因，以便在 Vercel **Logs** 排查。API、前端和复制错误摘要仍只返回通用错误，不包含内部路径、密钥或原始工具数据。此次修复待手动推送部署，公网真实 DeepSeek 分析仍需验收。
