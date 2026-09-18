@@ -1,9 +1,12 @@
 """Explicit local release operation; never called automatically by server startup."""
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from product_core.release import json_sha
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 def entry(path): return {'size': path.stat().st_size, 'sha256': sha(path)}
 def save(path, value): path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2)+'\n', encoding='utf-8')
@@ -28,6 +31,9 @@ def main():
     names.discard('product_core/_release_anchor.py')
     names.discard('product_release.json')
     manifest['source_files'] = {name: entry(ROOT/name) for name in sorted(names)}
+    # Keep the source-byte hash for audits, and pin every JSON value for the
+    # platform-owned config that can be reserialized during a Vercel build.
+    manifest['source_files']['vercel.json']['json_sha256'] = json_sha((ROOT/'vercel.json').read_bytes())
     manifest['build_contract'] = 'npm ci + npm run build; web/build-manifest.json pins dist bytes; dist and dependencies excluded from source inventory'
     identity = json.dumps({'source_files': manifest['source_files'], 'asset_set_id': manifest['asset_set_id'], 'parent': manifest['parent_release']}, sort_keys=True).encode()
     manifest['release_id'] = 'product15'+hashlib.sha256(identity).hexdigest()[:24]

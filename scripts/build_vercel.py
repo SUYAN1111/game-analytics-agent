@@ -46,13 +46,15 @@ def main():
         raise SystemExit('Cloud build requires Linux / Python 3.14; got '+environment+
             '. Use the uv build command from vercel.json; the system python may have a different version.')
     os.chdir(ROOT)
+    from product_core.release import verify
+    verify(False)
+    print('Source integrity verified before dependency installation.',flush=True)
     core=[line for line in (ROOT/'requirements-core.lock').read_text().splitlines() if line and not line.startswith('pywin32==')]
     core+=['psycopg[binary]==3.3.3']
     for target,requirements in [('_core_vendor',core),('_dsh_vendor',(ROOT/'requirements-dsh.lock').read_text().splitlines())]:
         subprocess.run([sys.executable,'-m','pip','install','--only-binary=:all:','--target',target,*requirements],check=True)
     assets()
     subprocess.run(['npm','run','build','--prefix','web'],check=True)
-    from product_core.release import verify
     from web_api.build import verify_build
     verify();verify_build()
     print('Linux dependencies, assets, source and frontend build verified; cloud runtime still needs acceptance testing.')

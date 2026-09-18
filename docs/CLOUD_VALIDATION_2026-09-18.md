@@ -48,3 +48,13 @@
 本地隔离测试从 `vercel.json` 读取实际命令，只将最后的构建脚本替换为环境探针：在 `UV_PYTHON=3.12` 下仍选择了 Python 3.14.7，pip 为固定的 25.3；原构建脚本在 Windows 上继续于依赖安装前拒绝执行，并打印实际环境。测试记录在忽略目录 `state/vercel-build-check/environment-result.json`，没有调用付费 API。该测试确认版本选择与 pip 可用，不代替完整 Linux 构建。
 
 本次修复尚待真实 Vercel 重新构建与公网验收；Linux CI 成功不等于 Vercel 已部署成功。此前的资产 ZIP、Neon 数据和 Vercel 环境变量继续复用。
+
+## Vercel 配置文件完整性失败
+
+用户随后提供的日志显示，提交 `834e2a0` 已通过 Python 检查、依赖安装、资产步骤和前端构建，在构建脚本最后的 `verify()` 中报 `product_integrity: missing/changed vercel.json`。只读查询 GitHub 确认：远端 `main` 与最近部署均为 `834e2a09296c39e32bc626e054a4ee9d32d002ef`，远端 `vercel.json` 字节与该提交的发布清单一致；本地全部 336 项源码也与 Git 提交字节一致。可排除漏提交和本地清单失配。
+
+当前证据确认构建环境中的配置未满足字节校验，但没有取得该环境的实际配置内容，不能断言仅发生了排版变化。现有校验会将 JSON 压缩、缩进、换行或对象键顺序调整一律视为改动，缺少对等价序列化的兼容。
+
+本次显式封版时额外登记 `vercel.json` 的规范 JSON 哈希，并保留原字节哈希。运行时只有该文件可在字节不一致时回退到全量 JSON 内容校验；不忽略任何字段，不接受额外字段、重复键、非有限数或数组顺序变化。业务源码和资产仍按原字节校验，发布锚点继续生效。校验移至安装依赖前，并在全部构建完成后重复检查；真正配置内容改变时会明确报 `JSON content changed vercel.json`，不会修改云端文件或重算发布锚点强行通过。
+
+新增 `scripts/check_release_integrity.py` 在独立源码副本上验证格式等价与负向篡改场景，并加入 Linux CI。18 项本地检查全部通过，包括原文件、压缩 JSON、CRLF、键重排，以及路由/请求头/时限/字段/类型变化、非法 JSON、重复键、缺文件、其他源码字节变化、将 JSON 例外套用到资产和清单锚点被改等拒绝场景。报告为忽略目录中的 `state/release-integrity-results.json`。此次未调用付费 API，尚待实际 Vercel 重试确认失败是否仅由序列化差异引起。

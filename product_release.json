@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product1544138796651afab4dadde281",
+  "release_id": "product150e9ef0dc0744dc59b235ed06",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "ace03e09889e679884aaa3817585f60b29ac2487275f811f283e360fec60b59d",
-      "size": 15693
+      "sha256": "1e804d67ce7062930ad95e649243028ab5a2996662010b37cbfb3050374c3a12",
+      "size": 15874
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -497,8 +497,8 @@
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "1cfd4da7759c81ba5e387f6f7c74db99fc9ae719a49f728fce7c911d6b1d1446",
-      "size": 7586
+      "sha256": "df15e0dad30bc2033e515699cc345c11b855a9cc2d5ce47721d9d5476f3d2df7",
+      "size": 9538
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -521,8 +521,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "e9cafe75ca344f6efa94b0848403e8d859384775f4324579da3fa45dc2c704c1",
-      "size": 13849
+      "sha256": "fb39b0e3924f33f9ea545c1407e8527df4f0f4a65b7591506f5f8b143185aff6",
+      "size": 14581
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -681,8 +681,8 @@
       "size": 1155
     },
     "product_core/release.py": {
-      "sha256": "0496cd1270cd01dc08dc9b67e8f9bb0038ddf27aba446d6af0bf35a1c016a322",
-      "size": 2067
+      "sha256": "65c906dd311e49e43c19091af5eaf6864a0b89c791b6ec038cd851001340202a",
+      "size": 3405
     },
     "product_core/session.py": {
       "sha256": "0700abf57f28f2c1a551d529f8440561ff44a06743ccb9c83701138ec26b4313",
@@ -721,8 +721,8 @@
       "size": 3654
     },
     "scripts/build_vercel.py": {
-      "sha256": "025ad79aff354193a9712ca2a67d5d2c942db2a16db54f44cb9d50d4e0fa65f8",
-      "size": 3177
+      "sha256": "7c3187d137d63a95ca4ea165330284b34d15185e6af02081c109a6dd6bfefe50",
+      "size": 3277
     },
     "scripts/check-web.ps1": {
       "sha256": "74b1b593750ee09c3e90dfcdb12ef26c5f49af272fac60af4ba611040b769724",
@@ -756,6 +756,10 @@
       "sha256": "242c646c9e05b002a04b21d5ad72db0d4b2e35c43331da6a4e318dd4caefe696",
       "size": 3174
     },
+    "scripts/check_release_integrity.py": {
+      "sha256": "85044281bc1a7ac5390d004a980dcd2902d456ee9230cbf406fe2150fe5f9ccb",
+      "size": 4783
+    },
     "scripts/check_scope_routing.py": {
       "sha256": "a9b20b51f33d100739d1b34af6311e9bb7d9034b1dcd20b57ab88de975b25cff",
       "size": 6113
@@ -773,8 +777,8 @@
       "size": 1448
     },
     "scripts/seal_release.py": {
-      "sha256": "5863c2c75c5f15f343a799d3eadafa1708c55169457de288f20af1ddb81cf7fc",
-      "size": 2458
+      "sha256": "16e277068982755447d49a3e1c04db098ad3c4c40d42b0f30473e44d19fdef0f",
+      "size": 2793
     },
     "scripts/source_test_fixtures.py": {
       "sha256": "c03fdfc30bec0041e0743ee27ced4aa62f2aa70ea9c297da5a431d616b07d2cb",
@@ -993,6 +997,7 @@
       "size": 1569
     },
     "vercel.json": {
+      "json_sha256": "46ce5ea5574c00abb897d075591efdfdfce427612b44fe24967b24b6c4102da6",
       "sha256": "efb5a1d5889e610c3ec09ca501654ecc5cb187ac9b3bbcc04a4306271b938ac4",
       "size": 1096
     },

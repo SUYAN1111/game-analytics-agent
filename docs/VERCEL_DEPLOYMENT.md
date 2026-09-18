@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；提交 `34a8051` 的 Linux 自动验收已通过，Neon 已完成初始化。首次 Vercel 部署遇到构建 Python 版本不匹配，本次已修正启动命令，等待重新部署；尚未上线。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；提交 `34a8051` 的 Linux 自动验收已通过，Neon 已完成初始化。Vercel 已通过 Python 版本检查、依赖安装与前端构建，随后因 `vercel.json` 字节与清单不一致失败；本次增加配置内容哈希校验，等待重试，尚未上线。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -98,6 +98,8 @@ ON CONFLICT (id) DO NOTHING;
 
 不要将 Build Command 简化为 `python scripts/build_vercel.py`：`Other` 预设下，这可能调用构建镜像的默认 Python，而不是 `.python-version` 所要求的函数运行时版本。`uv` 明确选择 Python 3.14，并提供构建脚本需要的固定版本 pip；不会把两套分析依赖合并。构建日志会显示实际 Python 版本。参见 [uv 的版本选择说明](https://docs.astral.sh/uv/guides/scripts/#using-different-python-versions)。
 
+构建先校验源码，再安装依赖，以便尽早报告缺文件或内容变化。`vercel.json` 的原始字节哈希和 JSON 内容哈希同时登记在发布清单中：缩进、换行和对象键顺序可以变化，但增删字段、改值、调整路由数组顺序及重复 JSON 键都不能通过。其余源码、锁文件、资产和前端构建继续严格校验字节；构建过程不会恢复配置、忽略字段或自动重新封版。
+
 本项目包含分析依赖和约 226 MiB 解压资产，需使用 Large Functions。该功能当前为公开测试版，支持至 5 GB，并要求 Fluid compute；新建项目自动加入，已有项目可用 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 启用。若变量显示 `Populated by System`，无需手动填写或重复添加。最终包体仍须以实际构建结果为准。参见 [官方公告](https://vercel.com/changelog/vercel-functions-can-now-be-up-to-5-gb-in-package-size)。
 
 ## 6. 填写 Vercel 环境变量
@@ -153,7 +155,8 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 | --- | --- |
 | `Cloud build requires Linux / Python 3.14` | Build Command 是否为本页完整的 `uv run` 命令；控制台不要覆盖成旧的 `python scripts/build_vercel.py` |
 | 构建找不到资产 | `ASSET_BUNDLE_URL` 是否为附件直链、未登录能否下载 |
-| source/build/asset integrity 报错 | 是否完整提交本次发布清单、源码、构建清单；是否被修改了换行符 |
+| source/build/asset integrity 报错 | 是否完整提交本次发布清单、源码、构建清单；除 `vercel.json` 的 JSON 排版外，所有文件仍按字节检查 |
+| `JSON content changed vercel.json` | 已排除仅排版不同；核对实际部署提交与项目覆盖配置，保留日志，不删除字段或跳过检查 |
 | 包体超过限制 | Fluid compute 和 Large Functions 是否已生效；查看实际包体日志 |
 | 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
 | 503 / 数据库不可用 | Neon 是否初始化了 schema 和预算、连接字符串是否正确且带 SSL |
