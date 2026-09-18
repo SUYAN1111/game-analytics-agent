@@ -2,6 +2,7 @@
 import os
 import sys
 import threading
+import time
 from pathlib import Path
 from uuid import uuid4
 from task13_runtime.common import CONFIG, ROOT, HostError, append, clean_environment, lines, read, replace, require, verify_task08, write, within_run
@@ -28,6 +29,7 @@ class Host:
         self.registered=bind(self.registered,quality_binding)
         self.evidence = CurrentEvidence(self.registered["definition"], self.registered["schemas"])
         self.history=[]
+        self.request_scope = {}
         require(offline_corpus is None or mode == "offline", "mode", "fixture corpus is offline controller-only")
         self.corpus = Corpus(within_run(offline_corpus) if offline_corpus is not None else None)
         from task13_runtime.common import accepted_segmentation
@@ -111,9 +113,12 @@ class Host:
         return result
 
     def turn(self, text, turn_id=None, *, validate=True, timeout=900, require_rule_discovery=False, on_progress=None):
+        deadline = time.monotonic() + timeout
         require(type(require_rule_discovery) is bool, 'command', 'require_rule_discovery must be boolean')
         self.verify_frozen_asset()
         turn_id = turn_id or "turn"+uuid4().hex
+        from task13_runtime.request_scope import contract, validate_context, validate_selections
+        bound_scope = contract(text, self.request_scope)
         # A prior rejected/incomplete user turn may have produced MCP calls
         # without reaching collect_evidence. They remain in audit, not this index.
         self.loaded_calls=len(list(lines(self.directory/'mcp/tool_calls.jsonl')))
@@ -146,8 +151,7 @@ class Host:
             try:
                 failure_path = Path(self.cfg["budget_file"]).with_name(Path(self.cfg["budget_file"]).name+".commit_failed.json")
                 require(not failure_path.exists(), "budget_write", "预算文件提交失败，原账本及费用预留保留；详见 " + str(failure_path))
-                require(calls and calls[0]["name"] == "inspect_context" and calls[0]["result"]["error"] is None,
-                        "context", "each completed user turn must obtain its current public context first")
+                validate_context(calls, turn_id)
                 require_completed(result['result'])
                 if require_rule_discovery:
                     require(any(c['turn_id']==turn_id and c['name']=='query_association_rules'
@@ -155,7 +159,30 @@ class Host:
                                 and c['result'].get('evidence_id') in self.rules.entries
                                 and c['result']['error'] is None for c in calls),
                             'rule_discovery', 'current-turn successful development query required; previous turns cannot release this prerequisite')
-                answer = verify_answer(result["result"]["final_response"], self.evidence, self.knowledge, self.clusters, self.rules,turn_id)
+                try:
+                    answer = verify_answer(result["result"]["final_response"], self.evidence, self.knowledge, self.clusters, self.rules,turn_id)
+                except HostError as first_error:
+                    # One answer-only correction, within the SAME turn and ledger.
+                    # Never repair network, integrity, scope-authority or budget failures.
+                    if first_error.code not in ('selection','selection_scope'): raise
+                    from task13_runtime.admission import Admission
+                    quota=Admission(self.cfg['admission']).call('quota',turn_id=turn_id)
+                    if min(quota['requests_remaining'],quota['task_requests_remaining'])<1: raise
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0: raise TimeoutError('Turn deadline reached before answer correction')
+                    write(self.directory/(turn_id+'_repair.json'),{'reason':first_error.code,'limit':1,'same_turn':True,'tools_allowed':False})
+                    self.driver.send({'op':'repair','turn_id':turn_id,'text':
+                        '宿主拒绝了最终引用（'+first_error.code+'）。只纠正最终JSON，不能重新调用工具或改变用户范围。'
+                        'compare_results 仅可引用 rate_difference、percentage_point_difference 或计数差异；没有 rate 字段。'
+                        '原始 rate/numerator/denominator 必须引用对应 query_metric 证据和该版本scope。'
+                        '仅用本轮已取得的真实证据，删去多余的非法引用及对应正文块，满足用户明确要求，保留五字段或合法partial结构。',
+                        'require_rule_discovery':require_rule_discovery})
+                    repaired=self.driver.receive(remaining,on_poll=reader.drain)
+                    write(self.directory/(turn_id+'_repair_result.json'),repaired)
+                    require(repaired.get('turn_id')==turn_id and 'result' in repaired,'answer_repair','Correction did not complete.')
+                    require_completed(repaired['result'])
+                    answer=verify_answer(repaired['result']['final_response'],self.evidence,self.knowledge,self.clusters,self.rules,turn_id)
+                validate_selections(answer, bound_scope)
             except HostError as exc:
                 write(self.directory/(turn_id+"_rejection.json"), {
                     "status": "failed", "displayed_as_verified": False,
@@ -164,6 +191,7 @@ class Host:
                     "input_file": turn_id+"_input.json", "raw_result_file": turn_id+"_raw_result.json"})
                 raise
             write(self.directory/(turn_id+"_answer.json"), answer)
+            if answer.get('status')!='control_checked': self.request_scope = bound_scope
             history_item['verified_scopes']=[r['scope'] for r in answer['claims']]
             return answer
         return result

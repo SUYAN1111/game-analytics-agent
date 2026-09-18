@@ -37,7 +37,7 @@ export async function apply(ctx) {
     /^(SYSTEMROOT|WINDIR|COMSPEC|PATH|PATHEXT|TEMP|TMP|USERPROFILE|APPDATA|LOCALAPPDATA|PROGRAMFILES|PROGRAMFILES\(X86\)|OS|APP_ASSET_DIR|APP_STATE_DIR|APP_DEBUG|APP_READ_AUDIT)$/i.test(key)));
   Object.assign(safeEnv,{PYTHONUTF8:'1',PYTHONIOENCODING:'utf-8',PYTHONNOUSERSITE:'1',PYTHONDONTWRITEBYTECODE:'1'});
   let closed=false, blocked=false, turnBlocked=false, currentTurn=null, toolCount=0, contextReady=false, contextEvidenceId=null;
-  let discoveryRequired=false, discoveryReady=false, discoveryEvidenceId=null;
+  let discoveryRequired=false, discoveryReady=false, discoveryEvidenceId=null, contextAttempts=0, repairRequestUsed=false;
   const pending = new Map();
   const toolAdmissions = new Map();
   let taskToolCount=0;
@@ -78,6 +78,8 @@ export async function apply(ctx) {
     if (value.stopped) fail('STOPPED','controller stopped turn');
     if (value.turn_id!==currentTurn) {
       currentTurn=value.turn_id;toolCount=0;contextReady=false;contextEvidenceId=null;turnBlocked=false;
+      contextAttempts=0;
+      repairRequestUsed=false;
       discoveryRequired=value.require_rule_discovery===true;discoveryReady=false;discoveryEvidenceId=null;
     }
     return value;
@@ -102,6 +104,10 @@ export async function apply(ctx) {
         if (outcome.error) throw outcome.error;
       }
       if (blocked || turnBlocked) fail('STOPPED','network disabled for run or current turn');
+      if (turn().answer_repair) {
+        if (repairRequestUsed) fail('model_limit','Only one answer correction HTTP request is permitted');
+        repairRequestUsed=true;
+      }
       const url=typeof input==='string'?input:input instanceof URL?input.href:input.url;
       const allowed=cfg.mode==='live'?'https://api.deepseek.com/chat/completions':cfg.offline_base_url+'/chat/completions';
       if (url!==allowed || (init.method||'GET').toUpperCase()!=='POST') fail('NETWORK_DENIED','unregistered external endpoint or method');
@@ -122,7 +128,7 @@ export async function apply(ctx) {
       // native catalogue; DSH/model still construct and dispatch the tool call.
       // Only a successful MCP return in this turn releases the constraint.
       const requiredTool=!contextReady?'inspect_context':discoveryRequired&&!discoveryReady?'query_association_rules':null;
-      body.tool_choice=requiredTool?{type:'function',function:{name:requiredTool}}:'auto';
+      body.tool_choice=turn().answer_repair?'none':requiredTool?{type:'function',function:{name:requiredTool}}:'auto';
       // This host requirement contains no answer, rule ID or test identifier.
       // Parameters are still produced by the model, and DSH dispatches real MCP.
       if (discoveryRequired) {
@@ -210,6 +216,8 @@ export async function apply(ctx) {
       const admission=toolAdmissions.get(String(exec.callId));
       if (!admission || admission.reason || admission.turn!==callTurn)
         fail('TOOL_ADMISSION','tool execution lacks its current synchronous guard admission');
+      if (!contextReady && tool.name==='inspect_context' && ++contextAttempts>2)
+        fail('CONTEXT_LIMIT','At most one context parameter correction is allowed');
       const outcome=await admission.promise;
       if (outcome.error) throw outcome.error;
       phase('正在调用工具 '+tool.name);
@@ -246,6 +254,7 @@ export async function apply(ctx) {
     try {
       turn();
       if (blocked || closed || turnBlocked) reason='Task13 run or turn stopped';
+      else if (turn().answer_repair) reason='Answer correction cannot call tools';
       else {
         toolCount++;taskToolCount++;
         promise=rpc('tool_attempt',{call_id:id}).then(result=>({result}),error=>({error}));

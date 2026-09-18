@@ -7,13 +7,13 @@ from web_api.app import create_app
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Windows local analysis web; offline by default')
-    parser.add_argument('--mode', choices=['offline','live'], default='offline')
+    parser = argparse.ArgumentParser(description='Windows local analysis web; DeepSeek live by default; offline is explicit test mode')
+    parser.add_argument('--mode', choices=['offline','live'], default='live')
     parser.add_argument('--port', type=int, default=8765)
-    parser.add_argument('--period', default='default')
+    parser.add_argument('--period', default='live-main')
     parser.add_argument('--queue-limit', type=int, default=8)
     parser.add_argument('--timeout', type=int, default=900)
-    parser.add_argument('--budget', type=float, default=5)
+    parser.add_argument('--budget', type=float, default=4.9)
     parser.add_argument('--summary', action='store_true')
     args = parser.parse_args()
     if args.mode == 'live' and not os.environ.get('DEEPSEEK_API_KEY'):

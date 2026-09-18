@@ -18,6 +18,7 @@ def main():
     save(ROOT/'web/build-manifest.json', {p.relative_to(dist).as_posix(): entry(p) for p in sorted(dist.rglob('*')) if p.is_file()})
     names = set(manifest['source_files'])
     names.add('task13_runtime/progress.py')
+    names.add('task13_runtime/request_scope.py')
     for directory in ('web', 'web_api', 'scripts', 'docs'):
         for p in (ROOT/directory).rglob('*'):
             if p.is_file() and not any(part in ('node_modules','dist','__pycache__','.vite') for part in p.relative_to(ROOT).parts):

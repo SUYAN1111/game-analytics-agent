@@ -5,9 +5,11 @@ import './style.css';
 import './workspace.css';
 import './flow.css';
 import './execution.css';
-import './water.css';
 import './scope.css';
-import {useReducedMotion,usePresence,useButtonRipples,useAutoInput,DirectionSelection,WaterArt,FlowGlyph} from './motion';
+import './fonts.css';
+import './studio.css';
+import {UsageDetails,sumUsage,type Usage} from './usage';
+import {useReducedMotion,usePresence,useAutoInput,DirectionSelection} from './motion';
 import {Execution} from './execution';
 import {mergeEvents,type ExecutionEvent} from './execution-events';
 import {ResultOverview} from './result-overview';
@@ -20,15 +22,15 @@ import {DataSource} from './data-source';
 type Job = {id:string; session_id:string; turn_id:string; text:string; status:string; created:number; updated:number;
   answer:{answer_markdown:string; status:string; message?:string; choices?:{text:string}[]; limitations?:string[]}|null; error:{code:string; message:string}|null;
   routing?:{kind:string;message?:string;limitations?:string[]}|null;
-  evidence:Evidence[]; events:ExecutionEvent[]};
+  usage?:Usage; evidence:Evidence[]; events:ExecutionEvent[]};
 type Session = {id:string; title:string; status:string; created:number; jobs?:Job[]};
 type Health = {mode:string; period:string; mode_label:string; questions:string[]; fault_questions:string[];
   capabilities:{title:string;description:string;examples:string[]}[];
-  budget:{actual_cny:number; reserved_unknown_cny:number; limit_cny:number; request_count:number; stopped:boolean}};
+  budget:{stopped:boolean}};
 const active = (j:Job) => ['queued','running','cancelling'].includes(j.status);
 const labels:Record<string,string> = {queued:'排队中',running:'正在分析',cancelling:'正在停止分析',succeeded:'分析完成 · 数据已核对',
   partial:'部分完成 · 已有结果已核对',clarification:'需要补充信息',out_of_scope:'当前能力范围之外',guidance:'使用提示',
-  failed:'未完成',cancelled:'已取消',timed_out:'已超时',budget_stopped:'体验额度已暂停',interrupted:'任务中断',close_failed:'暂未能结束'};
+  failed:'未完成',cancelled:'已取消',timed_out:'已超时',budget_stopped:'分析额度已暂停',interrupted:'任务中断',close_failed:'暂未能结束'};
 async function api<T>(path:string, body?:unknown):Promise<T> {
   let response:Response,value;
   try{response=await fetch('/api'+path, body === undefined ? {} : {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});value=await response.json();}
@@ -45,7 +47,30 @@ const predictionGuide='模型根据玩家获得参与资格时已有的信息，
 const guides:Record<string,string>={'剧情开始情况是怎么算出来的？':definitionGuide,'M03 的分子分母和适用范围是什么？':definitionGuide,'这些预测结果该怎么看？':predictionGuide,'冻结预测是什么意思？':predictionGuide};
 function KnowledgeAnswer({job}:{job:Job}){return guides[job.text]?<><p className="plain-guide">{guides[job.text]}</p><details className="verified-text"><summary>查看完整说明与来源原文</summary><SafeMarkdown text={job.answer?.answer_markdown||''}/></details></>:<SafeMarkdown text={job.answer?.answer_markdown||''}/>;}
 function App(){
-  const reducedMotion=useReducedMotion();useButtonRipples(reducedMotion);
+  const reducedMotion=useReducedMotion();
+  const [menuOpen,setMenuOpen]=useState(false);
+  useEffect(()=>{
+    const resized=()=>{if(innerWidth>760)setMenuOpen(false);};
+    const close=(e:KeyboardEvent)=>{
+      if(e.key==='Escape')setMenuOpen(false);
+      if(menuOpen&&e.key==='Tab'){
+        const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('.sidebar button')).filter(b=>!b.disabled&&b.offsetParent!==null);
+        const first=buttons[0],last=buttons.at(-1);
+        if(first&&last&&((e.shiftKey&&document.activeElement===first)||(!e.shiftKey&&document.activeElement===last))){e.preventDefault();(e.shiftKey?last:first).focus();}
+      }
+    };
+    window.addEventListener('resize',resized);window.addEventListener('keydown',close);
+    if(menuOpen)document.querySelector<HTMLButtonElement>('.sidebar .new-button')?.focus();
+    return()=>{window.removeEventListener('resize',resized);window.removeEventListener('keydown',close);if(menuOpen&&innerWidth<=760)document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus();};
+  },[menuOpen]);
+  useEffect(()=>{
+    const close=(event:PointerEvent|KeyboardEvent)=>{
+      const panel=document.querySelector<HTMLDetailsElement>('.conversation-usage[open]');
+      if(panel&&(('key' in event&&event.key==='Escape')||(!('key' in event)&&!panel.contains(event.target as Node))))panel.open=false;
+    };
+    document.addEventListener('pointerdown',close);document.addEventListener('keydown',close);
+    return()=>{document.removeEventListener('pointerdown',close);document.removeEventListener('keydown',close);};
+  },[]);
   const [health,setHealth]=useState<Health|null>(null), [sessions,setSessions]=useState<Session[]>([]);
   const [current,setCurrent]=useState<Session|null>(null), [text,setText]=useState(''), [error,setError]=useState('');
   const [sending,setSending]=useState(false), [evidence,setEvidence]=useState<unknown>(null), [evidenceTitle,setEvidenceTitle]=useState('');
@@ -94,7 +119,7 @@ function App(){
   async function newSession(){
     if(sending||deletingRef.current)return;
     setSending(true);scrollTarget.current=null;
-    setShowSources(false);setShowQuestions(false);setDirection(null);setPendingExample('');setText('');setNotice('');pending.current=null;setRetry(false);setError('');
+    setMenuOpen(false);setShowSources(false);setShowQuestions(false);setDirection(null);setPendingExample('');setText('');setNotice('');pending.current=null;setRetry(false);setError('');
     try {const s=await api<Session>('/sessions',{});await refreshList();await open(s.id);}
     catch(e){setError(String(e));}
     finally{setSending(false);}
@@ -175,45 +200,46 @@ function App(){
       if(download){const url=URL.createObjectURL(new Blob([markdown],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='分析-'+j.id.slice(0,8)+'.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setNotice('已下载回答和数据来源，可用文本编辑器打开。');}
       else{await navigator.clipboard.writeText(markdown);setNotice('已复制回答和数据来源。');}
     }catch(e){setError(String(e));}}
-  return <div className="shell">
-    <aside className="sidebar"><div className="brand"><span className="brand-icon"><BrandMark/></span><span className="brand-name"><b>玩家洞察</b><small>让数据回答问题</small></span></div>
+  return <div className={"shell"+(menuOpen?" sidebar-open":"")}>
+    {menuOpen&&<button className="sidebar-shade" aria-label="关闭导航" onClick={()=>setMenuOpen(false)}/>}
+    <aside className="sidebar" id="sidebar"><div className="brand"><span className="brand-icon"><BrandMark/></span><span className="brand-name"><b>玩家洞察</b><small>让数据回答问题</small></span></div>
       <button className="new-button" disabled={!!deleting||sending} onClick={newSession}>＋ 新建对话</button>
       <div className="section-label">对话记录 <span>{sessions.length.toString().padStart(2,'0')}</span></div>
-      <nav aria-label="历史对话">{sessions.length===0?<p className="muted">从第一个问题开始，分析记录会出现在这里。</p>:sessions.map(s=><div className="history-row" key={s.id} data-session-id={s.id}><button disabled={!!deleting||sending} className={'history '+(current?.id===s.id?'selected':'')} onClick={()=>{setShowSources(false);open(s.id).catch(e=>setError(String(e)));}}><span>{s.title}</span><small>{deleting===s.id?'正在删除…':`${new Date(s.created*1000).toLocaleDateString('zh-CN')} · ${s.status==='open'?'对话中':'只读记录'}`}</small></button><button className="history-delete" aria-label={'删除对话：'+s.title} title="删除对话" disabled={!!deleting||sending} onClick={()=>deleteSession(s)}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>)}</nav>
-      <div className="sidebar-footer"><FlowGlyph/><span className="dot"/> {health?.mode==='live'?'随时提问':'示例体验'}<p>{health?.mode_label||'正在连接服务'}</p><small>每个数字，都有据可查</small></div>
+      <nav aria-label="历史对话">{sessions.length===0?<p className="muted">从第一个问题开始，分析记录会出现在这里。</p>:sessions.map(s=><div className="history-row" key={s.id} data-session-id={s.id}><button disabled={!!deleting||sending} className={'history '+(current?.id===s.id?'selected':'')} onClick={()=>{setMenuOpen(false);setShowSources(false);open(s.id).catch(e=>setError(String(e)));}}><span>{s.title}</span><small>{deleting===s.id?'正在删除…':`${new Date(s.created*1000).toLocaleDateString('zh-CN')} · ${s.status==='open'?'对话中':'只读记录'}`}</small></button><button className="history-delete" aria-label={'删除对话：'+s.title} title="删除对话" disabled={!!deleting||sending} onClick={()=>deleteSession(s)}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>)}</nav>
+      <div className="sidebar-footer"><span className="service-indicator"/>{health?.mode==='live'?'模型 · DeepSeek':health?'本地模式':'正在连接服务'}<small>玩家行为分析助手</small></div>
     </aside>
-    <main><header><div><span className="eyebrow">从玩家行为，发现下一步</span><h1>{showSources?'管理你的数据':hasTurns?'分析对话':'你想了解什么？'}</h1></div><span className="demo-badge">◈ 模拟数据演示</span></header>
-      <div className="mode-strip"><span>{health?.mode_label||'连接中…'}</span><div className="source-current"><span>当前数据：玩家行为示例数据 <small>模拟数据</small></span><button className="source-trigger" ref={sourceButton} onClick={()=>setShowSources(v=>!v)}>{showSources?'返回分析':'管理数据源'}</button></div></div>
+    <main inert={menuOpen}><header className="workspace-header"><div className="header-title"><button className="menu-toggle" aria-label="展开导航" aria-expanded={menuOpen} aria-controls="sidebar" onClick={()=>setMenuOpen(v=>!v)}>☰</button><h1>{showSources?'数据源':hasTurns?current?.title:'分析工作台'}</h1></div><div className="header-actions"><button className="source-trigger" ref={sourceButton} onClick={()=>setShowSources(v=>!v)}>{showSources?'返回分析':'管理数据源'}</button><UsageDetails key={current?.id||'new'} usage={sumUsage(current?.jobs?.map(j=>j.usage)||[])} scope="本对话" running={!!running} stale={!!connectionLost}/></div></header>
+      <div className="data-context"><span className="data-context-icon" aria-hidden="true">▤</span><span>玩家行为数据</span><span className="data-tag">模拟数据</span></div>
       <div hidden={!showSources}><DataSource active={showSources} onBack={()=>{setShowSources(false);sourceButton.current?.focus();}}/></div>
       {!showSources&&(opening||openError)&&<div className="view-feedback" role="status">{opening?'正在读取对话…':<>{openError}<button onClick={()=>open(selected.current).catch(()=>{})}>重新读取对话</button></>}</div>}
       <div className={'analysis-workspace '+(hasTurns?'conversation-mode':'start-mode')} hidden={showSources||!!opening||!!openError}>
-      {welcomePresent&&<section className={"start-intro "+(hasTurns?"is-exiting":"welcome")} aria-hidden={hasTurns||undefined}><WaterArt/><div className="intro-copy"><span className="eyebrow"><FlowGlyph/>从问题开始</span><h2>从你的问题开始</h2><p>直接写下想了解的玩家行为，也可以看看下面的分析方向。</p></div></section>}
+      {welcomePresent&&<section className={"start-intro "+(hasTurns?"is-exiting":"welcome")} aria-hidden={hasTurns||undefined}><div className="intro-copy"><span className="eyebrow">玩家洞察</span><h2>想了解玩家的哪些行为？</h2><p>输入你的问题，让数据帮你找到答案。</p></div></section>}
       {hasTurns&&<div className="conversation-heading"><span>本次对话 · {current?.jobs?.length} 个问题</span><button className="more-questions" aria-expanded={showQuestions} aria-controls="question-picker" disabled={!!running||sending||!!unavailable} onClick={()=>setShowQuestions(v=>!v)}>{showQuestions?'收起分析方向':'换个分析方向'}</button></div>}
       <section id="question-picker" className="question-picker" aria-label="分析方向" hidden={hasTurns&&!showQuestions}>
         <div className="picker-heading"><h2>分析方向</h2><span>不必先选，直接提问也可以</span></div>
         <div className="direction-options" role="group" aria-label="选择分析方向"><DirectionSelection selected={direction} count={health?.capabilities.length||0}/>{health?.capabilities.map((c,i)=><button key={c.title} aria-pressed={direction===i} aria-controls="direction-details" disabled={!!running||sending||!!unavailable} onClick={()=>setDirection(direction===i?null:i)}>{c.title}</button>)}</div>
         {directionPresent&&shownDirection!==null&&health?.capabilities[shownDirection]&&<div key={shownDirection} className={"direction-details"+(direction===null?" is-exiting":"")} id="direction-details" aria-hidden={direction===null||undefined} inert={direction===null}><h3>{health.capabilities[shownDirection!].title}</h3><p>{health.capabilities[shownDirection!].description}</p><div className="direction-examples"><span>可以这样问</span>{health.capabilities[shownDirection!].examples.map(q=><button key={q} aria-label={q} disabled={!!running||sending||!!unavailable} onClick={()=>fill(q)}>{q}<span aria-hidden="true"> ↗</span></button>)}</div></div>}
-        <p className="picker-note">{health?.mode==='offline'?'当前为模拟数据演示，暂时只能回答部分问题。展开分类可查看可运行的示例。':'选择分类查看用途和示例，也可以直接输入自己的问题。'}</p>
+        <p className="picker-note">直接提问，也可以选择一个方向寻找灵感。</p>
       </section>
       <section className="conversation" aria-label="分析对话">
         {current?.jobs?.map(j=><article className="turn" key={j.id}><div className="user-message"><span className="avatar">你</span><div>{j.text}</div></div>
           <div className="assistant-message"><span className="avatar agent"><BrandMark/></span><div className="answer"><div className={'status '+(['succeeded','partial'].includes(j.status)?'verified':'')}><span>{labels[j.status]||j.status}</span><small>{Math.max(0,Math.floor(((active(j)?tick/1000:j.updated)-j.created)))} 秒</small></div>
             <Execution events={j.events} status={j.status} disconnected={connectionLost===j.id}/>
-            {j.routing?.kind==='execute'&&<p className="confirmed-scope">本次范围 · {j.routing.message}</p>}
             {j.answer?.status==='control'&&<div className="scope-reply" role="status"><p>{j.answer.message}</p>{j.routing&&['guidance','clarification','out_of_scope'].includes(j.routing.kind)&&<small>这条提示未调用大模型，你可以继续提问。</small>}<div className="scope-options">{j.answer.choices?.map(c=><button key={c.text} disabled={!!running||sending||!!unavailable||current.jobs?.at(-1)?.id!==j.id} onClick={()=>fill(c.text)}>{c.text}</button>)}<button disabled={!!running||sending||!!unavailable} onClick={()=>fill(j.text)}>修改这个问题</button></div></div>}
-            {j.answer&&['succeeded','partial'].includes(j.status)?<div className="result-reveal">{j.answer.limitations?.length?<aside className="partial-notice" aria-label="未能完成的部分"><strong>这次能回答的部分</strong>{j.answer.limitations.map(t=><p key={t}>{t}</p>)}</aside>:null}<div className="answer-toolbar"><h3>分析结果</h3><button onClick={()=>exportAnalysis(j,false)}>复制回答</button><button onClick={()=>exportAnalysis(j,true)}>下载分析</button></div>{j.evidence.some(e=>e.kind!=='knowledge_selections')?<><ResultOverview evidence={j.evidence} onInspect={e=>inspect(j,e)}/><AnalysisMethods evidence={j.evidence} onInspect={e=>inspect(j,e)}/><details className="detailed-data"><summary>查看详细数据</summary><Results evidence={j.evidence} onInspect={e=>inspect(j,e)}/></details><details className="verified-text"><summary>查看完整回答与统计范围</summary><SafeMarkdown text={j.answer.answer_markdown}/></details></>:<><KnowledgeAnswer job={j}/><AnalysisMethods evidence={j.evidence} onInspect={e=>inspect(j,e)}/></>}<details className="source-list"><summary>查看全部数据来源（{j.evidence.length}）</summary><div className="evidence-links">{j.evidence.map((e,i)=><button key={e.id} onClick={()=>inspect(j,e)}>↗ {e.label}证据 {i+1}</button>)}</div></details>{j.evidence.length===0&&<p className="muted">这是对结果使用方式的说明，没有新增统计数据。</p>}<small className="muted">结果来自模拟数据，仅供体验；两个现象一起出现，不代表一个导致了另一个。</small></div>:j.error?<div role="status" className="failure"><p>{j.error.message}</p>{j.error.code==='offline_unsupported'&&<button disabled={!!running||sending||!!unavailable} onClick={()=>fill(j.text)}>修改这个问题</button>}<details><summary>查看问题详情</summary><code>任务 {j.id} · {j.error.code}</code></details><button onClick={()=>navigator.clipboard.writeText(JSON.stringify({job_id:j.id,...j.error}))}>复制错误摘要</button></div>:null}
+            {j.answer&&['succeeded','partial'].includes(j.status)?<div className="result-reveal">{j.answer.limitations?.length?<aside className="partial-notice" aria-label="未能完成的部分"><strong>这次能回答的部分</strong>{j.answer.limitations.map(t=><p key={t}>{t}</p>)}</aside>:null}<div className="answer-toolbar"><h3>分析结果</h3><button onClick={()=>exportAnalysis(j,false)}>复制回答</button><button onClick={()=>exportAnalysis(j,true)}>下载分析</button></div>{j.evidence.some(e=>e.kind!=='knowledge_selections')?<><ResultOverview evidence={j.evidence} onInspect={e=>inspect(j,e)}/><AnalysisMethods evidence={j.evidence} onInspect={e=>inspect(j,e)}/><details className="detailed-data"><summary>查看详细数据</summary><Results evidence={j.evidence} onInspect={e=>inspect(j,e)}/></details><details className="verified-text"><summary>查看完整回答与统计范围</summary><SafeMarkdown text={j.answer.answer_markdown}/></details></>:<><KnowledgeAnswer job={j}/><AnalysisMethods evidence={j.evidence} onInspect={e=>inspect(j,e)}/></>}<details className="source-list"><summary>查看全部数据来源（{j.evidence.length}）</summary><div className="evidence-links">{j.evidence.map((e,i)=><button key={e.id} onClick={()=>inspect(j,e)}>↗ {e.label}证据 {i+1}</button>)}</div></details>{j.evidence.length===0&&<p className="muted">这是对结果使用方式的说明，没有新增统计数据。</p>}<small className="muted">数据源：模拟玩家行为数据。</small></div>:j.error?<div role="status" className="failure"><p>{j.error.message}</p>{j.error.code==='offline_unsupported'&&<button disabled={!!running||sending||!!unavailable} onClick={()=>fill(j.text)}>修改这个问题</button>}<details><summary>查看问题详情</summary><code>任务 {j.id} · {j.error.code}</code></details><button onClick={()=>navigator.clipboard.writeText(JSON.stringify({job_id:j.id,...j.error}))}>复制错误摘要</button></div>:null}
             {active(j)&&<button className="cancel" disabled={j.status==='cancelling'||controlling===j.id} onClick={()=>cancel(j)}>{controlling===j.id?'正在发送停止请求…':j.status==='cancelling'?'正在取消…':'取消任务'}</button>}
+            <UsageDetails usage={j.usage} running={active(j)} stale={connectionLost===j.id}/>
           </div></div></article>)}
       </section>
       <footer className="composer-area"><label className="composer-heading" htmlFor="question">{hasTurns?'接着问一个问题':'你的问题'}</label>{error&&<div role="alert" className="error-banner">{error}{retry&&pending.current&&<button disabled={sending} onClick={()=>submit(pending.current!.text)}>重试同一提交</button>}</div>}
         {sending&&<p className="operation-pending" role="status">正在提交，请稍候…</p>}
         {notice&&<p className="notice" role="status">{notice}</p>}
         {pendingExample&&<div className="replace-example" role="status"><p>输入框里已有内容。要换成下面这个问题吗？</p><blockquote>{pendingExample}</blockquote><button onClick={()=>useExample(pendingExample)}>替换输入内容</button><button onClick={()=>{setPendingExample('');input.current?.focus();}}>保留我的问题</button></div>}
-        {health?.budget.stopped&&<p className="error-banner">本次体验的可用额度已暂停，请联系管理员后再试。已完成的分析仍可查看。</p>}
+        {health?.budget.stopped&&<p className="error-banner">分析服务已暂停，请联系管理员检查模型连接和调用记录。已完成的分析仍可查看。</p>}
         {current&&(current.status!=='open'||deleting===current.id)&&<p className="readonly">{deleting===current?.id?'正在停止任务并删除对话，请稍候…':current?.status==='close_failed'?'对话暂时未能结束，请再次点击“结束对话”重试。':'此对话已结束或为历史只读记录。请新建对话继续。'}</p>}
         {lastAnswer&&!unavailable&&related.length>0&&<div className="related-questions" aria-label="接着了解"><span>接着了解</span>{related.map(q=><button className="followup" key={q} aria-label={q} disabled={!!running||sending} onClick={()=>fill(q)}>{q} ↗</button>)}</div>}
         <form onSubmit={e=>{e.preventDefault();submit();}}><label className="sr-only" htmlFor="question">输入问题</label><textarea ref={input} id="question" placeholder={hasTurns?'继续输入你想了解的问题…':'写下你想了解的玩家行为…'} value={text} maxLength={4000} disabled={!!running||sending||!!unavailable} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing&&e.nativeEvent.keyCode!==229){e.preventDefault();submit();}}}/><button className="send" aria-label="发送问题" type="submit" disabled={!text.trim()||!!running||sending||!!unavailable||health?.budget.stopped}><span>{hasTurns?'发送':'开始分析'}</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 16V4m-5 5 5-5 5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></form>
-        <div className="composer-meta"><span>Enter 发送 · Shift + Enter 换行</span>{current&&hasTurns&&<button onClick={close} disabled={current.status==='closed'||current.status==='read_only'}>结束对话</button>}<span>{health?.mode==='offline'?'示例体验 · 不产生费用':`费用 ¥${health?.budget.actual_cny.toFixed(4)||'0.0000'} / ¥${health?.budget.limit_cny||5} · 待结算 ¥${health?.budget.reserved_unknown_cny.toFixed(4)||'0.0000'}`}</span></div>
+        <div className="composer-meta"><span>Enter 发送 · Shift + Enter 换行</span>{current&&hasTurns&&<button onClick={close} disabled={current.status==='closed'||current.status==='read_only'}>结束对话</button>}<span>{running?'正在分析，完成后可继续提问':'分析结论请结合数据范围使用'}</span></div>
         
       </footer>
       </div>

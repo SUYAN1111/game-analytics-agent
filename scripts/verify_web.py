@@ -53,7 +53,7 @@ def main():
     log=(out/'http-test-process.log').open('w',encoding='utf-8')
     def start():
         nonlocal process
-        process=subprocess.Popen([sys.executable,'-B','-m','web_api','--port',str(port),'--period',period,'--queue-limit','1'],cwd=ROOT,env=env,stdout=log,stderr=log)
+        process=subprocess.Popen([sys.executable,'-B','-m','web_api','--mode','offline','--port',str(port),'--period',period,'--queue-limit','1'],cwd=ROOT,env=env,stdout=log,stderr=log)
         deadline=time.monotonic()+30
         while time.monotonic()<deadline:
             try: return client.request('/api/health')

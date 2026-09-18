@@ -8,7 +8,7 @@ const home=path.resolve('state/web/offline',period),python=path.resolve('.venv-c
 await fs.mkdir(out,{recursive:true});let server;const checks=[],errors=[];
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function start(){
-  server=spawn(python,['-B','-m','web_api','--port',String(port),'--period',period],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,DEEPSEEK_API_KEY:'',PYTHONUTF8:'1'}});
+  server=spawn(python,['-B','-m','web_api','--mode','offline','--port',String(port),'--period',period],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,DEEPSEEK_API_KEY:'',PYTHONUTF8:'1'}});
   server.stdout.on('data',()=>{});server.stderr.on('data',s=>fs.appendFile(path.join(out,'server.log'),s));
   for(let i=0;i<100;i++){try{if((await fetch(base+'/api/health')).ok)return;}catch{}if(server.exitCode!==null)throw new Error('server exited');await pause(200);}throw new Error('startup timeout');
 }

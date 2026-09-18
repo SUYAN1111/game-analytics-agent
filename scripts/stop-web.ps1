@@ -1,4 +1,4 @@
-param([ValidateSet('offline','live')][string]$Mode='offline', [ValidatePattern('^[a-zA-Z0-9_-]{1,64}$')][string]$Period='default')
+param([ValidateSet('offline','live')][string]$Mode='live', [ValidatePattern('^[a-zA-Z0-9_-]{1,64}$')][string]$Period='live-main')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 $stateRoot=if ($env:APP_STATE_DIR) {$env:APP_STATE_DIR} else {Join-Path $root 'state'}

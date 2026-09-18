@@ -48,6 +48,7 @@ REASONS = {
     'causality': '可以核对现有数据中的差异或关联，但不能据此判断玩家意愿，也不能证明原因。',
     'unsupported': '这部分要求超出了现有数据或工具的能力，下面仅展示已完成并核对过的部分。',
     'offline_language': '当前未连接语言模型，还不能可靠理解这句话。请补充要分析的对象和范围，也可以参考分析方向；你的原问题会保留。',
+    'filter': '这个筛选条件还不能对应到数据。示例区域只有 R1、R2、R3，没有与真实城市的对应关系；请写明数据中的区域编号。语言和设备也需要使用数据中已有的取值。',
 }
 
 
@@ -86,6 +87,9 @@ def scope_choices(p):
 def route(text, mode, previous=None):
     """Pure routing; previous is the last owned, persisted turn only."""
     t=normalize(text)
+    from task13_runtime.request_scope import contract
+    if contract(text,((previous or {}).get('routing') or {}).get('scope_contract'))['unresolved']:
+        return control('clarification','filter')
     if re.fullmatch(r'(你好|您好|嗨|哈喽|hello|hi|谢谢|感谢|再见)[!！。.?？]*',t):return control('guidance','greeting')
     if t in ('你能做什么','你能做什么?','你能做什么？','帮助','有哪些功能'):
         return control('guidance','capability',choices=[{'text':q} for q in FRIENDLY_QUESTIONS[:4]])
@@ -103,7 +107,7 @@ def route(text, mode, previous=None):
         # The existing examples keep their explicit, documented demo semantics.
         return execute({'kind':'example','question':resolved})
     business=bool(re.search(r'玩家|剧情|玩法|游玩|分组|分群|聚类|指标|版本|更新|预测|因果|覆盖|第二组|第[123一二三]组',t))
-    outside=bool(re.search(r'天气|气温|下雨|写诗|写作文|翻译英文|股票|菜谱|订机票|weather|forecast|poem',t))
+    outside=bool(re.search(r'天气|气温|下雨|写诗|写作文|翻译英文|股票|菜谱|订机票|笑话|段子|闲聊|聊天解闷|讲故事|唱首歌|weather|forecast|poem|tell.*joke',t))
     if outside and not business:return control('out_of_scope','outside')
     if re.search(r'上传|我[的这].*文件|这个文件|这个表格|这个excel|这个csv',t):return control('out_of_scope','upload')
     if re.search(r'玩家明细|用户明细|个人身份|逐人|重新训练|重训|执行代码|执行sql|忽略.*规则',t):return control('out_of_scope','no_data')

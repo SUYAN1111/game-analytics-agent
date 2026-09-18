@@ -34,7 +34,7 @@ class APIError(Exception):
 
 
 class Service:
-    def __init__(self, mode='offline', period='default', queue_limit=8, timeout=900, budget=5, summary=False):
+    def __init__(self, mode='live', period='live-main', queue_limit=8, timeout=900, budget=4.9, summary=False):
         if mode not in ('offline', 'live') or not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', period):
             raise ValueError('invalid local mode/period')
         if not 1 <= queue_limit <= 32 or not 1 <= timeout <= 900: raise ValueError('invalid queue/timeout')
@@ -118,7 +118,9 @@ class Service:
                 'request_count': len(attempts), 'stopped': state['stopped'] or self.runtime.ledger.failure_path.exists() or self.runtime.ledger.commit_error is not None}
 
     def health(self):
-        return {'mode': self.mode, 'period': self.period, 'assets_ready': True, 'budget': self.budget(),
+        budget = self.budget()
+        return {'mode': self.mode, 'period': self.period, 'assets_ready': True,
+                'budget': budget if self.mode == 'offline' else {'stopped': budget['stopped']},
                 'capabilities': [
                     {'title':'版本对比','description':'比较两次游戏更新后，玩家开始剧情的情况。重点看：已经可以开始剧情，但过了 3 天仍没开始的比例。','examples':[QUESTIONS[0]]},
                     {'title':'参与预测','description':'看看模型如何估计玩家未开始剧情的可能性，并了解哪些对象有预测结果。使用历史数据演示，预测不等于实际结果。','examples':[QUESTIONS[5],QUESTIONS[1]]},
@@ -127,7 +129,16 @@ class Service:
                     {'title':'指标说明','description':'看不懂某个数字？了解它是怎么算出来的、统计了哪些人，以及适合用来回答什么问题。','examples':[QUESTIONS[6]]}],
                 'capability_contract':public_capabilities(),
                 'queue_limit': self.queue_limit, 'questions': QUESTIONS, 'fault_questions': FAULTS if self.mode == 'offline' else [],
-                'mode_label': '模拟数据 · 示例体验' if self.mode == 'offline' else '自由提问', 'simulated_data': True}
+                'mode_label': '本地模式' if self.mode == 'offline' else 'DeepSeek', 'simulated_data': True}
+
+    def usage_attempts(self):
+        return read(self.runtime.ledger.path)['attempts'] if self.mode == 'live' else []
+
+    def public_job(self, db, row, after=0, attempts=None):
+        from web_api.usage import summarize
+        result = self.store.job(db, row, after)
+        result['usage'] = summarize(self.usage_attempts() if attempts is None else attempts, {row['turn_id']}, self.mode)
+        return result
 
     def sessions(self, owner, create=False):
         with self.cv, self.store.connect() as db:
@@ -140,7 +151,11 @@ class Service:
     def session(self, owner, sid):
         with self.cv, self.store.connect() as db:
             row = self.owned(db, owner, sid)
-            return {**self.public_session(row), 'jobs': [self.store.job(db, r) for r in db.execute('SELECT * FROM jobs WHERE session_id=? ORDER BY created', (sid,))]}
+            from web_api.usage import summarize
+            attempts = self.usage_attempts()
+            jobs = [self.public_job(db, r, attempts=attempts) for r in db.execute('SELECT * FROM jobs WHERE session_id=? ORDER BY created', (sid,))]
+            return {**self.public_session(row), 'jobs': jobs,
+                    'usage': summarize(attempts, {j['turn_id'] for j in jobs}, self.mode)}
 
     def submit(self, owner, sid, text, idem):
         with self.cv, self.store.connect() as db:
@@ -148,7 +163,7 @@ class Service:
             previous = db.execute('SELECT * FROM jobs WHERE session_id=? AND idem=?', (sid, idem)).fetchone()
             if previous:
                 if previous['text'] != text: raise APIError(409, 'idempotency_conflict', '同一提交标识不能用于不同问题。')
-                return self.store.job(db, previous)
+                return self.public_job(db, previous)
             if self.stopping or session['status'] != 'open': raise APIError(409, 'read_only', '对话已结束或只读，请新建对话。')
             if db.execute("SELECT 1 FROM jobs WHERE session_id=? AND status IN ('queued','running','cancelling')", (sid,)).fetchone():
                 raise APIError(409, 'busy', '此对话仍有任务在执行。')
@@ -158,6 +173,8 @@ class Service:
                 if candidate.get('routing'):
                     previous=candidate;break
             decision=route(text,self.mode,previous)
+            from task13_runtime.request_scope import contract
+            decision['scope_contract']=contract(text,((previous or {}).get('routing') or {}).get('scope_contract'))
             local=decision['kind'] in ('guidance','clarification','out_of_scope')
             if not local and self.budget()['stopped']: raise APIError(409, 'budget_stopped', ERRORS['budget_stopped'])
             if not local and db.execute("SELECT count(*) FROM jobs WHERE status='queued'").fetchone()[0] >= self.queue_limit:
@@ -168,14 +185,14 @@ class Service:
             db.execute("UPDATE sessions SET title=? WHERE id=? AND title='新对话'", (text[:40], sid))
             self.transition(db, jid, decision['kind'] if local else 'queued', answer={'status':'control','message':decision['message'],'choices':[{'text':c['text']} for c in decision.get('choices',[])]} if local else None)
             self.cv.notify_all()
-            return self.store.job(db, db.execute('SELECT * FROM jobs WHERE id=?', (jid,)).fetchone())
+            return self.public_job(db, db.execute('SELECT * FROM jobs WHERE id=?', (jid,)).fetchone())
 
     def job(self, owner, jid, after=0):
         with self.cv, self.store.connect() as db:
             row = db.execute('SELECT * FROM jobs WHERE id=?', (jid,)).fetchone()
             if not row: raise APIError(404, 'not_found', '记录不存在。')
             self.owned(db, owner, row['session_id'])
-            return self.store.job(db, row, after)
+            return self.public_job(db, row, after)
 
     def evidence(self, owner, sid, tid, eid):
         with self.cv, self.store.connect() as db:
@@ -321,6 +338,14 @@ class Service:
                         self.transition(db, jid, 'partial' if limitations else 'succeeded', answer={'answer_markdown': answer['answer_markdown'], 'status': answer['status'],'limitations':limitations})
             except Exception as exc:
                 code = getattr(exc, 'code', '')
+                if code == 'scope_authority':
+                    # No mismatched facts are published; keep the conversation
+                    # available for an explicit registered filter from the user.
+                    with self.cv,self.store.connect() as db:
+                        if db.execute('SELECT status FROM jobs WHERE id=?',(jid,)).fetchone()[0]=='running':
+                            reply=control('clarification','filter')
+                            self.transition(db,jid,'clarification',answer={'status':'control','message':reply['message'],'choices':[]})
+                    continue
                 category = ('timed_out' if isinstance(exc, TimeoutError) else 'offline_unsupported' if str(exc)=='offline_unsupported'
                             else 'asset_missing' if code in ('asset_integrity', 'knowledge_integrity')
                             else 'quota_reached' if code in ('model_limit','tool_limit','session_budget')

@@ -76,11 +76,12 @@ def main():
                     print(canonical({"new_session": session.id}), flush=True)
                     continue
                 require(set(command) == {"op", "turn_id", "text", "require_rule_discovery"}
-                        and command["op"] == "turn" and type(command["text"]) is str
+                        and command["op"] in ("turn", "repair") and type(command["text"]) is str
                         and type(command['require_rule_discovery']) is bool,
                         "command", "driver accepts plain-text turns and a boolean host discovery prerequisite only")
                 require(secret not in command["text"], "credential", "credential text cannot enter DSH messages")
                 replace(cfg["turn_file"], {"turn_id": command["turn_id"], "stopped": False,
+                                        "answer_repair": command['op']=='repair',
                                         "require_rule_discovery": command['require_rule_discovery']})
                 start = time.monotonic()
                 def notify(notification):

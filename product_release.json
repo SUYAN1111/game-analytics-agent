@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product15cf828e8a27a0de29db6a7977",
+  "release_id": "product1585f71c7fb1bb8058a48f9f82",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -269,8 +269,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "fa8f9c96df1074cdd311d7d2e02874e8ff5b8607fc868d5c361033af530a9645",
-      "size": 12761
+      "sha256": "a5eb6fb13d659d2bb7e66cd0b449f095ae26dbd77cb1dee11d66b584840ca5af",
+      "size": 14577
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -433,12 +433,28 @@
       "size": 11223
     },
     "docs/AGENT_SCOPE.md": {
-      "sha256": "b3f46b561024d7180fd296e0387d06d3103b1e5a2e8ca2cfb3cc1b3076f11b43",
-      "size": 3849
+      "sha256": "ee4983c338e6103913b70daa5d91c3666180e9a95c435ff0f4bc163d84e6f281",
+      "size": 4272
+    },
+    "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
+      "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
+      "size": 9146
+    },
+    "docs/LIVE_REPAIRS_2026-09-18.md": {
+      "sha256": "fff7abfe80895ba946307635b3688c792ae31c24203a78c3fa756f48a995c149",
+      "size": 4849
+    },
+    "docs/LIVE_VALIDATION_2026-09-18.md": {
+      "sha256": "5fd27c0fe10f025bb789c9c17a6f55560c52928a38b6dd096aa2c1be3b78d037",
+      "size": 8944
     },
     "docs/UX_PHASES.md": {
-      "sha256": "5432666eeaaa8c8344cb238ca239413184cf0cd88a16ebe4b90ba5e634844670",
-      "size": 15746
+      "sha256": "2e91216038c825d3e9db176d021c7e8640f9185a8cf94661ffd5ec50138e9d1f",
+      "size": 20751
+    },
+    "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
+      "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
+      "size": 4856
     },
     "docs/analysis-methods.md": {
       "sha256": "66fe86ad64e8e00567f7c21d567bfc9930ab688845283029b5ffb408e0e54d3d",
@@ -453,8 +469,8 @@
       "size": 3265
     },
     "docs/web-api.md": {
-      "sha256": "28368c52c164bd8be2c8de4338047f681325f6f069bf3c59ea75c878968fc46b",
-      "size": 4654
+      "sha256": "90649bb7e4c48db9f123349723b9ae88c318b0a553458f69123742b9ed955837",
+      "size": 5922
     },
     "features/__init__.py": {
       "sha256": "fdf09d860166d1c510348ecc8ed6f30ad10ea42492dc7077de206dc910f369ed",
@@ -632,6 +648,10 @@
       "sha256": "6032410b75a7211e7b53dc9d074dae8addb27000c2605c5196e075954930d494",
       "size": 2919
     },
+    "scripts/check_public_usage.py": {
+      "sha256": "242c646c9e05b002a04b21d5ad72db0d4b2e35c43331da6a4e318dd4caefe696",
+      "size": 3174
+    },
     "scripts/check_scope_routing.py": {
       "sha256": "a9b20b51f33d100739d1b34af6311e9bb7d9034b1dcd20b57ab88de975b25cff",
       "size": 6113
@@ -641,20 +661,20 @@
       "size": 1448
     },
     "scripts/seal_release.py": {
-      "sha256": "d9ff8de44980e24e7c36ede1972116466d476cc20c3c9f22fbe33e33a863f509",
-      "size": 2231
+      "sha256": "84a14f9083503e02271488cb7556b514edc6507b11012ff457d478ba6771b3f4",
+      "size": 2279
     },
     "scripts/source_test_fixtures.py": {
       "sha256": "c03fdfc30bec0041e0743ee27ced4aa62f2aa70ea9c297da5a431d616b07d2cb",
       "size": 3102
     },
     "scripts/start-web.ps1": {
-      "sha256": "22b69c0a29802c59c460dd58b2627522b9d2d5193a6500f239ccfa4ad7074008",
-      "size": 2124
+      "sha256": "fdfed8909df8e6b2c8755074c08fc6d769f5d028bdb38c8cfa96ed68e1ee1127",
+      "size": 2814
     },
     "scripts/stop-web.ps1": {
-      "sha256": "655a89bc506b6fbf9ce87cc68a2dba7b29ea904c53c220a65db5fb200983e786",
-      "size": 603
+      "sha256": "dc8e4ab77c5891056858723a08f43e0b9b1f8423b886d0021f31487dee0e782f",
+      "size": 602
     },
     "scripts/verify-web-key.ps1": {
       "sha256": "13973eef37cd35762c93e4046b03c8d25dc1ab8c8959e1d09a889cdd3542ee6a",
@@ -664,9 +684,13 @@
       "sha256": "0cc13d6c2b180f150b5b21da595c2c2b0e42c149d0b0c40c5b2eeaec0a264ac2",
       "size": 2189
     },
+    "scripts/verify_live_repairs.py": {
+      "sha256": "46ed4d97de1fa77003a485b860ee9e1c4d3856901354a1a2030e1c730ced5aee",
+      "size": 6850
+    },
     "scripts/verify_web.py": {
-      "sha256": "aadae21a6d40c6e4ff10bc53611219925895cdc3b9dd5bdadbb4e9718ca6ac37",
-      "size": 11722
+      "sha256": "018750ddf70f88cd7e34849e681c422f89c015356c25d3c8ceda0845467278bf",
+      "size": 11740
     },
     "segmentation/__init__.py": {
       "sha256": "8175625b3658efeabdf5c433202159538da4671906f9e4209ab8e7bb11953d3b",
@@ -809,12 +833,12 @@
       "size": 385
     },
     "task13_runtime/dsh_driver.py": {
-      "sha256": "5f8af4b91d07e0de5a7a3d024256c59f12d713bd97b737de8dad3235e3938bac",
-      "size": 7274
+      "sha256": "c73ac9b4d4aef54ee1b8c9c5222f48b8bdfc0c7a7677badba22c2c8fe1a63150",
+      "size": 7368
     },
     "task13_runtime/dsh_plugins/task13.mjs": {
-      "sha256": "29d843f68dbd2e82a78da2ee2fbf298f592319edae4df80a857f5e8d909ab2a5",
-      "size": 19034
+      "sha256": "989f15b4fd22ca12e6e412c0a71f71438dba005dfc16813894397908f4a50c58",
+      "size": 19592
     },
     "task13_runtime/dsh_profile/task13.patch.yml": {
       "sha256": "f1cecd6ae577db77015f849e43dc39a25ce9fbd943f46bfef3669ddb0e501976",
@@ -825,8 +849,8 @@
       "size": 1544
     },
     "task13_runtime/host.py": {
-      "sha256": "aa2951e76c0a737c929f24fdf5593f5d0049151849121f5e1ff730186ed39a48",
-      "size": 12360
+      "sha256": "aca12090676fa7e24c47db406f78211653063ece6a1d9b6ee932b8bdfb1743df",
+      "size": 14714
     },
     "task13_runtime/launch_mcp.py": {
       "sha256": "5a82daf54149a3a8e3d087e99892bd52759a5b7541e8292fed3b231a75c9b72f",
@@ -844,6 +868,10 @@
       "sha256": "afad94450966682ca2e26a891e2cbe4369db358fdab18c6e1620de57bce5be12",
       "size": 2158
     },
+    "task13_runtime/request_scope.py": {
+      "sha256": "8d44513ddd2c43cf75d4c7a06aeab6661ebc2028b5099a8456a9ae3f7fa8cecd",
+      "size": 5330
+    },
     "task13_runtime/state.py": {
       "sha256": "830df291718cad127d12142560da201bde275535bcf45732fac402ddebbd9e9c",
       "size": 3123
@@ -857,8 +885,8 @@
       "size": 16232
     },
     "web/browser-delete.mjs": {
-      "sha256": "095e35da689009d696502cb3a7a6477af46b627ddb65d23bd0571db618c42d9b",
-      "size": 7558
+      "sha256": "25c35efdf8e05453899ccee3aa1043d115672e2854830a92385293f5eb3d54c8",
+      "size": 7576
     },
     "web/browser-execution.mjs": {
       "sha256": "1ed45757a9e526d4bff99fbf0362f1e9a77b388c1297a43d6070aa30a176e98d",
@@ -877,8 +905,8 @@
       "size": 5817
     },
     "web/build-manifest.json": {
-      "sha256": "583bec598aac8a1eda75a101e8cffc6aa4db6794f4ac48278fba4132b52c6ddc",
-      "size": 689
+      "sha256": "d67f2c92d88ff79655ac7684da13ef7d5e611923cc0f1f298763ce2226559022",
+      "size": 15996
     },
     "web/index.html": {
       "sha256": "b8d20c6f4185a482fd08b8b24c9a8ce8bdcc10c23e232c4aa0e9aff9d1687b78",
@@ -896,13 +924,425 @@
       "sha256": "6bf753b1315535e213ceee71a9cd3afd9ee64b7e7e26223596fbd44822c382ff",
       "size": 417
     },
+    "web/public/fonts/OFL.txt": {
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "size": 4388
+    },
+    "web/public/fonts/noto-sc-031bdd855231.woff2": {
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c",
+      "size": 52464
+    },
+    "web/public/fonts/noto-sc-0465e227a44b.woff2": {
+      "sha256": "0118ec5d8c30b1971a59ec5982f3eeee3e687a40ef5b79108e99e5d82fa67aa9",
+      "size": 48132
+    },
+    "web/public/fonts/noto-sc-053089b6f5f6.woff2": {
+      "sha256": "56ae1a59a32e4a258336c6d100d5288f3d1ece6f9e4f2bb3ec0548c289ede761",
+      "size": 57648
+    },
+    "web/public/fonts/noto-sc-07ab20a5532b.woff2": {
+      "sha256": "7d4afb70f641781cfe859e18b81b5b641fb76872fb44760e9314e76fa6b42e3f",
+      "size": 49156
+    },
+    "web/public/fonts/noto-sc-0aafdd4c8e80.woff2": {
+      "sha256": "bae74acc629d2e7484c66fd9bb0614df5bf3e98c39811d9e7e9222845a1c4b62",
+      "size": 62636
+    },
+    "web/public/fonts/noto-sc-0baf1cf72ad3.woff2": {
+      "sha256": "5e52856457c5cdaba991d72419e6f419f6627a5231b674275b8152f691328a33",
+      "size": 2080
+    },
+    "web/public/fonts/noto-sc-0c999a4eced7.woff2": {
+      "sha256": "5932d441e7126669016ce303fb19247ff258622291f13069124eb9b91304bbf9",
+      "size": 10008
+    },
+    "web/public/fonts/noto-sc-0d0510b6aab9.woff2": {
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923",
+      "size": 61588
+    },
+    "web/public/fonts/noto-sc-0d665a295b89.woff2": {
+      "sha256": "5b9ef1ed48420aa7b9da1fbc18c4a4dfd3d4edf1c6b8aab89cf12b40913335a3",
+      "size": 46628
+    },
+    "web/public/fonts/noto-sc-0ef9be124604.woff2": {
+      "sha256": "30aee47f660fd88a68fee63052ce8f3746e78e606813de686b710692d7610529",
+      "size": 36416
+    },
+    "web/public/fonts/noto-sc-0f7bdd836bd9.woff2": {
+      "sha256": "71e5743bbd225b3d80426f1b9e1d45c61fa7265aa453e2d22181944ec52569ff",
+      "size": 47548
+    },
+    "web/public/fonts/noto-sc-1148db23dbf3.woff2": {
+      "sha256": "ec0014830db682b682120085e07476df857d016fa7bb1b4bb3dfe82113819a10",
+      "size": 45540
+    },
+    "web/public/fonts/noto-sc-1430491100e1.woff2": {
+      "sha256": "a99d55c00e4f95b79ccc545fcd5464428edb7127670eaed421003473fd4ede7f",
+      "size": 42236
+    },
+    "web/public/fonts/noto-sc-1d57717e8c63.woff2": {
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd",
+      "size": 57648
+    },
+    "web/public/fonts/noto-sc-1ebbd182efd3.woff2": {
+      "sha256": "a901edf25bc1cfae0fc4c474fce9f8783e93a46b9e88a1cb1cb1301feb1cbdb2",
+      "size": 59112
+    },
+    "web/public/fonts/noto-sc-22fb89bf67df.woff2": {
+      "sha256": "8c5094c3785fd04f84142ebc0362d835cce48e56b13e90d9900ddce5f9fe060f",
+      "size": 46176
+    },
+    "web/public/fonts/noto-sc-23574a2d4f96.woff2": {
+      "sha256": "1f76f6ffded00b9ead063038ebfd5019ad334ffeb7035dda3aa33f4dd1bb7adc",
+      "size": 54656
+    },
+    "web/public/fonts/noto-sc-25bd190778a7.woff2": {
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262",
+      "size": 56508
+    },
+    "web/public/fonts/noto-sc-2b2e94e96649.woff2": {
+      "sha256": "7623501009e4a6db7c2d5a635f57099da3e78de33fa85cccdf8d3c1596064ccb",
+      "size": 55496
+    },
+    "web/public/fonts/noto-sc-2c18b4d9414d.woff2": {
+      "sha256": "77037ed42ff4e7b0e5cc296cabe4f0580d1d518239a4a067c00ff8097f60819f",
+      "size": 65384
+    },
+    "web/public/fonts/noto-sc-3039dc8a322e.woff2": {
+      "sha256": "65b77f1fe9d68dae692578370f64b50ace8469fcf737b34d8b4cdfabed344f23",
+      "size": 41568
+    },
+    "web/public/fonts/noto-sc-312873494df3.woff2": {
+      "sha256": "6d3ac3e20959dbcb9c0f4fbe786a2fc4040f565577b35a13275959eec27a9ae0",
+      "size": 33576
+    },
+    "web/public/fonts/noto-sc-315f3bacece8.woff2": {
+      "sha256": "38d0df21ac374e938a5c885f50a80b7be2dbab9a34803462a4f2c6c6fa777128",
+      "size": 56792
+    },
+    "web/public/fonts/noto-sc-3424382b7c11.woff2": {
+      "sha256": "cba3d00c8db989f0f0c3c7c48b1672468d9cb3c8c06514fc5cf1bb82ddccae7e",
+      "size": 9096
+    },
+    "web/public/fonts/noto-sc-348a1262a1d0.woff2": {
+      "sha256": "9fafd93ac77b81ffdeeb30c31e7d5911eb5b6a0a976b54c6e418eec8701a97e2",
+      "size": 3796
+    },
+    "web/public/fonts/noto-sc-37d9b85e8252.woff2": {
+      "sha256": "b05afdd32b3bf722adac4b2c936a3c3390fb4b6b8adc20a132a0b42cb9c23e83",
+      "size": 56156
+    },
+    "web/public/fonts/noto-sc-3bccb7459751.woff2": {
+      "sha256": "ff21d8fcc60ce39145c09da40c66f190dbb52b4b5ae6de1861dcaf15f87ef497",
+      "size": 54008
+    },
+    "web/public/fonts/noto-sc-3cb0b4fa2d6e.woff2": {
+      "sha256": "e87e0a1342e1778c69040e768b5ad1d615068cec94579ba0176a875cb4170bde",
+      "size": 26900
+    },
+    "web/public/fonts/noto-sc-403b7fdb64b5.woff2": {
+      "sha256": "382f72b98d4bb9d7006109efa128aedf846904490b52a5d4f1db151a73718faf",
+      "size": 8704
+    },
+    "web/public/fonts/noto-sc-42d34494e9b4.woff2": {
+      "sha256": "0cda750d7d04a4e12e4b2ea1d78c0a3ec430b5c07e02b87064e809ff75d76998",
+      "size": 52548
+    },
+    "web/public/fonts/noto-sc-4519341d4f82.woff2": {
+      "sha256": "7c445e85d04f5319eda4b07329a71f5e468fb7906547d34150b819916d2f6d31",
+      "size": 36788
+    },
+    "web/public/fonts/noto-sc-4759ba6147a8.woff2": {
+      "sha256": "e316201f3fc493d191136a3ea728d184227b9651aea2bb38e279c45ef58646a7",
+      "size": 8244
+    },
+    "web/public/fonts/noto-sc-4810a9e6b36e.woff2": {
+      "sha256": "8cdb9903f770db21bd3d17eab6a1dd7d302b47f7eab059b2ff814d9593ce2526",
+      "size": 67620
+    },
+    "web/public/fonts/noto-sc-491733eec7be.woff2": {
+      "sha256": "8df409a4e0a237c21db73608de96e2ae49c53de50826098d050a0e2cca867836",
+      "size": 53528
+    },
+    "web/public/fonts/noto-sc-4e260cc3ba0f.woff2": {
+      "sha256": "3ed54e59ef4758e3cf1f81d9dd5ac9197ba8a7071ec8c0d69e2d52b2a2826be6",
+      "size": 32612
+    },
+    "web/public/fonts/noto-sc-4f9677a4373c.woff2": {
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0",
+      "size": 61472
+    },
+    "web/public/fonts/noto-sc-503405f23c08.woff2": {
+      "sha256": "83b0a59e0a5e045a44b1819d98795bee83684f746844f6fc4ebf448db3d53d39",
+      "size": 9344
+    },
+    "web/public/fonts/noto-sc-53718f4481a1.woff2": {
+      "sha256": "fd4df1f02c2cb4d7db99d2d35225561f9695483f5f829e0f6667adac4bbe7ff6",
+      "size": 41616
+    },
+    "web/public/fonts/noto-sc-5591740d4401.woff2": {
+      "sha256": "672d2d994994a3c39072fbbc4a40f0e25424ab2ff36ec63f3b55849d1ab8a650",
+      "size": 54592
+    },
+    "web/public/fonts/noto-sc-5c429b7a2c9a.woff2": {
+      "sha256": "13e51063d7743cfe2d533620860719890426ef12f6fe036d50b3c1a8f41508e7",
+      "size": 45876
+    },
+    "web/public/fonts/noto-sc-5d6047b47712.woff2": {
+      "sha256": "ffded4e7fd560d935f847ddd084187a049bbaca55d1deea9d2e6daf153cdea5b",
+      "size": 3416
+    },
+    "web/public/fonts/noto-sc-5dd55dc81ab6.woff2": {
+      "sha256": "c9585f7d070700be0435c1014761af37cd512faa68ffc33341d1e4634abed682",
+      "size": 50764
+    },
+    "web/public/fonts/noto-sc-6322a04cb87b.woff2": {
+      "sha256": "a6b0e11c4c761ffda2e693d037f1384af67b6a338f81a8c0fcd7aa4eea9a177c",
+      "size": 52584
+    },
+    "web/public/fonts/noto-sc-6661c1d24a8e.woff2": {
+      "sha256": "4a60a1ccba9052841d6f22a1d8d84a553184689b1de4c3dc6bcaa654c2c91ef6",
+      "size": 43504
+    },
+    "web/public/fonts/noto-sc-68aa32e5fbe5.woff2": {
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17",
+      "size": 60372
+    },
+    "web/public/fonts/noto-sc-6918b74fa16e.woff2": {
+      "sha256": "c1d919c8701a86ed7f33a8044f7c4e5675db2fce8b754091e97b2c0792f9782c",
+      "size": 25240
+    },
+    "web/public/fonts/noto-sc-691df0b64069.woff2": {
+      "sha256": "4943895a4dfa5dcf427429a13e1c56bb3fd344c1dd7b1ad927b9d6743e358ac0",
+      "size": 52844
+    },
+    "web/public/fonts/noto-sc-6b6ca9715a25.woff2": {
+      "sha256": "d9a4bb7bcc2be578e52835906301f04f6caf285ffcd299065521830529532fd6",
+      "size": 43940
+    },
+    "web/public/fonts/noto-sc-6fd4f4f75aac.woff2": {
+      "sha256": "e7ac1d4930eabd781b541d961576a89b49580cdf336ca2413e0eb7709b41e72a",
+      "size": 39312
+    },
+    "web/public/fonts/noto-sc-7a78ee3d4a0e.woff2": {
+      "sha256": "a42eff5010de7b0d6922a14734dd06c9b495655ac6e4397506f44c8e3eaee10c",
+      "size": 61076
+    },
+    "web/public/fonts/noto-sc-7ecbad9683e6.woff2": {
+      "sha256": "c1409c43e55ecff21bd7eee9327e71a6f4c66449842861b368dcdfe14445aab3",
+      "size": 11356
+    },
+    "web/public/fonts/noto-sc-80f40ab08701.woff2": {
+      "sha256": "6590d0a6fe94571cfb84a6d9536e0f58b6a6164643ffa339d3c1788835c96147",
+      "size": 57668
+    },
+    "web/public/fonts/noto-sc-833e1bc94f52.woff2": {
+      "sha256": "e64f57937e3ae4feb9dd073d6a5257a74fda82575060718a162c95c8c09ef2ae",
+      "size": 20176
+    },
+    "web/public/fonts/noto-sc-83c7d72fb38e.woff2": {
+      "sha256": "acaa6195041b1a928d35c7e80365a4e653ffc5cba556c0a1443ee3a561228eb8",
+      "size": 54244
+    },
+    "web/public/fonts/noto-sc-867dff649411.woff2": {
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1",
+      "size": 46192
+    },
+    "web/public/fonts/noto-sc-871a1889c434.woff2": {
+      "sha256": "b34f765cbbf4d02e71cc0d3ea9d488ad4a9da2bcea08f4c84a74e6ec82877f06",
+      "size": 55604
+    },
+    "web/public/fonts/noto-sc-87e4943be5d1.woff2": {
+      "sha256": "7a377a40e99fd9bc3b1eb38517f08c4ac09520437bed24c3d3a39e2b64ff0ee9",
+      "size": 47676
+    },
+    "web/public/fonts/noto-sc-8aacbd85649d.woff2": {
+      "sha256": "38aa326b4c84902a342b4225a452a7ca3ac32ebf40792663d7db2013c22bee9d",
+      "size": 46888
+    },
+    "web/public/fonts/noto-sc-8b248fc8272e.woff2": {
+      "sha256": "b1d9582dfa2684636af41b19f0e2b397f8200337e0302dcaac3638ad431b7000",
+      "size": 7336
+    },
+    "web/public/fonts/noto-sc-8eede11e2c74.woff2": {
+      "sha256": "6479166925eb462be1a74ad446099719e8021949abf5c3eafefd9ad290836b9c",
+      "size": 52868
+    },
+    "web/public/fonts/noto-sc-9550dd0bd06a.woff2": {
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269",
+      "size": 62664
+    },
+    "web/public/fonts/noto-sc-960edfc1b707.woff2": {
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335",
+      "size": 61828
+    },
+    "web/public/fonts/noto-sc-9a65118fc8d1.woff2": {
+      "sha256": "4895abcaddbd162e48a212dd75c270d3ba1706519f527dff5fd7ec47dfa64dfd",
+      "size": 47488
+    },
+    "web/public/fonts/noto-sc-a13743d3230c.woff2": {
+      "sha256": "82540b6201a9b9ade19206b3e6e9ba65038e6ab5d8b61952352d87b92978f967",
+      "size": 50200
+    },
+    "web/public/fonts/noto-sc-a17df0905920.woff2": {
+      "sha256": "3298bed30dc8d23323c0ba9cab32aa4088d39f5316d126b5cbdabd56884a5f01",
+      "size": 47904
+    },
+    "web/public/fonts/noto-sc-a3d9161acf4c.woff2": {
+      "sha256": "5a019946bcadcec6e510d2786b1a490a8ca4442c849e3fbf6251bdc06a7e1f47",
+      "size": 48420
+    },
+    "web/public/fonts/noto-sc-aba6606e6b14.woff2": {
+      "sha256": "1f0287be83a28e7ac104beb7f1b12ea6c0f327dd2dcd50033fb11c4aba123734",
+      "size": 56424
+    },
+    "web/public/fonts/noto-sc-ad43b2180205.woff2": {
+      "sha256": "0eeffd5daad5c17bba306e06e89e93ac563a497c806c0fa1d4c3a53a8ffa4225",
+      "size": 8012
+    },
+    "web/public/fonts/noto-sc-aed2ddb2e81d.woff2": {
+      "sha256": "4cd00537a46f6f1acaf2762a59176e059062d7259217a8a85a589df775531ea6",
+      "size": 52000
+    },
+    "web/public/fonts/noto-sc-b12946d09196.woff2": {
+      "sha256": "b9732b5606bd87c51942e5f56270d26495f2bc22a157493725417af2c70c265e",
+      "size": 47452
+    },
+    "web/public/fonts/noto-sc-b319733b26c1.woff2": {
+      "sha256": "92f56f713cc0b62f1cbbbc3533b957cff5d2db2abdb4b45a173564011d217ddc",
+      "size": 49180
+    },
+    "web/public/fonts/noto-sc-c0d4f4088af5.woff2": {
+      "sha256": "ad5f29028d5699a59688d807fda531f23cb2c1ecd7815495853bbae8e75b8646",
+      "size": 64548
+    },
+    "web/public/fonts/noto-sc-c2c438e9296a.woff2": {
+      "sha256": "f760b7a3871d214d421b378faa2e27a763bc632000f983964a837f2323665f1d",
+      "size": 58320
+    },
+    "web/public/fonts/noto-sc-c3aa2e199b36.woff2": {
+      "sha256": "54e302c23f11a8fd518f0948183800ac954315067f0990eed41b9c91e55761ef",
+      "size": 9704
+    },
+    "web/public/fonts/noto-sc-c41aef9d0114.woff2": {
+      "sha256": "4929c9f39a5a4bd941050c7358e1556e57cef901b8c75503453e62c23ede281c",
+      "size": 41540
+    },
+    "web/public/fonts/noto-sc-c4fcd091b01d.woff2": {
+      "sha256": "06999a39c4c3a7ea279822ec42aeaf7e2f99d4047e4f8b7c48254158b7e293fa",
+      "size": 51840
+    },
+    "web/public/fonts/noto-sc-c6ee32ce09ed.woff2": {
+      "sha256": "6597209ca97077267b65fc072819325eb5a6d3787791d193cc481b3a71fb1b76",
+      "size": 47032
+    },
+    "web/public/fonts/noto-sc-c700cbbc8bdd.woff2": {
+      "sha256": "0db1ca695a491d372060eba39ae66b1816457e8992698fbaacd35cc0f7786658",
+      "size": 41832
+    },
+    "web/public/fonts/noto-sc-c8ce03939619.woff2": {
+      "sha256": "be8386e7bd7facfe78886db838ece2fac15056ef9ea6c48d631054460cd37c6f",
+      "size": 50888
+    },
+    "web/public/fonts/noto-sc-c929f58c6d9d.woff2": {
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb",
+      "size": 76800
+    },
+    "web/public/fonts/noto-sc-c9bfd78b4147.woff2": {
+      "sha256": "bd98226c8e0aa80876366386a23e909087df5d6b570f48b2366a8849a3ca137b",
+      "size": 50688
+    },
+    "web/public/fonts/noto-sc-ce1c27f68f43.woff2": {
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602",
+      "size": 57964
+    },
+    "web/public/fonts/noto-sc-cf1c2dd6f3fe.woff2": {
+      "sha256": "e6c25be1bb08a63a0f4cd0cea425fc90b65df538be8505e3cf4010bec2853b64",
+      "size": 47220
+    },
+    "web/public/fonts/noto-sc-d15cefa6a6c7.woff2": {
+      "sha256": "8fa21e7e457acf3e8ca2e0561d5df4dd26cf0824a27a721c2b831b202e88e195",
+      "size": 62580
+    },
+    "web/public/fonts/noto-sc-d8d7eeaa2558.woff2": {
+      "sha256": "272d6d0e153f56e8ab7d9412ca1e8581c06ce371641cf863859a0ab01751c1ea",
+      "size": 51784
+    },
+    "web/public/fonts/noto-sc-d96a1bfa4577.woff2": {
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a",
+      "size": 58204
+    },
+    "web/public/fonts/noto-sc-d9dfb6ba5309.woff2": {
+      "sha256": "db887159ca6e46f3f2787f7a1037940805bb7db727fd3a7ee2bdf9fb47f74469",
+      "size": 32632
+    },
+    "web/public/fonts/noto-sc-daae8bb6f172.woff2": {
+      "sha256": "8daa61282fb62a111c17f896b12429a43a3d60bd5f2eceb8c5a4f7d57a26d83c",
+      "size": 41608
+    },
+    "web/public/fonts/noto-sc-db4708b086d1.woff2": {
+      "sha256": "941c0c2971fc1d6d1e36c3d40d74e6a133ad02f58f0bc3a9cb265d8a60f3eb31",
+      "size": 60708
+    },
+    "web/public/fonts/noto-sc-dcc356f7293d.woff2": {
+      "sha256": "5798753a721bb4eccbf7d9ca923d2496524009a6c27c4bfc36e2b27f0251ee59",
+      "size": 41232
+    },
+    "web/public/fonts/noto-sc-e0ea3ef26dc5.woff2": {
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d",
+      "size": 64552
+    },
+    "web/public/fonts/noto-sc-e1e11eed1b89.woff2": {
+      "sha256": "8b437aeb9e9fcb5aa31bd8565986f92cb7c43dbf1ac3763531b8b384fcda7290",
+      "size": 10984
+    },
+    "web/public/fonts/noto-sc-e560b4cd196e.woff2": {
+      "sha256": "23919a2eb11d25dd3a78c020ecc337c9c72b8ca760412f5b4cd567cc43b776ba",
+      "size": 45276
+    },
+    "web/public/fonts/noto-sc-e5ced97a28f4.woff2": {
+      "sha256": "767b7b9864658d91d81787ebeac555cb9d67ec920002845061516dd87fa1b95f",
+      "size": 43528
+    },
+    "web/public/fonts/noto-sc-eaaed9cbfa77.woff2": {
+      "sha256": "3657f66babdf6aff2d2ca3cbadf7bcdce820bda6be7c765d909afee8e74dad5c",
+      "size": 41432
+    },
+    "web/public/fonts/noto-sc-eaee82cb3414.woff2": {
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503",
+      "size": 58648
+    },
+    "web/public/fonts/noto-sc-f14ed3e3b6d0.woff2": {
+      "sha256": "a3e4a78929826930956ef1e3b3c1c329815d75c88f67296c4ffeac203e2cb544",
+      "size": 53500
+    },
+    "web/public/fonts/noto-sc-f4e95cf2507c.woff2": {
+      "sha256": "17e15c4f0a5bfd92e65a65d285833633f2cc8d4a51a8ba6a2080663989123d7e",
+      "size": 11464
+    },
+    "web/public/fonts/noto-sc-f68452c58c3d.woff2": {
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d",
+      "size": 52984
+    },
+    "web/public/fonts/noto-sc-f7b2e0e32562.woff2": {
+      "sha256": "bafbd591af6493fface8ee91ca8701cd227f18b1636c5a380c1dbd84cd79b92d",
+      "size": 63864
+    },
+    "web/public/fonts/noto-sc-fad77b533253.woff2": {
+      "sha256": "43df2b5dad9bb8353549d68023297605443f251f1f846a9cb2e5363b84aacd0b",
+      "size": 46624
+    },
+    "web/public/fonts/provenance.json": {
+      "sha256": "eaf8ed89f37459d008d2daddd1a3258c7b60f36824fa9ece111ca6e4b511770a",
+      "size": 30830
+    },
     "web/src/analysis-methods.ts": {
       "sha256": "78a290fa15a822da11bcf146402234cec13c0ddea8ba4b5535454be76998118c",
       "size": 8391
     },
     "web/src/brand.tsx": {
-      "sha256": "97ecd96743dc667ad7f46b6d0410d6eaffd7f5860caf9bce7632914ea4f6dbfc",
-      "size": 491
+      "sha256": "bdc547270883e8260524a594ee21f79069a13ea01823507a70aec7578205f59e",
+      "size": 444
     },
     "web/src/data-source.tsx": {
       "sha256": "ce782f92007b6e34dc8d470c3c4e772b4713b0032fbf4ad3d9f18e83c1683717",
@@ -924,9 +1364,13 @@
       "sha256": "f561e19cefa25707c4ff91b1d35f0d0d318bf2866937425b630db61a93e0e7e5",
       "size": 7531
     },
+    "web/src/fonts.css": {
+      "sha256": "feca79e4702f0b1aa67aa9e02ed77756a556a26f25732f8e6810e0f906a7c820",
+      "size": 104978
+    },
     "web/src/main.tsx": {
-      "sha256": "6f1359d4fce8f1e6bd6cec89750ad16ea2b95a781a2dfa61b6bf2eb223e6e2e0",
-      "size": 29975
+      "sha256": "833351c5e2a27feeaa5f4092c4b845b2dc0c41a07acb692e3c4fb41b02b10f10",
+      "size": 31510
     },
     "web/src/method-panel.tsx": {
       "sha256": "2b833f302c0bf9dd26f8e19973a9aa78618feb517352d9234ebb575aa59f44b5",
@@ -941,8 +1385,8 @@
       "size": 5206
     },
     "web/src/result-overview.tsx": {
-      "sha256": "2b8d3d981271f47ee1976bf8f2fb91750fdfb134579ce0c93d520bbc56ed1b3e",
-      "size": 7173
+      "sha256": "5e326eb7d04cece05a80d53b26110c8b9d3c326757fedeaf6fd94304afe6d86a",
+      "size": 7488
     },
     "web/src/results.tsx": {
       "sha256": "0e38e1530741c70bcc0dfc36aac07fd2d6d7bfb845559634297a91c3d7682f08",
@@ -956,9 +1400,17 @@
       "sha256": "e1072ab2da05a09ce9bb4f22687b5d9ba58eb2c207afdefc7b0282be4cbb6781",
       "size": 2997
     },
+    "web/src/studio.css": {
+      "sha256": "7a692567efbae4acf4f8b259bf626c72dd209e71d498e8d3f87d4db2eb0203d4",
+      "size": 16254
+    },
     "web/src/style.css": {
       "sha256": "801deedd4563f9776a35dc0061e7cfa439cdc7ab458c3d38384459ad9a4de393",
       "size": 7629
+    },
+    "web/src/usage.tsx": {
+      "sha256": "45437d77d972aa887b582673091ffdbb175707896561effa33cc7a623eb37cd6",
+      "size": 2842
     },
     "web/src/water.css": {
       "sha256": "c6263629fb60c28904fff60fd6652be0fe22e5d7e9b6457f512d1a2969296dbb",
@@ -985,8 +1437,8 @@
       "size": 68
     },
     "web_api/__main__.py": {
-      "sha256": "7a10d1b70bd651195ecd9a952d7fea0c18b9ac650c45ff97ea0c81b56cbaee18",
-      "size": 2062
+      "sha256": "6b9bc8388594cbcaf4e375f1c8eab770373accc85dd5944c1cb4671470dd2df5",
+      "size": 2100
     },
     "web_api/app.py": {
       "sha256": "6f9ff4387f66f1618a9dd6179aeb263813ed43f1cc26ac6e89aebbfded152f81",
@@ -997,8 +1449,8 @@
       "size": 607
     },
     "web_api/capabilities.py": {
-      "sha256": "4b365d7012dece947fcd8e29221d1989da529e7ff87482564315044206f5f135",
-      "size": 15746
+      "sha256": "64b8a65c2f5a7d4875aa0c46f188102b5714f32d56971128e38a0c10b526c55d",
+      "size": 16242
     },
     "web_api/evidence.py": {
       "sha256": "07361d3f5afce48faabca3de068459ab84479979aeed8180d6861142c10c4750",
@@ -1009,16 +1461,20 @@
       "size": 11022
     },
     "web_api/scope_prompt.md": {
-      "sha256": "f6a5e117ae49c4a300891a949c44f1a6d639d3b60d553625e2508b8809c4d7a1",
-      "size": 2318
+      "sha256": "2f7109a532008ea6f7c214d786eeef898629fff417d9b33285681caa55c616c3",
+      "size": 3238
     },
     "web_api/service.py": {
-      "sha256": "7eff5964c460d0ac2cade1d873179d30a408fe38682e50abc47aa248091ec11c",
-      "size": 24254
+      "sha256": "39cd318b0aba4e2de3def50258777e907760677e9b0f1b0321f877bbc4556fdd",
+      "size": 25759
     },
     "web_api/store.py": {
       "sha256": "0c6e7a6bb3ca9a3ce4f8b1cdbf2b2d72d7f94c022e037604720f6fa9f4d972ee",
       "size": 3517
+    },
+    "web_api/usage.py": {
+      "sha256": "3abd3f184259d2872d5ccca6b076b08d18aed281ec5f32633f20a30c1a2c8aa3",
+      "size": 1084
     }
   },
   "upstream": [

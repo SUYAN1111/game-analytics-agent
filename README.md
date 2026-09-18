@@ -2,10 +2,10 @@
 
 体验改版的阶段、细节、进度和下阶段提醒统一记录在 [四阶段体验改版记录](docs/UX_PHASES.md)。接续改版时先阅读该记录。
 
-四阶段体验改版已完成：提问与结果层级、真实执行反馈、视觉与动效、结果旁的算法说明。[分析方法说明](docs/analysis-methods.md) 记录各方法的实际来源及展示边界；真实 DeepSeek 联调仍是单独的待验证工作。
+四阶段体验改版已完成：提问与结果层级、真实执行反馈、视觉与动效、结果旁的算法说明。[分析方法说明](docs/analysis-methods.md) 记录各方法的实际来源及展示边界。2026-09-18 首轮真实 DeepSeek 联调发现四项问题，现已修复并通过六条针对性真实浏览器回归。详见 [修复与回归报告](docs/LIVE_REPAIRS_2026-09-18.md)；[首轮基线](docs/LIVE_VALIDATION_2026-09-18.md) 保留。随后完成了简洁工作台、中文字体及按对话/提问展示实际用量和预计成本，见 [工作台改版记录](docs/WORKSPACE_REDESIGN_2026-09-18.md)。用户已跳过性能/token 优化，并确定采用 **Vercel**；下一步是后台运行方式、资产与持久化适配及部署验证，当前尚未迁移或上线。此前的 [可行性检查](docs/FREE_HOSTING_AUDIT_2026-09-18.md) 保留为历史参考，不再以 Oracle 为下一步方向。
 
 本产品包含 Windows 本地分析核心、中文网页与 HTTP 接口。数据为固定模拟数据，服务仅监听本机。
-网页默认使用本地规则识别常见分析意图和参数，经真实 DSH/MCP 工具及宿主核验返回结果。问候和明确无关请求在本地处理；缺少范围或规则无法理解的表达会请求补充，不偷换为示例问题。能力边界、澄清及部分完成协议见 [Agent 能力边界](docs/AGENT_SCOPE.md)。未请求真实付费模型 API，任意自然语言理解仍待真实模型联调；原实验结论与 Task13 两组 19/24 不变。
+网页默认使用真实 DeepSeek 理解范围内的分析问题，经真实 DSH/MCP 工具及宿主核验返回结果。常见问候和部分明确无关请求仍在本地处理；只有显式选择 offline 才使用本地测试模式，调用失败不会自动切换为模拟模型。能力边界、澄清及部分完成协议见 [Agent 能力边界](docs/AGENT_SCOPE.md)。真实模型已证明可以处理部分自由表达和追问，也暴露了无依据范围映射、引用和纠正流程问题；原实验结论与 Task13 两组 19/24 不变。
 
 ## 本地网页
 
@@ -19,7 +19,7 @@ npm.cmd --prefix web run build
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-web.ps1
 ```
 
-离线启动（无需密钥）：
+正常启动（默认 DeepSeek，自动读取根目录 `.env` 中的密钥，分析请求会产生模型调用费用）：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-web.ps1
@@ -37,9 +37,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-web.ps1
 
 执行中取消会回收本会话所属 Windows 进程树，并结束整个对话；排队取消保留对话。确认回收前显示正在取消。取消/超时可能留下未知费用预留，按原合同停止该模式共享预算，不能假定费用为零。重启后历史回答及证据可读，但旧对话只读；未完成任务标为中断，不自动重发。
 
-网页元数据位于 `APP_STATE_DIR/web/{offline|live}/{period}/web.sqlite3`，预算位于同目录 `budget/`，默认周期 `default`。离线/live 完全隔离。重启同一周期不清零费用/预留/停止状态。需新周期时显式指定从未使用过的名称，例如 `-Period offline-demo-02`；保留旧记录，停止时使用相同 `-Mode` / `-Period`。不要通过删除账本解除停止。
+网页元数据位于 `APP_STATE_DIR/web/{offline|live}/{period}/web.sqlite3`，预算位于同目录 `budget/`，当前正常启动周期为 `live-main`，上限 4.90 元。旧 `live/default` 曾因受限网络导致首次请求失败，其 0.092122 元未知预留及停止状态完整保留；本次一次性恢复到新周期，两者上限合计仍小于原 5 元。离线/live 完全隔离。重启同一周期不清零费用/预留/停止状态，不自动创建新周期。停止时使用相同 `-Mode` / `-Period`；旧 default 周期需显式指定 `-Period default`。不要通过删除账本解除停止。
 
-真实模型入口（会使用 DeepSeek API；本次开发未调用）：
+真实模式启动前先做无密钥、不调用模型的 HTTPS 检查；网络不通会在创建服务和费用预留前报错。由开发助手启动时必须使用有外网权限的执行环境，不能只验证网页可打开就声称模型可用。2026-09-18 已完成相同版本比较问题的真实浏览器复测，4 次模型请求、预计成本 0.03423328 元，结果核验成功；截图在 `state/live-network-recovery/success.png`。
+
+真实模型入口（会使用 DeepSeek API 并产生费用；首轮联调问题见上方报告）：
 
 在项目根目录的 `.env` 中填写并保存一次密钥（没有此文件时可复制 `.env.example`）：
 
@@ -47,15 +49,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-web.ps1
 DEEPSEEK_API_KEY=在这里替换为你的真实密钥
 ```
 
-以后在项目根目录运行以下命令，会自动读取 `.env`，不必每次输入密钥。若默认端口正在运行离线服务，先执行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-web.ps1`，等待服务退出后启动：
+以后在项目根目录运行以下命令，会自动读取 `.env`，不必每次输入密钥。若默认端口正在运行离线服务，先执行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-web.ps1 -Mode offline`，等待服务退出后启动：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-web.ps1 -Mode live
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-web.ps1
 ```
 
-浏览器地址仍为 http://127.0.0.1:8765/ 。读取顺序为：现有进程环境变量 → 项目根目录 `.env` → 隐藏输入提示。修改 `.env` 后重启服务生效，无需重新构建或封版。不带 `-Mode live` 时仍为离线模式，不读取 `.env`。
+浏览器地址仍为 http://127.0.0.1:8765/ 。读取顺序为：现有进程环境变量 → 项目根目录 `.env` → 隐藏输入提示。修改 `.env` 后重启服务生效，无需重新构建或封版。启动和停止脚本默认均为 live；显式传 `-Mode offline` 才进入无需密钥的本地测试模式，该模式不读取 `.env`。直接执行 `python -m web_api` 也默认为 live，但要求进程环境已有密钥；日常使用上面的 PowerShell 启动命令即可。
 
-`.env` 是本地明文文件，已被 Git 忽略，也不进入前端构建或发布校验清单；手动打包分享项目时也应排除它。不要把密钥贴到聊天、网页代码或命令参数中。启动脚本只读取文件中的 `DEEPSEEK_API_KEY`，不执行文件内容；密钥传给后台进程，退出时清除脚本设置的环境变量。其他配置仍通过原有环境变量设置。页面不能切换模式、端点、预算或工具。默认 H0，H1 仅保留 Python 启动配置 `--summary`。真实 API 浏览器、Linux、Vercel、公网部署均未验证。
+`.env` 是本地明文文件，已被 Git 忽略，也不进入前端构建或发布校验清单；手动打包分享项目时也应排除它。不要把密钥贴到聊天、网页代码或命令参数中。启动脚本只读取文件中的 `DEEPSEEK_API_KEY`，不执行文件内容；密钥传给后台进程，退出时清除脚本设置的环境变量。其他配置仍通过原有环境变量设置。页面不能切换模式、端点、预算或工具。默认 H0，H1 仅保留 Python 启动配置 `--summary`。真实 API 已做本机浏览器小样本验收；Linux、Vercel、公网部署仍未验证。
 
 开发验证命令（仅离线；浏览器脚本会执行取消并可能停止测试周期，请在独立周期服务上运行）：
 
@@ -144,4 +146,4 @@ CLI 实际模型演示入口是 `python -B -m product_core chat --live --budget-
 Python open 审计、实际第一方模块路径、锁定环境与静态闭包共同验证原库独立性；这不是操作系统级隔离，也不能覆盖所有原生库系统调用。
 源码白名单包括必要的公开引用资料，有些原资料保留历史相对路径作为追溯说明，不构成运行读取依赖。
 网页使用最小浏览器 Cookie 所有权绑定，不提供注册账号或公网多用户服务。SQLite schema 已版本化，尚无跨版本迁移需求。
-Linux/Docker、真实模型回复、Vercel 与公网部署均未验证；跨平台运行需要另行移植和验收进程管理与预算通信。
+真实模型回复已做首轮小样本验收，仍有阻碍上线的问题。Linux/Docker、Vercel 与公网部署未验证；跨平台运行需要另行移植和验收进程管理与预算通信。
