@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "fluid": true,
+  "build": {
+    "env": {
+      "VERCEL_SUPPORT_LARGE_FUNCTIONS": "1"
+    }
+  },
   "installCommand": "npm ci --prefix web",
   "buildCommand": "uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py",
   "outputDirectory": "web/dist",

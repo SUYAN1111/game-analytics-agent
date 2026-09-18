@@ -42,6 +42,9 @@ def assets():
 def main():
     environment=f'{sys.platform} / Python {sys.version.split()[0]} ({sys.executable})'
     print('Cloud build environment: '+environment,flush=True)
+    large_functions=os.environ.get('VERCEL_SUPPORT_LARGE_FUNCTIONS') in ('1','true')
+    print('Vercel large functions build flag: '+('enabled' if large_functions else 'disabled')+
+          ' (VERCEL_SUPPORT_LARGE_FUNCTIONS).',flush=True)
     if sys.platform!='linux' or sys.version_info[:2]!=(3,14):
         raise SystemExit('Cloud build requires Linux / Python 3.14; got '+environment+
             '. Use the uv build command from vercel.json; the system python may have a different version.')

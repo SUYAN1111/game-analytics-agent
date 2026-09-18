@@ -58,3 +58,13 @@
 本次显式封版时额外登记 `vercel.json` 的规范 JSON 哈希，并保留原字节哈希。运行时只有该文件可在字节不一致时回退到全量 JSON 内容校验；不忽略任何字段，不接受额外字段、重复键、非有限数或数组顺序变化。业务源码和资产仍按原字节校验，发布锚点继续生效。校验移至安装依赖前，并在全部构建完成后重复检查；真正配置内容改变时会明确报 `JSON content changed vercel.json`，不会修改云端文件或重算发布锚点强行通过。
 
 新增 `scripts/check_release_integrity.py` 在独立源码副本上验证格式等价与负向篡改场景，并加入 Linux CI。18 项本地检查全部通过，包括原文件、压缩 JSON、CRLF、键重排，以及路由/请求头/时限/字段/类型变化、非法 JSON、重复键、缺文件、其他源码字节变化、将 JSON 例外套用到资产和清单锚点被改等拒绝场景。报告为忽略目录中的 `state/release-integrity-results.json`。此次未调用付费 API，尚待实际 Vercel 重试确认失败是否仅由序列化差异引起。
+
+## Vercel 函数包体超过 500 MB
+
+用户后续日志显示 `Total bundle size (774.37 MB) exceeds the maximum function size (500 MB)`，说明部署已进入 Python 函数打包阶段。当前阻塞是包体限制。只读核对官方 Python 打包器的 `dependency-externalizer.ts` 与 `large-functions.ts`：这条 500 MB 错误位于未开启 Large Functions 的分支，开关读取构建进程的 `VERCEL_SUPPORT_LARGE_FUNCTIONS`，仅 `1` 或 `true` 会启用。官方的 Large Functions 公开测试版支持至 5 GB，但需要 Fluid compute 与 Active CPU；不能将新项目的默认资格当作该项目已生效的证明。参见 [函数限制](https://vercel.com/docs/functions/limitations)。
+
+配置新增 `fluid: true`，并在 `build.env` 中仅加入公开开关 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1`。该旧式字段仍在官方配置规范中，用于将环境变量传入构建进程；因用户导入界面的值不可编辑且找不到 Functions 开关，采用仓库配置以减少手动步骤。应用密钥、数据库凭据和访问码仍留在项目后台，未写入源码。构建脚本只打印开关是否启用，不打印环境变量集合。参见 [构建环境变量说明](https://vercel.com/docs/project-configuration/vercel-json#build.env) 和 [运行时构建环境](https://github.com/vercel/vercel/blob/main/DEVELOPING_A_RUNTIME.md#accessing-environment-and-secrets)。
+
+本地按官方 JSON schema 的字段约束校验完整配置，并确认无效的 `fluid` 字符串会被拒绝。官方 schema 混用了 draft-04 声明和新版本队列约束，校验采用 Draft7 的实例验证，不声称通过官方 schema 自身的元验证。运行下载的官方 `isLargeFunctionsEnabled()` 确认仓库开关被接受，并用缺失值、`0` 作负向对照；这不是一次 Vercel 部署。报告在忽略目录 `state/vercel-size/`。
+
+此次没有裁剪冻结资产、合并两套 Python 依赖、变更分析工具或新增付费 API 调用；没有提交、推送或操作远端项目。仍需用户推送后，在原 Vercel 项目确认日志出现 `Vercel large functions build flag: enabled`，再确认最终部署成功及公网功能。构建进程读到开关不等于平台已接受大包或云端运行验收通过。

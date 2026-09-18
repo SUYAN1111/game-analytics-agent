@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；提交 `34a8051` 的 Linux 自动验收已通过，Neon 已完成初始化。Vercel 已通过 Python 版本检查、依赖安装与前端构建，随后因 `vercel.json` 字节与清单不一致失败；本次增加配置内容哈希校验，等待重试，尚未上线。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Windows 本地验证通过；提交 `34a8051` 的 Linux 自动验收已通过，Neon 已完成初始化。Vercel 已进入函数打包，774.37 MB 包体被标准 500 MB 限制拦截；配置已显式启用 Fluid compute 与 Large Functions，等待云端重试，尚未上线。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -91,7 +91,8 @@ ON CONFLICT (id) DO NOTHING;
 | Output Directory | `web/dist` |
 | Node.js Version | `24.x` |
 | Python | 函数运行时由 `.python-version` 指定 `3.14`；构建命令另用 `uv --python 3.14` 明确选择版本 |
-| Fluid compute | 启用 |
+| Fluid compute | `vercel.json` 已设置 `"fluid": true`，无需寻找控制台开关 |
+| Large Functions | `vercel.json` 的 `build.env` 已设置 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` |
 | 函数最长时间 | `vercel.json` 已设置 300 秒 |
 
 这些命令已写入 `vercel.json`，控制台不要覆盖成单独的 Vite 前端构建。当前 Vercel Python 支持 ASGI 和流式响应；Hobby Fluid 函数最长 300 秒。参见 [Python 运行时](https://vercel.com/docs/functions/runtimes/python) 和 [函数限制](https://vercel.com/docs/functions/limitations)。
@@ -100,11 +101,15 @@ ON CONFLICT (id) DO NOTHING;
 
 构建先校验源码，再安装依赖，以便尽早报告缺文件或内容变化。`vercel.json` 的原始字节哈希和 JSON 内容哈希同时登记在发布清单中：缩进、换行和对象键顺序可以变化，但增删字段、改值、调整路由数组顺序及重复 JSON 键都不能通过。其余源码、锁文件、资产和前端构建继续严格校验字节；构建过程不会恢复配置、忽略字段或自动重新封版。
 
-本项目包含分析依赖和约 226 MiB 解压资产，需使用 Large Functions。该功能当前为公开测试版，支持至 5 GB，并要求 Fluid compute；新建项目自动加入，已有项目可用 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 启用。若变量显示 `Populated by System`，无需手动填写或重复添加。最终包体仍须以实际构建结果为准。参见 [官方公告](https://vercel.com/changelog/vercel-functions-can-now-be-up-to-5-gb-in-package-size)。
+本项目包含分析依赖、DSH 原生程序和约 226 MiB 解压资产。实际 Vercel 日志报告包体 774.37 MB，超过普通 Python 函数的 500 MB 限制。Large Functions 公开测试版支持至 5 GB，需要 Fluid compute 和 Active CPU。仓库通过 `fluid: true` 和构建环境变量 `VERCEL_SUPPORT_LARGE_FUNCTIONS=1` 显式申请启用；不再仅依赖新项目的默认设置。参见 [函数限制与启用方法](https://vercel.com/docs/functions/limitations) 和 [Fluid compute 配置](https://vercel.com/docs/fluid-compute)。
+
+这里使用仍受配置规范支持的旧式 `build.env`，仅保存这个公开开关，以兼容导入页面显示 `Populated by System`、无法编辑变量值的情况。官方通常推荐在项目设置中管理环境变量；API 密钥、数据库密码和访问码仍只填写在 Vercel 后台，不能放入此文件。参见 [build.env 说明](https://vercel.com/docs/project-configuration/vercel-json#build.env)。
+
+更新代码后继续部署原项目，不必重建项目或重新上传资产。构建日志应出现 `Vercel large functions build flag: enabled`；它确认构建进程读到了开关，不代表平台资格和最终部署已通过。若仍报告 500 MB，保留该行和完整打包错误，检查项目或团队是否存在同名变量覆盖及平台资格；不要删除模型文件或跳过完整性检查。真正生效与最终包体以 Vercel 的新部署结果为准。
 
 ## 6. 填写 Vercel 环境变量
 
-在项目的 **Environment Variables** 添加下面六项，至少勾选 **Production**。每一项都在 Vercel 后台填写，不需要提交 `.env`。
+在项目的 **Environment Variables** 添加下面五项，至少勾选 **Production**。每一项都在 Vercel 后台填写，不需要提交 `.env`。
 
 | 名称 | 填什么 |
 | --- | --- |
@@ -141,7 +146,7 @@ ON CONFLICT (id) DO NOTHING;
 
 目标是 Vercel Hobby + Neon Free，**不购买独立服务器**。但不能提前保证任何访问量都完全免费：账号资格、构建、计算、流量、存储、数据库及 GitHub Actions 均有各自的额度，应以控制台显示为准。DeepSeek API 费用独立于托管平台，不因使用免费托管而免除。
 
-账号注册、数据上传、数据库初始化与部署由仓库维护者手动操作。当前 Linux 验收已通过，Vercel 首次构建失败后正等待修复版重试。仍须完成上述云端实测，才能确认这套代码在你的免费额度内满足使用需求；构建修复没有新增付费 API 调用。
+账号注册、数据上传、数据库初始化与部署由仓库维护者手动操作。当前 Linux 验收已通过，Vercel 正等待大包配置修改后的重试。仍须完成上述云端实测，才能确认这套代码在你的免费额度内满足使用需求；构建修复没有新增付费 API 调用。
 
 云端目前全站同时执行一项分析，单次执行留出清理时间后最多约 260 秒，平台硬上限为 300 秒。超时或进程丢失不会自动重跑；未结算预留会保留并阻止继续消耗。请求之间只带入最近两轮已核验回答和范围信息，不恢复整个旧 DSH 进程；新一轮数字必须重新取证。
 
@@ -157,7 +162,7 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 | 构建找不到资产 | `ASSET_BUNDLE_URL` 是否为附件直链、未登录能否下载 |
 | source/build/asset integrity 报错 | 是否完整提交本次发布清单、源码、构建清单；除 `vercel.json` 的 JSON 排版外，所有文件仍按字节检查 |
 | `JSON content changed vercel.json` | 已排除仅排版不同；核对实际部署提交与项目覆盖配置，保留日志，不删除字段或跳过检查 |
-| 包体超过限制 | Fluid compute 和 Large Functions 是否已生效；查看实际包体日志 |
+| 包体超过 500 MB | 是否部署了含 `fluid` / `build.env` 的新提交；日志中大包开关是否为 `enabled`；项目变量覆盖与平台资格 |
 | 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
 | 503 / 数据库不可用 | Neon 是否初始化了 schema 和预算、连接字符串是否正确且带 SSL |
 | 403 | 浏览器生产域名是否与 `APP_ORIGIN` 相同 |
