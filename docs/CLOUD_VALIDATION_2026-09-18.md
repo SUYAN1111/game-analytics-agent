@@ -108,3 +108,21 @@
 另在临时本地 PostgreSQL / CloudService 中执行一次版本比较，使用离线模型桩及真实 DSH/MCP，返回 `succeeded`、7 项证据、无分析错误；报告 `state/cloud-bundle-analysis.json`。离线桩的请求也会登记在临时账本中，不代表真实 DeepSeek 用量。本次没有使用生产密钥或付费模型；测试对话已清理，生产预算未修改。
 
 后台新增有界脱敏的 `analysis_failed` 日志，保留任务 ID、失败阶段和具体原因，以便在 Vercel **Logs** 排查。API、前端和复制错误摘要仍只返回通用错误，不包含内部路径、密钥或原始工具数据。此次修复待手动推送部署，公网真实 DeepSeek 分析仍需验收。
+
+## 公网日志确认分析资产被平台过滤
+
+继 `97e2851` 的修复后，用户提供任务 `a859c8cb93814ad1a6a2d240009d6791` 的 Vercel 私有日志：`stage=prepare`、`type=HostError`、`code=asset_integrity`，具体为 `product_integrity: missing/changed association/public/discovery_V1_V3.json`。这确认了实际分析资产缺失。上一轮模拟测试只对源码应用平台过滤规则，却完整复制了资产，因而漏掉此场景。
+
+Vercel Python 打包器的 `**/public/**` 规则同时影响四个已封版的资产文件：`association/public/discovery_V1_V3.json`、`validation_V4.json`、`validation_V5.json`、`validation_V6.json`（后面三项同目录），合计 17,586 字节。本轮测试先对源码和资产都应用规则，稳定复现日志中的同一文件错误，再验证修复。
+
+新增 `cloud_api/asset_bundle.py`。构建完成完整校验后，将原 60 项资产生成单个 `runtime-assets.zip`；`vercel.json` 排除松散的 `assets/**`，保留归档。API 入口在业务路径模块导入前校验发布锚点、检查归档清单和每项大小、哈希，展开到系统临时目录并设置 `APP_ASSET_DIR`。状态目录与资产目录保持独立。展开使用独立暂存目录及原子发布；并发启动可复用已完整验证的目录，损坏缓存不放行。
+
+资产身份仍为 `asset143f285f40e8357711e76382ff`，归档仍为 25,612,256 字节、SHA-256 `455b9f3f40ef0b08957c716d34c5a62b2846b402466491e0a76f94211cb294b2`，与原 GitHub Release 附件相同。无需新附件、环境变量、数据库初始化或访客访问码。
+
+本轮 Windows / Python 3.14 本地验证：
+
+- `scripts/check_cloud_bundle.py` 的 15 项检查通过：复现原始缺失、完整构建拒绝漏文件、源码/知识/模型/清单变化拒绝、全部 60 项资产恢复、坏归档和危险路径拒绝、并发及缓存校验、实际 `api.index` 在无松散资产的目录中启动 live Host、私有日志脱敏。live Host 仅初始化，不调用模型。
+- `CLOUD_TEST_ASSET_ARCHIVE=1` 下的 `scripts/check_cloud_runtime.py` 连接临时本地 PGlite，使用归档展开的数据、离线模型桩及真实 DSH/MCP。比较、知识、预测、分群、关联全部 `succeeded`，分别产生 7、2、5、10、3 项证据，诊断列表为空。每类均检查新 Service 读取持久结果和删除。报告 `state/cloud-runtime-results.json` 为 `PASS`，`assets_from_archive=true`、`paid_calls=0`。
+- 18 项发布完整性检查通过；完整源码、60 项资产及前端产物校验通过。发布清单仅在本地显式重新封版，云端构建不重算信任锚点。
+
+Linux 工作流新增从运行时归档执行五类分析的步骤，待用户推送后运行。本轮没有提交、推送、部署、调用真实 DeepSeek 或修改生产预算。上述结果不能替代新版本的 Vercel 冷启动、实际函数包体、Neon 连接池及公网真实模型分析验收。

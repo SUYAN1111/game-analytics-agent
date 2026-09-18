@@ -13,7 +13,7 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 300,
-      "excludeFiles": "{.git/**,.venv-core/**,.venv-dsh/**,state/**,web/node_modules/**,.env,.env.local,.env.production,.env.development,.env.preview}"
+      "excludeFiles": "{.git/**,.venv-core/**,.venv-dsh/**,state/**,assets/**,web/node_modules/**,.env,.env.local,.env.production,.env.development,.env.preview}"
     }
   },
   "rewrites": [

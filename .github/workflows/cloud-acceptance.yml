@@ -34,7 +34,7 @@ jobs:
         run: python scripts/check_release_integrity.py
       - run: npm ci --prefix web
       - run: uv run --no-project --python 3.14 --with pip==25.3 python scripts/build_vercel.py
-      - name: Verify runtime after Vercel build-only file exclusions
+      - name: Verify runtime asset archive after Vercel file exclusions
         run: python scripts/check_cloud_bundle.py
       - name: Verify isolated child interpreters
         run: python scripts/check_cloud_bootstrap.py
@@ -43,7 +43,10 @@ jobs:
       - run: python scripts/check_cloud_public.py
       - name: Verify failure reports remain available and redacted
         run: python scripts/check_cloud_diagnostics.py
-      - run: python scripts/check_cloud_runtime.py
+      - name: Verify five tool chains using installed runtime assets
+        run: python scripts/check_cloud_runtime.py
+        env:
+          CLOUD_TEST_ASSET_ARCHIVE: "1"
       - run: python scripts/check_cloud_store.py
       - uses: actions/upload-artifact@v4
         if: always()

@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product158cdafabb31cd3dee660b5fa8",
+  "release_id": "product15bedcc621591f5501313251b9",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "48f954cbc5d215d23f469f8343fb69e6cf6fa6d2213fc209ebb40d2412659442",
-      "size": 15917
+      "sha256": "a2c5ef9e6c6acfa7295d210b5af18d560abbfc666d7a6d288f3dc283160a21c2",
+      "size": 15947
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -353,8 +353,8 @@
       "size": 7215
     },
     "api/index.py": {
-      "sha256": "5af16833baae127dc56c986c8b1bf540dabec86f6d77aa70fe1cb6dbf61d1be4",
-      "size": 359
+      "sha256": "ec4850f712554e349d8836c850647099ebeb8c6b4e19fb33dd32e221eeafe4ab",
+      "size": 668
     },
     "association/__init__.py": {
       "sha256": "68118d4af52f97ba3c8c3fa0a2a1e5bf887894677766a8ebf2d89c8a9fbdb733",
@@ -456,6 +456,10 @@
       "sha256": "9ea5db8b773b13dd219883e84c6736fcdb85ff67f3e118bd7b9c95909c914464",
       "size": 11485
     },
+    "cloud_api/asset_bundle.py": {
+      "sha256": "117f52bbc7b92d2396b4637b576af4bf0055b773be4f65e047e2d1c113c35ca7",
+      "size": 5444
+    },
     "cloud_api/auth.py": {
       "sha256": "1767ba553ccf9ae5efa6a390b6253ea6b313de290666e5705c230f8e927865a4",
       "size": 1783
@@ -501,8 +505,8 @@
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "ad2d9e501448660bc4edea64abb018d27a8f67584c91303420b27ed85059e7e4",
-      "size": 19774
+      "sha256": "08550690eb03af78c9ec1b637da4ba45583af8344c52e2355ab2124a4c3b140f",
+      "size": 22745
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -525,8 +529,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "e820ca110fb9eddb2f21cea8183514dfd9afca1139ac98d9087ae9d3809f6f79",
-      "size": 18866
+      "sha256": "8887080c7a64cb40240bf300dd55aa3fe67dfd5d89b9311c3d9dec5e32608742",
+      "size": 20176
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -725,8 +729,8 @@
       "size": 3654
     },
     "scripts/build_vercel.py": {
-      "sha256": "f7ae21ac0d43ad16efc412a3b6f18167f92ba8c2d94d72fd28b6ef5cf6eda774",
-      "size": 3570
+      "sha256": "f4b95629c1f1a55fb6977661fb87428692fa6b5aad1ae51c550895193864b17e",
+      "size": 3773
     },
     "scripts/check-web.ps1": {
       "sha256": "74b1b593750ee09c3e90dfcdb12ef26c5f49af272fac60af4ba611040b769724",
@@ -737,8 +741,8 @@
       "size": 2293
     },
     "scripts/check_cloud_bundle.py": {
-      "sha256": "cfeffe00125d548f37cbe5868300ecc5fd42410f48d564ae643779c6b5da58ed",
-      "size": 7269
+      "sha256": "2e322d5a88aff16fcf91ca3d18092a05401a75c8c97d9cefd07ecaca11162eb5",
+      "size": 11315
     },
     "scripts/check_cloud_diagnostics.py": {
       "sha256": "94b8ab91c64441165bc161f8d7472545d840bd52bd320da79c7f839f48aaa3db",
@@ -757,8 +761,8 @@
       "size": 10970
     },
     "scripts/check_cloud_runtime.py": {
-      "sha256": "4097f4f585a28c1526a21cb9807c95438f2cbafb8bc67ae86a9a6d7be834bf7f",
-      "size": 2642
+      "sha256": "43db7dc47c1ac72f7577215047231f552d2a90ab345805fd2206535402cecec9",
+      "size": 3152
     },
     "scripts/check_cloud_store.py": {
       "sha256": "515f701439b31b213912bcbc551fa6ae3fa3ee106f70e14d7b1dcc3a292726f5",
@@ -1013,9 +1017,9 @@
       "size": 1569
     },
     "vercel.json": {
-      "json_sha256": "07c66d069e5684296df45a2ab84654d53b7d02406ae7af8709139e7c35e3d391",
-      "sha256": "50630f794c7e399fd0d691d7a7c8d383f668409cccc6b30f47bb006ed906d682",
-      "size": 1194
+      "json_sha256": "5785a007bbbaddfe3ef45c0a413119af1bd3f8fb766d831b2bcd71c2efad2c65",
+      "sha256": "85a78ff880902fddf8884fc7eb07584e710084a94522de52d830d89b032e8644",
+      "size": 1204
     },
     "web/browser-check.mjs": {
       "sha256": "6b967921f6cee580c8f45ba852e980ba7550b6aae5a97a30611c8810a3af5efa",

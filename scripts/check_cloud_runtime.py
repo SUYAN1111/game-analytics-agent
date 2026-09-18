@@ -8,6 +8,13 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 if (ROOT/'_core_vendor').exists():sys.path.insert(0,str(ROOT/'_core_vendor'))
 local=ROOT/'state/cloud-test/python'
 if local.exists():sys.path.insert(0,str(local))
+archive_directory=None
+if os.environ.get('CLOUD_TEST_ASSET_ARCHIVE')=='1':
+    import tempfile
+    from cloud_api.asset_bundle import install_archive
+    archive_directory=tempfile.TemporaryDirectory(prefix='cloud-assets-')
+    # Configure before CloudService or any runtime path module is imported.
+    os.environ['APP_ASSET_DIR']=str(install_archive(ROOT,Path(archive_directory.name)))
 from cloud_api.service import CloudService
 from cloud_api.diagnostics import scrub
 
@@ -20,7 +27,8 @@ def main():
            ('prediction','查看示例数据中的剧情参与预测'),('clusters','不同玩家的游戏习惯有什么区别？'),
            ('association','玩休闲小游戏的玩家，也会玩协作玩法吗？')]
     from product_core.paths import STATE
-    report={'status':'FAIL','platform':sys.platform,'cases':results,'paid_calls':0}
+    report={'status':'FAIL','platform':sys.platform,'cases':results,'paid_calls':0,
+            'assets_from_archive':archive_directory is not None}
     STATE.mkdir(parents=True,exist_ok=True)
     try:
         for name,text in cases:
@@ -42,4 +50,5 @@ def main():
         raise
     finally:
         (STATE/'cloud-runtime-results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')
+        if archive_directory:archive_directory.cleanup()
 if __name__=='__main__':main()

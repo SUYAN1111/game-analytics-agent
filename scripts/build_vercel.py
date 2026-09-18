@@ -60,5 +60,8 @@ def main():
     subprocess.run(['npm','run','build','--prefix','web'],check=True)
     from web_api.build import verify_build
     verify(include_build_sources=True);verify_build()
+    from cloud_api.asset_bundle import build_archive
+    archive=build_archive(ROOT,ROOT/'assets')
+    print(f'Sealed runtime asset archive: {archive.name} ({archive.stat().st_size} bytes).',flush=True)
     print('Linux dependencies, assets, source and frontend build verified; cloud runtime still needs acceptance testing.')
 if __name__=='__main__':main()
