@@ -43,6 +43,8 @@ jobs:
       - run: python scripts/check_cloud_public.py
       - name: Verify failure reports remain available and redacted
         run: python scripts/check_cloud_diagnostics.py
+      - name: Verify driver exit and cleanup failures without paid requests
+        run: python scripts/check_cloud_cleanup.py
       - name: Verify five tool chains using installed runtime assets
         run: python scripts/check_cloud_runtime.py
         env:
@@ -57,3 +59,4 @@ jobs:
             /tmp/agent-ci/cloud-runtime-results.json
             /tmp/agent-ci/cloud-public-results.json
             /tmp/agent-ci/cloud-bundle-results.json
+            /tmp/agent-ci/cloud-cleanup-results.json

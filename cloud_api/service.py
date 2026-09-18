@@ -19,6 +19,12 @@ class CloudService(Service):
         state = self.store.ledger()
         return {'stopped':state['stopped']}
 
+    @staticmethod
+    def error(code):
+        if code=='close_failed':
+            return {'code':code,'message':'本次分析未能正常结束，请稍后刷新查看任务状态。系统不会自动重试分析。'}
+        return Service.error(code)
+
     def usage_attempts(self):
         return self.store.ledger()['attempts'] if self.mode=='live' else []
 
@@ -44,7 +50,7 @@ class CloudService(Service):
         with self.cv, self.store.connect() as db:
             dead = db.execute('SELECT j.* FROM jobs j JOIN executions e ON e.job_id=j.id WHERE e.finished=FALSE AND e.deadline<?',(now,)).fetchall()
             for row in dead:
-                if row['status'] in ACTIVE:
+                if row['status'] in (*ACTIVE,'close_failed'):
                     self.transition(db,row['id'],'interrupted',error=self.error('interrupted'))
                     db.execute("UPDATE sessions SET status='read_only' WHERE id=?",(row['session_id'],))
                 state=self.store.ledger()
@@ -101,7 +107,7 @@ class CloudService(Service):
             self.owned(db,owner,sid)
             for row in db.execute("SELECT id FROM jobs WHERE session_id=? AND status IN ('queued','running')",(sid,)).fetchall():
                 self.cancel(owner,row['id'])
-            active=db.execute("SELECT 1 FROM jobs WHERE session_id=? AND status='cancelling'",(sid,)).fetchone()
+            active=db.execute("SELECT 1 FROM executions e JOIN jobs j ON j.id=e.job_id WHERE j.session_id=? AND e.finished=FALSE",(sid,)).fetchone()
             db.execute('UPDATE sessions SET status=? WHERE id=?',('closing' if active else 'closed',sid))
             return self.session(owner,sid)
 
@@ -120,8 +126,8 @@ class CloudService(Service):
     def execute(self, claim, *, diagnostics=None):
         if diagnostics is not None and self.mode != 'offline':
             raise ValueError('detailed diagnostics are only available to offline tests')
-        from pathlib import Path
         from agent_runtime.common import replace
+        from cloud_api.diagnostics import failure_details,log_failure,runtime_context
         from cloud_api.budget import CloudBudget
         from product_core.budget import Coordinator
         from product_core.paths import STATE, ASSETS
@@ -133,7 +139,7 @@ class CloudService(Service):
         home=STATE/('cloud-'+token);home.mkdir(parents=True)
         host=coordinator=stub=None
         done=threading.Event();watcher=None;aborted=[]
-        category=None;answer=None;evidence=[];failure=None;stage='prepare'
+        category=None;answer=None;evidence=[];stage='prepare'
         try:
             ledger=CloudBudget(self.store,home/'budget.json',jid,token,sid)
             coordinator=Coordinator(ledger,verify)
@@ -158,12 +164,14 @@ class CloudService(Service):
                         if not status or status[0]!='running' or time.time()>deadline-15:
                             aborted.append('cancelled' if status and status[0]=='cancelling' else 'timed_out')
                             host.close();return
-                    except Exception:
+                    except Exception as exc:
                         aborted.append('failed')
+                        log_failure(jid,'watch',exc,secrets=(host.canary,))
                         try:host.close()
-                        except Exception:pass
+                        except Exception as close_exc:
+                            log_failure(jid,'watch_cleanup',close_exc,secrets=(host.canary,))
                         return
-            watcher=threading.Thread(target=watch,daemon=True);watcher.start()
+            watcher=threading.Thread(target=watch,name='cloud-watch-'+jid,daemon=True);watcher.start()
             self.progress(sid,jid,tid,{'turn_id':tid,'code':'preparing'})
             stage='host_open'
             host.open()
@@ -177,7 +185,12 @@ class CloudService(Service):
                 if answer.get('status')!='reference_checked_candidate' or not answer.get('answer_markdown'):raise ValueError('unverified result')
                 evidence=snapshots(answer,host)
         except Exception as exc:
-            failure=exc
+            private=(host.canary,) if host else ()
+            log_failure(jid,stage,exc,secrets=private,
+                        context={**runtime_context(home,host.driver if host else None,secrets=private),
+                                 'stop_reasons':list(aborted)})
+            if diagnostics is not None:
+                diagnostics.append(failure_details(home,exc,stage,secrets=private))
             code=getattr(exc,'code','')
             category=('timed_out' if isinstance(exc,TimeoutError) else 'quota_reached' if code in ('model_limit','tool_limit','session_budget')
                       else 'budget_stopped' if code in ('stopped','budget_limit','budget_write','attempt_limit')
@@ -185,19 +198,18 @@ class CloudService(Service):
         finally:
             done.set()
             if watcher:watcher.join(15)
-            try:
-                if host:host.close()
-                if coordinator:coordinator.close()
-                if stub:stub.close()
-            except Exception as exc:
-                if failure is None:failure=exc;stage='cleanup'
-                category='close_failed'
-            if failure is not None:
-                from cloud_api.diagnostics import failure_details,log_failure
-                private=(host.canary,) if host else ()
-                log_failure(jid,stage,failure,secrets=private)
-                if diagnostics is not None:
-                    diagnostics.append(failure_details(home,failure,stage,secrets=private))
+            private=(host.canary,) if host else ()
+            # Cleanup errors must not erase the analysis failure or skip other resources.
+            for name,resource in (('host',host),('coordinator',coordinator),('stub',stub)):
+                if resource is None:continue
+                try:resource.close()
+                except Exception as exc:
+                    category='close_failed'
+                    log_failure(jid,'cleanup_'+name,exc,secrets=private,
+                                context={**runtime_context(home,host.driver if host else None,secrets=private),
+                                         'stop_reasons':list(aborted)})
+                    if diagnostics is not None:
+                        diagnostics.append(failure_details(home,exc,'cleanup_'+name,secrets=private))
         with self.cv,self.store.connect() as db:
             current=db.execute('SELECT status FROM jobs WHERE id=?',(jid,)).fetchone()
             lease=db.execute('SELECT * FROM executions WHERE job_id=?',(jid,)).fetchone()
@@ -207,7 +219,7 @@ class CloudService(Service):
             if aborted and not category:category=aborted[-1]
             if category:
                 self.transition(db,jid,category if category in ('cancelled','timed_out','budget_stopped','close_failed') else 'failed',error=self.error(category))
-                db.execute("UPDATE sessions SET status='closed' WHERE id=?",(sid,))
+                db.execute('UPDATE sessions SET status=? WHERE id=?',('closing' if category=='close_failed' else 'closed',sid))
             elif current[0]=='running':
                 if answer.get('status')=='control_checked':
                     c=answer['control'];self.transition(db,jid,c['kind'],answer={'status':'control','message':c['message'],'choices':[]})

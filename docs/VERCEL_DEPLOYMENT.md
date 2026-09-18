@@ -1,6 +1,6 @@
 # 手动部署到 Vercel
 
-仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Neon 已初始化，Vercel 已部署。继 `97e2851` 的构建文件校验修复后，公网日志确认 Vercel 还会遗漏 `association/public/` 下的分析资产。现改为构建运行时归档、启动时校验并展开；15 项本地打包检查和从归档取数的五类分析全部通过，待推送及公网验收。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
+仓库已实现云端代码、数据库持久化、构建配置和 Linux 自动验收。**Neon 已初始化，Vercel 已部署。`5be7190` 的资产归档更新后，公网日志从资产缺失变为分析子进程退出，页面显示 `close_failed`。本轮修复错误记录与清理流程，通过 7 项故障检查及五类真实工具回归；线上退出原因仍待新版完整日志确认，不能视为公网验收完成。** 具体通过项和限制见 [云端排查记录](CLOUD_VALIDATION_2026-09-18.md)。
 
 网页和分析后台都放在 Vercel；Neon PostgreSQL 只负责保存对话、证据和费用账本。不需要自己购买、维护一台服务器，也不需要 Docker 或 MySQL。DeepSeek 仍使用真实 API，分析数据仍是项目现有的固定模拟数据。
 
@@ -12,7 +12,7 @@
 
 现有 `.gitignore` 已排除 `.env`、`assets/`、`state/`、虚拟环境、依赖、构建产物及数据库文件。提交前在编辑器的“暂存的更改”里确认没有密钥和这些目录。不要修改 `.gitattributes` 的 `* -text`：发布校验固定文件字节，自动改换行符会导致云端校验失败。
 
-本次打包修复建议提交说明：`fix: preserve analysis assets in Vercel runtime bundle`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目、上传附件或运行初始化 SQL。`runtime-assets.zip` 是构建时生成的文件，已被 `.gitignore` 排除，不提交到 Git。
+本次错误处理更新建议提交说明：`fix: preserve cloud failure causes and complete cleanup`。已部署的项目只需更新代码，继续使用原有五项环境变量、数据库和资产附件，不需要重新建项目、上传附件或运行初始化 SQL。`runtime-assets.zip` 是构建时生成的文件，已被 `.gitignore` 排除，不提交到 Git。
 
 ## 2. 上传模拟数据资产包
 
@@ -177,6 +177,7 @@ Windows 本地历史不会自动迁移到 Neon；云端新建独立历史。云�
 | 包体超过 500 MB | 是否部署了含 `fluid` / `build.env` 的新提交；日志中大包开关是否为 `enabled`；项目变量覆盖与平台资格 |
 | 页面显示配置未完成 | 五个应用环境变量是否填写，尤其是实际生产域名 `APP_ORIGIN`；修改后是否 Redeploy |
 | 开始分析后立即 `asset_missing` | 在项目 **Logs** 搜索错误摘要的 `job_id`，查看 `analysis_failed` 的具体阶段和文件。若缺少 `association/public/` 数据，确认部署了运行时归档修复且新构建日志出现 `Sealed runtime asset archive`。公开错误文字不能单独证明需要重新上传资产 |
+| `close_failed` 或日志 `driver_exit` | 保存同一 `job_id` 下全部 `analysis_failed` 记录，包括 `analysis`、`watch`、`cleanup_host` / `cleanup_coordinator`。新版记录退出码、停止原因、嵌套异常和有界脱敏错误日志；`driver_exit` 本身不能证明内存不足或模型服务故障。不要反复提交已计费问题 |
 | 新版仍提示输入访问码 | 确认部署了免登录更新且 `APP_ACCESS_MODE` 没有设置为 `invite`；默认公开模式无需输入码 |
 | 提示允许 Cookie | 允许此站点保存 Cookie 后刷新，首次健康检查会自动建立浏览器身份 |
 | 提示分析次数用完 | 等待相应窗口到期；删除对话不会重置次数，已有结果仍能查看 |

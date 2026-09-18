@@ -176,7 +176,7 @@ class DriverProcess:
                 next_progress = time.monotonic()+30
             try: line = self.messages.get(timeout=min(1, remaining))
             except queue.Empty: continue
-            require(line is not None, "driver_exit", "DSH driver closed without a completed response")
+            require(line is not None, "driver_exit", "DSH driver closed without a completed response; exit_code="+str(self.process.poll()))
             if on_poll is not None: on_poll()
             return __import__("json").loads(line)
 

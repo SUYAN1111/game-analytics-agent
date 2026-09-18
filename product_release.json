@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product15bedcc621591f5501313251b9",
+  "release_id": "product15cab6013e8b908cecd765eddb",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "a2c5ef9e6c6acfa7295d210b5af18d560abbfc666d7a6d288f3dc283160a21c2",
-      "size": 15947
+      "sha256": "c389b4d331aa75b30b56233a0b4c387957ee42c9522a33d4a03fbdb0516c88d3",
+      "size": 15961
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -309,8 +309,8 @@
       "size": 1789
     },
     "agent_runtime/processes.py": {
-      "sha256": "45cd906d885fecf7eb7f5fa1b400d6c058e03819c0fa06e753cf8f51ef05ff55",
-      "size": 10942
+      "sha256": "1d33517442a6fd2ec813dce1bdfbb3225339b2b2e50f090acbfb4ad5901131bf",
+      "size": 10978
     },
     "analysis_core/__init__.py": {
       "sha256": "dcce4cf9b42ab632d9b24d40102d70e48a746107a4ad706bc9337bb227d897b9",
@@ -473,8 +473,8 @@
       "size": 1877
     },
     "cloud_api/diagnostics.py": {
-      "sha256": "2d5e02738fdf4510eda3d3a4202324a52b2fb762b55fb3a0fd443a8d31921b6f",
-      "size": 1858
+      "sha256": "b1ffa542ce949594e7375fedf2267ca14aa167c7543bcedbfef96b6069214a0b",
+      "size": 3569
     },
     "cloud_api/dsh_bootstrap.py": {
       "sha256": "0170fff1b929de126405670f38fa63b1854fb1af3a060d40b59c053cfa90dbcc",
@@ -489,8 +489,8 @@
       "size": 1981
     },
     "cloud_api/service.py": {
-      "sha256": "f90e731d68054a800f68136fdf0379eef6571e09923ed6b74c4fc33f296c7f21",
-      "size": 13718
+      "sha256": "afb8cfd59ca979e7680e3c615c3481434a4f5b692363b613161745eac5391f24",
+      "size": 14853
     },
     "cloud_api/store.py": {
       "sha256": "db2b11f45e85db770afbb23f9b04a90594f4d34208d1363da8ee1ca2293d9475",
@@ -505,8 +505,8 @@
       "size": 4272
     },
     "docs/CLOUD_VALIDATION_2026-09-18.md": {
-      "sha256": "08550690eb03af78c9ec1b637da4ba45583af8344c52e2355ab2124a4c3b140f",
-      "size": 22745
+      "sha256": "b4be894a402a01a94e8716ab05957cb34b6e8a770c6b9bccb1e820c1577f66c6",
+      "size": 25168
     },
     "docs/FREE_HOSTING_AUDIT_2026-09-18.md": {
       "sha256": "2eb84af94db7917865659ba8c110cf56c331c6e71a8524ee248d1589c1783742",
@@ -529,8 +529,8 @@
       "size": 21720
     },
     "docs/VERCEL_DEPLOYMENT.md": {
-      "sha256": "8887080c7a64cb40240bf300dd55aa3fe67dfd5d89b9311c3d9dec5e32608742",
-      "size": 20176
+      "sha256": "b91d699562b82075b0f6e54c4b05b313b5ba72e54234a84c93788495ed943d37",
+      "size": 20557
     },
     "docs/WORKSPACE_REDESIGN_2026-09-18.md": {
       "sha256": "96585144f42cec248725fe8b4092e281a0d38185a6a28fab1888a49e06343303",
@@ -743,6 +743,10 @@
     "scripts/check_cloud_bundle.py": {
       "sha256": "2e322d5a88aff16fcf91ca3d18092a05401a75c8c97d9cefd07ecaca11162eb5",
       "size": 11315
+    },
+    "scripts/check_cloud_cleanup.py": {
+      "sha256": "56f5a799d688dd7244788a14d846d6186e8addf4dd29b803c98fdfa5e4a0105b",
+      "size": 9193
     },
     "scripts/check_cloud_diagnostics.py": {
       "sha256": "94b8ab91c64441165bc161f8d7472545d840bd52bd320da79c7f839f48aaa3db",
