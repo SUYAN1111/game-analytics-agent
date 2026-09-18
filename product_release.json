@@ -249,7 +249,7 @@
     "task": "Task14"
   },
   "platform": "Windows x64 Python 3.14",
-  "release_id": "product1548c15c69465113b9b58c1092",
+  "release_id": "product1535b06ac135b127fe432713cc",
   "runtime_origin": "Task13 runtime only; no evaluator/gold/protocol runner",
   "source_files": {
     ".env.example": {
@@ -277,8 +277,8 @@
       "size": 406
     },
     "README.md": {
-      "sha256": "21afea10c377929dd6d217f5e722f5f302cfee33ff4a8ec624394b1e35e69819",
-      "size": 15221
+      "sha256": "2d19b10d16b2fe5ffc8e3927ec477152ba21718366267383f6bd10678240196b",
+      "size": 15599
     },
     "THIRD_PARTY.json": {
       "sha256": "8ba52c4ca115745aa0c9b96aa750a437c0938093149edb08a40b2048a98b8fd9",
@@ -500,6 +500,10 @@
       "sha256": "5fd27c0fe10f025bb789c9c17a6f55560c52928a38b6dd096aa2c1be3b78d037",
       "size": 8944
     },
+    "docs/LOCAL_DEVELOPMENT.md": {
+      "sha256": "f99f3386fdf397b95ad2cd8698e1ebf8e728348db567bf94bb186f85d7c1b3f4",
+      "size": 11999
+    },
     "docs/UX_PHASES.md": {
       "sha256": "56f009231c6c519fbe269ea44fcd5e5279be2078e8f43d90da34d01c3768f800",
       "size": 21720
@@ -523,6 +527,10 @@
     "docs/execution-feedback.md": {
       "sha256": "5b00e789eec12c539a895e809713e5cb31c5771438531c7868ea4183df9875bb",
       "size": 3265
+    },
+    "docs/images/analysis-workspace.png": {
+      "sha256": "029bf2fd9e1acc363525c54fb90ae4b40295fbbbc4c7416b4a6de1d210092f3d",
+      "size": 123758
     },
     "docs/web-api.md": {
       "sha256": "90649bb7e4c48db9f123349723b9ae88c318b0a553458f69123742b9ed955837",
